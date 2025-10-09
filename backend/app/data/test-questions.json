@@ -1,0 +1,84 @@
+{
+  "_id": "BASE",
+  "name": "Base Question Set",
+  "questions": [
+    {
+      "_id": "INS1",
+      "question": "Operate machines to make products",
+      "options": [
+        {
+          "text": "Strongly Like",
+          "_id": 5
+        },
+        {
+          "text": "Like",
+          "_id": 4
+        },
+        {
+          "text": "Neither Like or Dislike",
+          "_id": 3
+        },
+        {
+          "text": "Dislike",
+          "_id": 2
+        },
+        {
+          "text": "Strongly Dislike",
+          "_id": 1
+        }
+      ]
+    },
+    {
+      "_id": "INS2",
+      "question": "Investigate crimes",
+      "options": [
+        {
+          "text": "Strongly Like",
+          "_id": 5
+        },
+        {
+          "text": "Like",
+          "_id": 4
+        },
+        {
+          "text": "Neither Like or Dislike",
+          "_id": 3
+        },
+        {
+          "text": "Dislike",
+          "_id": 2
+        },
+        {
+          "text": "Strongly Dislike",
+          "_id": 1
+        }
+      ]
+    },
+    {
+      "_id": "INS3",
+      "question": "Write books or plays",
+      "options": [
+        {
+          "text": "Strongly Like",
+          "_id": 5
+        },
+        {
+          "text": "Like",
+          "_id": 4
+        },
+        {
+          "text": "Neither Like or Dislike",
+          "_id": 3
+        },
+        {
+          "text": "Dislike",
+          "_id": 2
+        },
+        {
+          "text": "Strongly Dislike",
+          "_id": 1
+        }
+      ]
+    }
+  ]
+}
