@@ -31,3 +31,8 @@ app.add_middleware(
 
 # Include routers
 app.include_router(tests.router)
+
+# add "this is backend" route for '/'
+@app.get("/")
+async def read_root():
+    return {"message": "This is the backend for Career Assessment API"}
