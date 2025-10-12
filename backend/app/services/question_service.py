@@ -2,7 +2,15 @@ import json
 import uuid
 from typing import Optional, List, Dict, Any
 from datetime import datetime
+
+# app configurations
 from app.core.config import settings
+
+# database imports
+from sqlalchemy.orm import Session
+from app.models.database import SubmissionDB, SessionLocal, create_tables
+
+# type definitions
 from app.models.schemas import (
     TestSubmissionPayload,
     SubmissionFilter,
@@ -40,146 +48,146 @@ class QuestionService:
         return None
 
     def submit_answers(self, test_data: TestSubmissionPayload) -> Dict[str, Any]:
-        """Submit answers and store in JSON file"""
+        """Submit answers and store in PostgreSQL database"""
         submission_id = str(uuid.uuid4())
         
-        # Create submission record
-        submission_record = {
-            "id": submission_id,  # Using 'id' instead of '_id' for consistency
-            "userId": test_data.userId,
-            "createdAt": test_data.createdAt,
-            "name": test_data.name,
-            "status": "SUBMITTED",
-            "responses": [response.__dict__ for response in test_data.responses],
-            "submittedAt": datetime.now().isoformat()
-        }
+        # Ensure tables exist
+        create_tables()
         
-        submissions_path = settings.submissions_path
+        # Create database session
+        db: Session = SessionLocal()
         
         try:
-            # Read existing submissions
-            with open(submissions_path, "r") as f:
-                content = f.read().strip()
-                if content:
-                    submissions = json.loads(content)
-                else:
-                    submissions = []
+            # Convert responses to JSON string
+            responses_json = json.dumps([response.__dict__ for response in test_data.responses])
             
-            # Add new submission
-            submissions.append(submission_record)
+            # Create submission record for database
+            submission_record = SubmissionDB(
+                id=submission_id,
+                user_id=test_data.userId,
+                created_at=test_data.createdAt,
+                name=test_data.name,
+                status="SUBMITTED",
+                responses=responses_json,
+                submitted_at=datetime.now()
+            )
             
-            # Write back to file
-            with open(submissions_path, "w") as f:
-                json.dump(submissions, f)
-                
-        except FileNotFoundError:
-            # Create new file with the first submission
-            with open(submissions_path, "w") as f:
-                json.dump([submission_record], f)
-        
-        return {
-            "status": "success", 
-            "submissionId": submission_id,
-            "message": "Answers submitted successfully"
-        }
+            # Add and commit to database
+            db.add(submission_record)
+            db.commit()
+            db.refresh(submission_record)
+            
+            return {
+                "status": "success", 
+                "submissionId": submission_id,
+                "message": "Answers submitted successfully"
+            }
+            
+        except Exception as e:
+            db.rollback()
+            return {
+                "status": "error",
+                "message": f"Failed to submit answers: {str(e)}"
+            }
+        finally:
+            db.close()
 
     def get_submission(self, submission_id: str) -> Optional[Dict[str, Any]]:
-        """Get a specific submission by ID"""
-        submissions_path = settings.submissions_path
+        """Get a specific submission by ID from PostgreSQL database"""
+        db: Session = SessionLocal()
         
         try:
-            with open(submissions_path, "r") as f:
-                content = f.read().strip()
-                if not content:
-                    return None
-                submissions = json.loads(content)
+            submission = db.query(SubmissionDB).filter(SubmissionDB.id == submission_id).first()
             
-            # Find submission by ID
-            for submission in submissions:
-                if submission.get("id") == submission_id:
-                    return submission
+            if submission:
+                return {
+                    "id": submission.id,
+                    "userId": submission.user_id,
+                    "createdAt": submission.created_at,
+                    "name": submission.name,
+                    "status": submission.status,
+                    "responses": json.loads(submission.responses),
+                    "submittedAt": submission.submitted_at.isoformat()
+                }
             
             return None
             
-        except (FileNotFoundError, json.JSONDecodeError):
+        except Exception as e:
             return None
+        finally:
+            db.close()
 
     def get_submissions(self, filters: Optional[SubmissionFilter] = None) -> List[Dict[str, Any]]:
-        """Get submissions with optional filtering"""
-        submissions_path = settings.submissions_path
+        """Get submissions with optional filtering from PostgreSQL database"""
+        db: Session = SessionLocal()
         
         try:
-            with open(submissions_path, "r") as f:
-                content = f.read().strip()
-                if not content:
-                    return []
-                submissions = json.loads(content)
-        
-        except (FileNotFoundError, json.JSONDecodeError):
-            return []
-        
-        # Apply filters if provided
-        if filters:
-            filtered_submissions = []
+            query = db.query(SubmissionDB)
             
+            # Apply filters if provided
+            if filters:
+                if filters.userId:
+                    query = query.filter(SubmissionDB.user_id == filters.userId)
+                
+                if filters.status:
+                    query = query.filter(SubmissionDB.status == filters.status)
+                
+                if filters.name:
+                    query = query.filter(SubmissionDB.name.ilike(f"%{filters.name}%"))
+                
+                if filters.createdAtFrom:
+                    query = query.filter(SubmissionDB.created_at >= filters.createdAtFrom)
+                
+                if filters.createdAtTo:
+                    query = query.filter(SubmissionDB.created_at <= filters.createdAtTo)
+                
+                # Apply pagination
+                if filters.offset:
+                    query = query.offset(filters.offset)
+                
+                if filters.limit:
+                    query = query.limit(filters.limit)
+            
+            submissions = query.all()
+            
+            # Convert to dictionary format
+            result = []
             for submission in submissions:
-                # Filter by userId
-                if filters.userId and submission.get("userId") != filters.userId:
-                    continue
-                
-                # Filter by status
-                if filters.status and submission.get("status") != filters.status:
-                    continue
-                
-                # Filter by name
-                if filters.name and filters.name.lower() not in submission.get("name", "").lower():
-                    continue
-                
-                # Filter by date range
-                submission_date = submission.get("createdAt", "")
-                if filters.createdAtFrom and submission_date < filters.createdAtFrom:
-                    continue
-                
-                if filters.createdAtTo and submission_date > filters.createdAtTo:
-                    continue
-                
-                filtered_submissions.append(submission)
+                result.append({
+                    "id": submission.id,
+                    "userId": submission.user_id,
+                    "createdAt": submission.created_at,
+                    "name": submission.name,
+                    "status": submission.status,
+                    "responses": json.loads(submission.responses),
+                    "submittedAt": submission.submitted_at.isoformat()
+                })
             
-            submissions = filtered_submissions
+            return result
         
-        # Apply pagination
-        if filters and filters.offset:
-            submissions = submissions[filters.offset:]
-        
-        if filters and filters.limit:
-            submissions = submissions[:filters.limit]
-        
-        return submissions
+        except Exception as e:
+            return []
+        finally:
+            db.close()
 
     def delete_submission(self, submission_id: str) -> bool:
-        """Delete a submission by ID"""
-        submissions_path = settings.submissions_path
+        """Delete a submission by ID from PostgreSQL database"""
+        db: Session = SessionLocal()
         
         try:
-            with open(submissions_path, "r") as f:
-                content = f.read().strip()
-                if not content:
-                    return False
-                submissions = json.loads(content)
+            submission = db.query(SubmissionDB).filter(SubmissionDB.id == submission_id).first()
             
-            # Find and remove submission
-            original_count = len(submissions)
-            submissions = [s for s in submissions if s.get("id") != submission_id]
-            
-            if len(submissions) < original_count:
-                # Write back updated submissions
-                with open(submissions_path, "w") as f:
-                    json.dump(submissions, f, indent=2)
+            if submission:
+                db.delete(submission)
+                db.commit()
                 return True
             
             return False
             
-        except (FileNotFoundError, json.JSONDecodeError):
+        except Exception as e:
+            db.rollback()
             return False
+        finally:
+            db.close()
 
 question_service = QuestionService()

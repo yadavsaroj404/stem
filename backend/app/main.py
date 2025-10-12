@@ -1,12 +1,24 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import tests
+from app.models.database import create_tables
+
+
+# Initialize database tables on startup
+@asynccontextmanager
+async def startup_event(app: FastAPI):
+    create_tables()
+    yield
+    
 
 app = FastAPI(
     title="Career Assessment API",
     description="API for career assessment questionnaires and test data",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=startup_event
 )
+
 
 # Add CORS middleware
 app.add_middleware(
