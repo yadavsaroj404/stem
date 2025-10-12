@@ -20,7 +20,7 @@ class QuestionService:
     __questions: dict
 
     def __init__(self):
-        questions_path = settings.questions_path
+        questions_path = settings.questions_absolute_path
         with open(questions_path, "r") as f:
             self.__questions = json.load(f)
 

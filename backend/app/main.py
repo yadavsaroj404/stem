@@ -3,12 +3,17 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import tests
 from app.models.database import create_tables
+import os
 
 
 # Initialize database tables on startup
 @asynccontextmanager
 async def startup_event(app: FastAPI):
-    create_tables()
+    # Only create tables if database URL is available
+    try:
+        create_tables()
+    except Exception as e:
+        print(f"Database initialization error: {e}")
     yield
     
 
