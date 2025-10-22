@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import analyzing from "@/images/subjects/search.gif";
+import analyzing from "@/images/objects/search.gif";
 import Image from "next/image";
 
 export default function TestAnalyzePage() {
@@ -23,6 +23,7 @@ export default function TestAnalyzePage() {
           width={80}
           height={80}
           src={analyzing}
+          unoptimized
           alt="Analyzing"
           className="mx-auto"
         />

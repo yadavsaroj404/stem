@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import pp from "@/images/people/nepaliKeti.jpg";
+import pp from "@/images/people/student.png";
 import Image from "next/image";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdDashboard, MdLogout } from "react-icons/md";
@@ -11,6 +11,11 @@ import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { fetchQuestions } from "@/helpers/data-fetch";
 import { Question } from "@/interfaces/tests";
 import { useRouter } from "next/navigation";
+import counterFrame from "@/images/objects/timer-frame.gif";
+import Timer from "@/components/Timer";
+import PauseModal from "@/components/Modals/Pause";
+import StillThereModal from "@/components/Modals/StillThere";
+import PartialCompletionModal from "@/components/Modals/PartialCompletion";
 
 export default function TestPage() {
   const router = useRouter();
@@ -22,6 +27,11 @@ export default function TestPage() {
   const [responses, setResponses] = useState<
     { questionId: string; selectedOptionId: number }[]
   >([]);
+  const [shownModal, setShownModal] = useState<
+    "PAUSE" | "STILL_THERE" | "PARTIAL_COMPLETION" | "NONE"
+  >("NONE");
+  const shownCompletionsRef = useRef<number[]>([]);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Fetch questions from the backend
   useEffect(() => {
@@ -35,20 +45,38 @@ export default function TestPage() {
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
+    const handleClickOutside = (event: MouseEvent) =>
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node) &&
+      setIsDropdownOpen(false);
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // show 25%,50%,75% done modal and remove after 3 seconds
+  useEffect(() => {
+    const completion = Math.floor((responses.length / questions.length) * 100);
+    if (
+      [25, 50, 75].includes(completion) &&
+      !shownCompletionsRef.current.includes(completion)
+    ) {
+      shownCompletionsRef.current = [
+        ...shownCompletionsRef.current,
+        completion,
+      ];
+      const showTimer = setTimeout(() => {
+        setShownModal("PARTIAL_COMPLETION");
+      }, 500);
+      const hideTimer = setTimeout(() => {
+        setShownModal("NONE");
+      }, 5500);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [responses, questions.length]);
 
   const submitAnswer = async () => {
     const testData = {
@@ -79,6 +107,20 @@ export default function TestPage() {
       setLoading(false);
     }
   };
+
+  const handleQuestionChange = (newIndex: number) => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      if (newIndex === questions.length) {
+        submitAnswer();
+      } else {
+        setCurrIndex(newIndex);
+        setIsAnimating(false);
+      }
+    }, 200); // Corresponds to the duration of the fade-out animation
+  };
+
   const goToNextQuestion = () => {
     // go to next question if only the current question is answered
     const currentQuestion = questions[currIndex];
@@ -90,16 +132,12 @@ export default function TestPage() {
       alert("Please select an option before proceeding.");
       return;
     }
-    if (currIndex === questions.length - 1) {
-      submitAnswer();
-    } else {
-      setCurrIndex(currIndex + 1);
-    }
+    handleQuestionChange(currIndex + 1);
   };
 
   const goToPreviousQuestion = () => {
     if (currIndex > 0) {
-      setCurrIndex(currIndex - 1);
+      handleQuestionChange(currIndex - 1);
     }
   };
 
@@ -142,14 +180,48 @@ export default function TestPage() {
   const progress =
     responses.length > 0 ? (responses.length / questions.length) * 100 : 0;
 
+  const questionSectionClass = `
+    transition-all duration-200
+    ${
+      isAnimating
+        ? "opacity-0 transform -translate-x-8"
+        : "opacity-100 transform translate-x-0"
+    }
+  `;
+
   return (
     <>
-      <section className="flex justify-between items-center my-6">
-        <div className="flex items-center gap-x-5">
+      {shownModal === "PAUSE" && (
+        <PauseModal onClose={() => setShownModal("NONE")} />
+      )}
+      {shownModal === "STILL_THERE" && (
+        <StillThereModal
+          onClose={() => setShownModal("NONE")}
+          takeABreak={() => setShownModal("PAUSE")}
+        />
+      )}
+
+      {shownModal === "PARTIAL_COMPLETION" && (
+        <PartialCompletionModal
+          completion={Math.floor((responses.length / questions.length) * 100)}
+        />
+      )}
+      <section className="flex flex-col lg:flex-row justify-between items-center my-6 px-4 md:px-0 gap-y-6 lg:gap-y-0">
+        <div className="flex items-center gap-x-5 w-full lg:w-auto order-2 lg:order-1">
           {/* timer */}
-          <div className="">4:25</div>
+          <div className="relative">
+            <Image
+              width={55}
+              height={55}
+              src={counterFrame}
+              unoptimized
+              alt="timer"
+              className=""
+            />
+            <Timer />
+          </div>
           {/* progress bar */}
-          <div className="w-64 bg-purple-900/30 rounded-full h-5 mt-2">
+          <div className="w-full lg:w-85 bg-purple-900/30 rounded-full h-5 mt-2">
             <div
               className="bg-gradient-to-r from-[#5100D2]  to-[#D400FF] h-5 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
@@ -158,7 +230,10 @@ export default function TestPage() {
         </div>
 
         {/* user profile */}
-        <div className="relative" ref={dropdownRef}>
+        <div
+          className="relative w-full max-w-xs self-end lg:w-auto order-1 lg:order-2"
+          ref={dropdownRef}
+        >
           <div
             className="flex justify-center items-center gap-x-3 cursor-pointer rounded-4xl px-4 bg-primary-brand-color shadow-[inset_0_0px_8px_rgba(255,255,255,0.6)] hover:bg-opacity-90 transition-all duration-200"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -220,32 +295,35 @@ export default function TestPage() {
         </div>
       </section>
 
-      <section className="flex justify-between mt-10 gap-x-10 items-start">
+      <section
+        className={`flex flex-col lg:flex-row justify-between mt-10 lg:gap-10 items-start px-4 md:px-0 ${questionSectionClass}`}
+      >
         {/* left side */}
-        <div className="">
-          <div className="text-sm font-semibold pb-1 w-fit border-b-2 border-[#D400FF]/30">
+        <div className="w-full lg:w-1/2">
+          <div className="text-sm font-semibold w-fit border-b-2 border-[#D400FF]/30">
             Question {currIndex + 1} of {questions.length}
           </div>
           <div className="mt-5 capitalize text-xl font-bold">
             {questions[currIndex].question}
           </div>
-          {/* <div className="mt-5 capitalize text-xl font-bold">{questions[currIndex].question}</div> */}
           <Image
             src={mohotarma}
             alt="mohotarma"
             width={400}
             height={300}
-            className="w-auto"
+            className="w-1/2"
           />
         </div>
 
         {/* right side */}
-        <div className="w-5/12">
-          <div className="">Choose the option that feels most true to you</div>
+        <div className="w-full lg:w-5/12">
+          <div className="hidden lg:block mb-4">
+            Choose the option that feels most true to you
+          </div>
           {questions[currIndex].options.map((option, index) => (
             <div
               key={index}
-              className={`flex items-center px-4 my-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color transition duration-150 cursor-pointer ${
+              className={`flex items-center px-4 mb-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color transition duration-150 cursor-pointer ${
                 isOptionSelected(currIndex, option._id)
                   ? "bg-primary-brand-color shadow-[inset_0_5px_8px_rgba(255,255,255,0.4)]"
                   : "hover:bg-primary-dark hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)]"
@@ -258,20 +336,34 @@ export default function TestPage() {
               <span className="text-base font-medium">{option.text}</span>
             </div>
           ))}
-          <div className="flex justify-between mt-10">
+          <div className="flex justify-between items-center mt-10">
             <button
               className="bg-[#39008C] p-5 rounded-full border border-primary-brand-color hover:bg-primary-brand-color hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)] transition duration-150 cursor-pointer"
               onClick={goToPreviousQuestion}
+              disabled={currIndex === 0 || isAnimating}
             >
               <FaArrowLeftLong />
             </button>
             <button
+              className="block lg:hidden underline decoration-gray-300 hover:decoration-gray-400 underline-offset-4 cursor-pointer text-base w-fit"
+              onClick={() => setShownModal("PAUSE")}
+            >
+              Pause this test
+            </button>
+            <button
               className="bg-[#39008C] p-5 rounded-full border border-primary-brand-color hover:bg-primary-brand-color hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)] transition duration-150 cursor-pointer"
               onClick={goToNextQuestion}
+              disabled={isAnimating}
             >
               <FaArrowRightLong />
             </button>
           </div>
+          <button
+            className="hidden lg:block mt-8 underline decoration-gray-300 hover:decoration-gray-400 underline-offset-4 cursor-pointer text-base w-fit mx-auto lg:ml-auto lg:mr-0"
+            onClick={() => setShownModal("PAUSE")}
+          >
+            Pause this test
+          </button>
         </div>
       </section>
     </>
