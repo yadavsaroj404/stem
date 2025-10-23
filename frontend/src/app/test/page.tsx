@@ -70,7 +70,7 @@ export default function TestPage() {
       }, 500);
       const hideTimer = setTimeout(() => {
         setShownModal("NONE");
-      }, 5500);
+      }, 2500);
       return () => {
         clearTimeout(showTimer);
         clearTimeout(hideTimer);
@@ -190,7 +190,9 @@ export default function TestPage() {
   `;
 
   return (
-    <>
+    <main
+    // className="px-4 md:px-6 lg:px-14"
+    >
       {shownModal === "PAUSE" && (
         <PauseModal onClose={() => setShownModal("NONE")} />
       )}
@@ -200,13 +202,12 @@ export default function TestPage() {
           takeABreak={() => setShownModal("PAUSE")}
         />
       )}
-
       {shownModal === "PARTIAL_COMPLETION" && (
         <PartialCompletionModal
           completion={Math.floor((responses.length / questions.length) * 100)}
         />
       )}
-      <section className="flex flex-col lg:flex-row justify-between items-center my-6 px-4 md:px-0 gap-y-6 lg:gap-y-0">
+      <section className="px-4 md:px-6 lg:px-14 flex flex-col lg:flex-row justify-between items-center my-6 gap-y-6 lg:gap-y-0">
         <div className="flex items-center gap-x-5 w-full lg:w-auto order-2 lg:order-1">
           {/* timer */}
           <div className="relative">
@@ -296,14 +297,15 @@ export default function TestPage() {
       </section>
 
       <section
-        className={`flex flex-col lg:flex-row justify-between mt-10 lg:gap-10 items-start px-4 md:px-0 ${questionSectionClass}`}
+        className={`relative flex flex-col lg:flex-row justify-between mt-10 lg:gap-10 items-start ${questionSectionClass}`}
       >
         {/* left side */}
-        <div className="w-full lg:w-1/2">
-          <div className="text-sm font-semibold w-fit border-b-2 border-[#D400FF]/30">
+        <div className="relative w-full lg:w-1/2 overflow-hidden">
+          <div className="-z-10 absolute w-[1000px] lg:w-[1000px] h-[1000px] rounded-full left-[-320px] lg:left-[-451px] bottom-[-900px] lg:bottom-[-700px] shadow-[0_4px_100px_0_#6300FF]"></div>
+          <div className="mx-4 md:mx-6 lg:mx-14 text-sm font-semibold w-fit border-b-2 border-[#D400FF]/30">
             Question {currIndex + 1} of {questions.length}
           </div>
-          <div className="mt-5 capitalize text-xl font-bold">
+          <div className="px-4 md:px-6 lg:px-14 mt-5 capitalize text-xl font-bold">
             {questions[currIndex].question}
           </div>
           <Image
@@ -311,12 +313,12 @@ export default function TestPage() {
             alt="mohotarma"
             width={400}
             height={300}
-            className="w-1/2"
+            className="w-1/2 mx-4 md:mx-6 lg:mx-14"
           />
         </div>
 
         {/* right side */}
-        <div className="w-full lg:w-5/12">
+        <div className="px-4 md:px-6 lg:px-14 w-full lg:w-5/12">
           <div className="hidden lg:block mb-4">
             Choose the option that feels most true to you
           </div>
@@ -366,6 +368,6 @@ export default function TestPage() {
           </button>
         </div>
       </section>
-    </>
+    </main>
   );
 }

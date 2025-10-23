@@ -13,9 +13,8 @@ export const fetchQuestions: () => Promise<TestQuestions | null> = async () => {
     console.log("Fetched questions:", data);
     return data.data;
   } catch (error) {
+    alert(`Error fetching questions: ${error}`);
     console.error(error);
     return null;
   }
 };
-
-// export const submitTestResults = async (testData)

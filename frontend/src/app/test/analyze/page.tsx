@@ -16,9 +16,7 @@ export default function TestAnalyzePage() {
     return () => clearTimeout(timer);
   }, [router]);
   return (
-    <>
-      {/* place it on the center of the screen */}
-      <div className="w-fit text-center absolute top-1/2 left-1/2 -translate-1/2 p-10">
+      <div className="w-full lg:w-fit text-center absolute top-1/2 left-1/2 -translate-1/2 p-0 lg:p-10">
         <Image
           width={80}
           height={80}
@@ -27,11 +25,10 @@ export default function TestAnalyzePage() {
           alt="Analyzing"
           className="mx-auto"
         />
-        <h1 className="text-base font-bold">
+        <h1 className="text-xs lg:text-base font-bold">
           Analyzing Your Responses and matching you with perfect
         </h1>
-        <h1 className="text-base font-bold">Career Path....</h1>
+        <h1 className="text-sm lg:text-base font-bold">Career Path....</h1>
       </div>
-    </>
   );
 }

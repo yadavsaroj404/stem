@@ -28,7 +28,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://stem-frontend-teal.vercel.app", "http://localhost:3000"],
+    allow_origins=["https://stem-frontend-teal.vercel.app", "http://localhost:3000", "http://192.168.1.2:8000"],
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],

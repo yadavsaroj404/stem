@@ -15,11 +15,10 @@ export default function TestCompletePage() {
   }, [router]);
 
   return (
-    <>
-      {/* place it on the center of the screen */}
+    <main className="px-4 md:px-6 lg:px-14">
       <div className="flex items-center justify-center h-screen">
         <h1 className="text-base font-bold">Test is Successfully Completed</h1>
       </div>
-    </>
+    </main>
   );
 }
