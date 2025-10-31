@@ -1,37 +1,37 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import pp from "@/images/people/student.png";
+import { useState, useRef, useEffect, ReactElement, Fragment } from "react";
 import Image from "next/image";
-import { IoIosArrowDown } from "react-icons/io";
-import { MdDashboard, MdLogout } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
-import mohotarma from "@/images/test/mohotarma.png";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { fetchQuestions } from "@/helpers/data-fetch";
-import { Question } from "@/interfaces/tests";
+import {
+  AnyQuestion,
+  AnyResponse,
+  GroupOption as GroupOptionParams,
+  MatchingQuestion,
+  TextImageOption as TextImageOptionParams,
+  TextOption as TextOptionParams,
+} from "@/interfaces/tests";
 import { useRouter } from "next/navigation";
 import counterFrame from "@/images/objects/timer-frame.gif";
 import Timer from "@/components/Timer";
 import PauseModal from "@/components/Modals/Pause";
 import StillThereModal from "@/components/Modals/StillThere";
 import PartialCompletionModal from "@/components/Modals/PartialCompletion";
+import UserProfile from "@/components/UserProfile";
 
 export default function TestPage() {
   const router = useRouter();
   const [currIndex, setCurrIndex] = useState(0);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<AnyQuestion[]>([]);
   const [loading, setLoading] = useState(true);
-  const [responses, setResponses] = useState<
-    { questionId: string; selectedOptionId: number }[]
-  >([]);
+  const [responses, setResponses] = useState<AnyResponse[]>([]);
   const [shownModal, setShownModal] = useState<
     "PAUSE" | "STILL_THERE" | "PARTIAL_COMPLETION" | "NONE"
   >("NONE");
   const shownCompletionsRef = useRef<number[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
 
   // Fetch questions from the backend
   useEffect(() => {
@@ -41,17 +41,6 @@ export default function TestPage() {
       setLoading(false);
     };
     fetchData();
-  }, []);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) =>
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node) &&
-      setIsDropdownOpen(false);
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // show 25%,50%,75% done modal and remove after 3 seconds
@@ -98,9 +87,9 @@ export default function TestPage() {
           body: JSON.stringify(testData),
         }
       );
-      if (!response.ok) {
-        throw new Error("Failed to submit test");
-      }
+      // if (!response.ok) {
+      //   throw new Error("Failed to submit test");
+      // }
       router.push("/test/complete");
     } catch (error) {
       alert("Failed to submit test. Please try again.");
@@ -141,36 +130,30 @@ export default function TestPage() {
     }
   };
 
-  const selectOption = (questionIndex: number, optionId: number) => {
-    // add or update the response for the question
+  const updateResponse = (newResponse: AnyResponse) => {
     setResponses((prevResponses) => {
       const existingResponseIndex = prevResponses.findIndex(
-        (response) => response.questionId === questions[questionIndex]._id
+        (response) => response.questionId === newResponse.questionId
       );
 
       if (existingResponseIndex !== -1) {
-        // Update existing response
         const newResponses = [...prevResponses];
-        newResponses[existingResponseIndex].selectedOptionId = optionId;
+        newResponses[existingResponseIndex] = newResponse;
         return newResponses;
       } else {
-        // Add new response
-        return [
-          ...prevResponses,
-          {
-            questionId: questions[questionIndex]._id,
-            selectedOptionId: optionId,
-          },
-        ];
+        return [...prevResponses, newResponse];
       }
     });
   };
 
-  const isOptionSelected = (questionIndex: number, optionId: number) => {
-    const response = responses.find(
-      (resp) => resp.questionId === questions[questionIndex]._id
-    );
-    return response?.selectedOptionId === optionId;
+  const isOptionSelected = (questionId: string, optionId: number) => {
+    const response = responses.find((resp) => resp.questionId === questionId);
+    if (!response) return false;
+
+    if (response.type === "text" || response.type === "text-image") {
+      return response.selectedOptionId === optionId;
+    }
+    return false;
   };
 
   if (loading) {
@@ -180,6 +163,7 @@ export default function TestPage() {
   const progress =
     responses.length > 0 ? (responses.length / questions.length) * 100 : 0;
 
+  const currentQuestion = questions[currIndex];
   const questionSectionClass = `
     transition-all duration-200
     ${
@@ -189,12 +173,97 @@ export default function TestPage() {
     }
   `;
 
+  const renderOptions = () => {
+    switch (currentQuestion.type) {
+      case "text":
+        return currentQuestion.options.map((option, index) => (
+          <TextOption
+            key={option._id}
+            index={index}
+            option={option}
+            onSelect={(optionId) =>
+              updateResponse({
+                questionId: currentQuestion._id,
+                type: "text",
+                selectedOptionId: optionId,
+              })
+            }
+            isOptionSelected={isOptionSelected(currentQuestion._id, option._id)}
+          />
+        ));
+      case "text-image":
+        return (
+          <div className="flex gap-5 mb-4">
+            {currentQuestion.options.map((option, index) => (
+              <TextImageOption
+                key={option._id}
+                index={index}
+                option={option}
+                onSelect={(optionId) =>
+                  updateResponse({
+                    questionId: currentQuestion._id,
+                    type: "text-image",
+                    selectedOptionId: optionId,
+                  })
+                }
+                isOptionSelected={isOptionSelected(
+                  currentQuestion._id,
+                  option._id
+                )}
+              />
+            ))}
+          </div>
+        );
+      case "matching":
+        return (
+          <MatchingQuestionComponent
+            question={currentQuestion}
+            onSelect={(matches) =>
+              updateResponse({
+                questionId: currentQuestion._id,
+                type: "matching",
+                matches,
+              })
+            }
+            response={
+              responses.find(
+                (r) => r.questionId === currentQuestion._id
+              ) as AnyResponse
+            }
+          />
+        );
+      case "group":
+        return (
+          <GroupQuestionComponent
+            question={currentQuestion}
+            onSelect={(selectedSubOptionIds) =>
+              updateResponse({
+                questionId: currentQuestion._id,
+                type: "group",
+                selectedSubOptionIds,
+              })
+            }
+            response={
+              responses.find(
+                (r) => r.questionId === currentQuestion._id
+              ) as AnyResponse
+            }
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <main
-    // className="px-4 md:px-6 lg:px-14"
-    >
+    <main>
       {shownModal === "PAUSE" && (
-        <PauseModal onClose={() => setShownModal("NONE")} />
+        <PauseModal
+          onClose={() => {
+            setIsTimerPaused(false);
+            setShownModal("NONE");
+          }}
+        />
       )}
       {shownModal === "STILL_THERE" && (
         <StillThereModal
@@ -219,7 +288,7 @@ export default function TestPage() {
               alt="timer"
               className=""
             />
-            <Timer />
+            <Timer isPaused={isTimerPaused} />
           </div>
           {/* progress bar */}
           <div className="w-full lg:w-85 bg-purple-900/30 rounded-full h-5 mt-2">
@@ -231,113 +300,43 @@ export default function TestPage() {
         </div>
 
         {/* user profile */}
-        <div
-          className="relative w-full max-w-xs self-end lg:w-auto order-1 lg:order-2"
-          ref={dropdownRef}
-        >
-          <div
-            className="flex justify-center items-center gap-x-3 cursor-pointer rounded-4xl px-4 bg-primary-brand-color shadow-[inset_0_0px_8px_rgba(255,255,255,0.6)] hover:bg-opacity-90 transition-all duration-200"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          >
-            <Image
-              src={pp}
-              alt="profile pic"
-              width={100}
-              height={100}
-              className="w-8 h-8 my-2 rounded-full object-cover"
-            />
-            <span className="text-sm font-semibold">Ahmed bin Tariq</span>
-            <IoIosArrowDown
-              className={`transition-transform duration-200 ${
-                isDropdownOpen ? "rotate-180" : ""
-              }`}
-            />
-          </div>
-
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-full bg-[#D7CDFF] border border-primary-brand-color rounded-3xl shadow-lg z-50 overflow-hidden">
-              <div className="px-4 py-2">
-                <button
-                  className="flex items-center w-full py-1.5 text-sm font-semibold text-black border-b-2 border-primary-brand-color/20"
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                    // Add dashboard navigation logic here
-                  }}
-                >
-                  <MdDashboard color="#6300FF" className="mr-3 text-lg" />
-                  Dashboard
-                </button>
-
-                <button
-                  className="flex items-center w-full py-1.5 text-sm font-semibold text-black border-b-2 border-primary-brand-color/20"
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                    // Add profile navigation logic here
-                  }}
-                >
-                  <FaUser color="#6300FF" className="mr-3 text-lg" />
-                  Profile
-                </button>
-
-                <button
-                  className="flex items-center w-full py-1.5 text-sm font-semibold text-red-600"
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                    // Add logout logic here
-                  }}
-                >
-                  <MdLogout color="#6300FF" className="mr-3 text-lg" />
-                  Log Out
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        <UserProfile />
       </section>
 
       <section
         className={`relative flex flex-col lg:flex-row justify-between mt-10 lg:gap-10 items-start ${questionSectionClass}`}
       >
         {/* left side */}
-        <div className="relative w-full lg:w-1/2 overflow-hidden">
+        <div className="relative w-full lg:max-w-1/2 overflow-hidden">
           <div className="-z-10 absolute w-[1000px] lg:w-[1000px] h-[1000px] rounded-full left-[-320px] lg:left-[-451px] bottom-[-900px] lg:bottom-[-700px] shadow-[0_4px_100px_0_#6300FF]"></div>
           <div className="mx-4 md:mx-6 lg:mx-14 text-sm font-semibold w-fit border-b-2 border-[#D400FF]/30">
             Question {currIndex + 1} of {questions.length}
           </div>
-          <div className="px-4 md:px-6 lg:px-14 mt-5 capitalize text-xl font-bold">
-            {questions[currIndex].question}
-          </div>
+          <h1 className="px-4 md:px-6 lg:px-14 mt-5 capitalize text-xl font-bold">
+            {currentQuestion.question}
+          </h1>
+          {currentQuestion.description && (
+            <p className="px-4 md:px-6 lg:px-14 mt-2 capitalize text-sm font-semibold">
+              {currentQuestion.description}
+            </p>
+          )}
           <Image
-            src={mohotarma}
-            alt="mohotarma"
+            src={currentQuestion.image}
+            alt={currentQuestion.question}
             width={400}
             height={300}
-            className="w-1/2 mx-4 md:mx-6 lg:mx-14"
+            className="w-1/2 mt-5 mx-4 md:mx-6 lg:mx-14"
           />
         </div>
 
         {/* right side */}
-        <div className="px-4 md:px-6 lg:px-14 w-full lg:w-5/12">
-          <div className="hidden lg:block mb-4">
-            Choose the option that feels most true to you
-          </div>
-          {questions[currIndex].options.map((option, index) => (
-            <div
-              key={index}
-              className={`flex items-center px-4 mb-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color transition duration-150 cursor-pointer ${
-                isOptionSelected(currIndex, option._id)
-                  ? "bg-primary-brand-color shadow-[inset_0_5px_8px_rgba(255,255,255,0.4)]"
-                  : "hover:bg-primary-dark hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)]"
-              }`}
-              onClick={() => selectOption(currIndex, option._id)}
-            >
-              <span className="text-base font-medium mr-2 ">
-                ({String.fromCharCode(65 + index)})
-              </span>
-              <span className="text-base font-medium">{option.text}</span>
+        <div className="px-4 md:px-6 lg:px-14 w-full lg:min-w-5/12">
+          {currentQuestion.optionInstruction && (
+            <div className="hidden lg:block mb-4">
+              {currentQuestion.optionInstruction}
             </div>
-          ))}
+          )}
+          {renderOptions()}
           <div className="flex justify-between items-center mt-10">
             <button
               className="bg-[#39008C] p-5 rounded-full border border-primary-brand-color hover:bg-primary-brand-color hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)] transition duration-150 cursor-pointer"
@@ -348,7 +347,10 @@ export default function TestPage() {
             </button>
             <button
               className="block lg:hidden underline decoration-gray-300 hover:decoration-gray-400 underline-offset-4 cursor-pointer text-base w-fit"
-              onClick={() => setShownModal("PAUSE")}
+              onClick={() => {
+                setIsTimerPaused(true);
+                setShownModal("PAUSE");
+              }}
             >
               Pause this test
             </button>
@@ -362,12 +364,267 @@ export default function TestPage() {
           </div>
           <button
             className="hidden lg:block mt-8 underline decoration-gray-300 hover:decoration-gray-400 underline-offset-4 cursor-pointer text-base w-fit mx-auto lg:ml-auto lg:mr-0"
-            onClick={() => setShownModal("PAUSE")}
+            onClick={() => {
+              setIsTimerPaused(true);
+              setShownModal("PAUSE");
+            }}
           >
             Pause this test
           </button>
         </div>
       </section>
     </main>
+  );
+}
+
+// Option component for text-based options
+function TextOption({
+  option,
+  index,
+  onSelect,
+  isOptionSelected,
+}: {
+  option: TextOptionParams;
+  index: number;
+  onSelect: (id: number) => void;
+  isOptionSelected: boolean;
+}): ReactElement {
+  return (
+    <div
+      className={`flex items-center px-4 mb-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color transition duration-150 cursor-pointer ${
+        isOptionSelected
+          ? "bg-primary-brand-color shadow-[inset_0_5px_8px_rgba(255,255,255,0.4)]"
+          : "hover:bg-primary-dark hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)]"
+      }`}
+      onClick={() => onSelect(option._id)}
+    >
+      <span className="text-base font-medium mr-2 ">
+        ({String.fromCharCode(65 + index)})
+      </span>
+      <span className="text-base font-medium">{option.text}</span>
+    </div>
+  );
+}
+
+// Options for image-text-based options
+function TextImageOption({
+  option,
+  index,
+  onSelect,
+  isOptionSelected,
+}: {
+  option: TextImageOptionParams;
+  index: number;
+  onSelect: (id: number) => void;
+  isOptionSelected: boolean;
+}): ReactElement {
+  return (
+    <div
+      className={`px-4 mb-4 py-3 text-center bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color transition duration-150 cursor-pointer ${
+        isOptionSelected
+          ? "bg-primary-brand-color shadow-[inset_0_5px_8px_rgba(255,255,255,0.4)]"
+          : "hover:bg-primary-dark hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)]"
+      }`}
+      onClick={() => onSelect(option._id)}
+    >
+      <span className="text-base font-medium mr-2 ">
+        ({String.fromCharCode(65 + index)})
+      </span>
+      <span className="text-base font-medium">{option.text}</span>
+      <Image
+        width={100}
+        height={100}
+        src={option.image}
+        alt={option.text}
+        className="mx-auto my-5"
+      />
+    </div>
+  );
+}
+
+function MatchingQuestionComponent({
+  question,
+  onSelect,
+  response,
+}: {
+  question: MatchingQuestion;
+  onSelect: (matches: { leftId: number; rightId: number }[]) => void;
+  response: AnyResponse | undefined;
+}) {
+  const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
+  const [matches, setMatches] = useState<{ leftId: number; rightId: number }[]>(
+    []
+  );
+
+  useEffect(() => {
+    if (response && response.type === "matching") {
+      setMatches(response.matches);
+    } else {
+      setMatches([]);
+    }
+  }, [response]);
+
+  const handleSelect = (side: "left" | "right", id: number) => {
+    if (side === "left") {
+      // If the same left item is clicked again, deselect it
+      if (selectedLeft === id) {
+        setSelectedLeft(null);
+      } else {
+        setSelectedLeft(id);
+      }
+    } else if (side === "right" && selectedLeft !== null) {
+      // If the right item is already matched, do nothing to prevent re-matching
+      if (matches.some((m) => m.rightId === id)) {
+        return;
+      }
+      const newMatches = matches.filter((m) => m.leftId !== selectedLeft);
+      const updatedMatches = [
+        ...newMatches,
+        { leftId: selectedLeft, rightId: id },
+      ];
+      setMatches(updatedMatches);
+      onSelect(updatedMatches);
+      setSelectedLeft(null);
+    }
+  };
+
+  const getMatchForLeft = (leftId: number) => {
+    return matches.find((m) => m.leftId === leftId);
+  };
+
+  const getMatchForRight = (rightId: number) => {
+    return matches.find((m) => m.rightId === rightId);
+  };
+
+  return (
+    <div className="flex gap-4">
+      {/* Left Side */}
+      <div className="w-1/2 space-y-3">
+        {question.leftSide.map((item) => {
+          const match = getMatchForLeft(item._id);
+          return (
+            <div
+              key={item._id}
+              onClick={() => handleSelect("left", item._id)}
+              className={`p-3 rounded-lg border transition-all cursor-pointer flex justify-between items-center ${
+                selectedLeft === item._id
+                  ? "bg-blue-500 border-blue-400"
+                  : match
+                  ? "bg-green-700 border-green-500"
+                  : "border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark"
+              }`}
+            >
+              <span>{item.text}</span>
+              {item.image && (
+                <Image
+                  src={item.image}
+                  alt={item.text}
+                  width={40}
+                  height={40}
+                  className="rounded-md"
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+      {/* Right Side */}
+      <div className="w-1/2 space-y-3">
+        {question.rightSide.map((item) => {
+          const match = getMatchForRight(item._id);
+          return (
+            <div
+              key={item._id}
+              onClick={() => handleSelect("right", item._id)}
+              className={`p-3 rounded-lg border transition-all cursor-pointer flex justify-between items-center ${
+                match
+                  ? "bg-green-700 border-green-500 cursor-not-allowed"
+                  : selectedLeft
+                  ? "border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark"
+                  : "border-gray-500 bg-gray-700 cursor-not-allowed"
+              }`}
+            >
+              <span>{item.text}</span>
+              {item.image && (
+                <Image
+                  src={item.image}
+                  alt={item.text}
+                  width={40}
+                  height={40}
+                  className="rounded-md"
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function GroupQuestionComponent({
+  question,
+  onSelect,
+  response,
+}: {
+  question: any;
+  onSelect: (selectedIds: number[]) => void;
+  response: AnyResponse | undefined;
+}) {
+  const [selected, setSelected] = useState<Record<number, number>>({});
+
+  useEffect(() => {
+    if (response && response.type === "group") {
+      const newSelected: Record<number, number> = {};
+      question.options.forEach((group: any) => {
+        const found = group.subOptions.find((sub: any) =>
+          response.selectedSubOptionIds.includes(sub._id)
+        );
+        if (found) {
+          newSelected[group._id] = found._id;
+        }
+      });
+      setSelected(newSelected);
+    } else {
+      setSelected({});
+    }
+  }, [response, question.options]);
+
+  const handleSelect = (groupId: number, subOptionId: number) => {
+    const newSelected = { ...selected, [groupId]: subOptionId };
+    setSelected(newSelected);
+    onSelect(Object.values(newSelected));
+  };
+
+  return (
+    <div className="flex gap-2.5">
+      {question.options.map((group: GroupOptionParams) => (
+        <div
+          key={group._id}
+          className="w-full p-4 rounded-lg border border-primary-brand-color bg-[#1B0244] bg-opacity-50"
+        >
+          <h3 className="font-semibold mb-2 text-sm text-nowrap">
+            {group.groupName}
+          </h3>
+          <div className="space-y-2">
+            {group.subOptions.map((subOption) => (
+              <label
+                key={subOption._id}
+                className="flex items-center cursor-pointer text-sm text-nowrap"
+              >
+                <input
+                  type="radio"
+                  name={`group-${group._id}`}
+                  checked={selected[group._id] === subOption._id}
+                  onChange={() => handleSelect(group._id, subOption._id)}
+                  className="mr-2"
+                />
+                {subOption.text}
+              </label>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

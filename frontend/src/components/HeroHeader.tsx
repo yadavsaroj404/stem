@@ -33,7 +33,7 @@ const HeroHeader = () => {
           <div className="flex flex-col space-y-8 lg:order-2 lg:flex-1">
             {/* Trust badge */}
             <div className="order-1 w-fit inline-flex items-center px-4 py-2 bg-primary-dark bg-opacity-50 rounded-full border border-primary-brand-color shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)]">
-              <span className="text-sm font-medium text-center">
+              <span className="text-xs sm:text-sm font-medium text-center">
                 Trusted by 5,000+ students exploring their future.
               </span>
             </div>

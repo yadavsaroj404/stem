@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 
-export default function Timer() {
+export default function Timer({ isPaused }: { isPaused: boolean }) {
   const [secondsLeft, setSecondsLeft] = useState(265); // 4:25 in seconds
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    if (secondsLeft <= 0) return;
+    if (secondsLeft <= 0 || isPaused) return;
     const interval = setInterval(() => {
       setIsAnimating(true);
       setTimeout(() => {
@@ -16,7 +16,7 @@ export default function Timer() {
       }, 400);
     }, 1200);
     return () => clearInterval(interval);
-  }, [secondsLeft]);
+  }, [secondsLeft, isPaused]);
 
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
