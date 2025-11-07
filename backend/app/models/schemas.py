@@ -4,7 +4,8 @@ from datetime import datetime
 
 class Response(BaseModel):
     questionId: str
-    selectedOptionId: int
+    type: str
+    selectedOptionId: str
 
 class TestSubmissionPayload(BaseModel):
     userId: str

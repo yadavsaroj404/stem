@@ -1,6 +1,7 @@
 export interface TestQuestions {
   _id: string;
   name: string;
+  version: string;
   questions: AnyQuestion[];
 }
 
@@ -82,13 +83,13 @@ export interface SimpleResponse {
 export interface MatchingResponse {
   questionId: string;
   type: "matching";
-  matches: { leftId: number; rightId: number }[];
+  selectedOptionId: string; // e.g., "l401-r403;l402-r402;"
 }
 
 export interface GroupResponse {
   questionId: string;
   type: "group";
-  selectedSubOptionIds: number[];
+  selectedOptionId: string; // e.g., "501-511;502-523;"
 }
 
 export type AnyResponse = SimpleResponse | MatchingResponse | GroupResponse;

@@ -218,13 +218,16 @@ export default function TestPage() {
         return (
           <MatchingQuestionComponent
             question={currentQuestion}
-            onSelect={(matches) =>
+            onSelect={(matches) => {
+              const selectedOptionId = matches
+                .map((m) => `${m.leftId}-${m.rightId}`)
+                .join(";");
               updateResponse({
                 questionId: currentQuestion._id,
                 type: "matching",
-                matches,
-              })
-            }
+                selectedOptionId,
+              });
+            }}
             response={
               responses.find(
                 (r) => r.questionId === currentQuestion._id
@@ -236,13 +239,16 @@ export default function TestPage() {
         return (
           <GroupQuestionComponent
             question={currentQuestion}
-            onSelect={(selectedSubOptionIds) =>
+            onSelect={(selectedSubOptionIds) => {
+              const selectedOptionId = Object.entries(selectedSubOptionIds)
+                .map(([groupId, subOptionId]) => `${groupId}-${subOptionId}`)
+                .join(";");
               updateResponse({
                 questionId: currentQuestion._id,
                 type: "group",
-                selectedSubOptionIds,
-              })
-            }
+                selectedOptionId,
+              });
+            }}
             response={
               responses.find(
                 (r) => r.questionId === currentQuestion._id
@@ -455,29 +461,65 @@ function MatchingQuestionComponent({
   const [matches, setMatches] = useState<{ leftId: number; rightId: number }[]>(
     []
   );
+  const COLORS = [
+    "rgba(255, 87, 87, 0.15)",
+    "rgba(87, 151, 255, 0.15)",
+    "rgba(87, 255, 159, 0.15)",
+    "rgba(255, 229, 87, 0.15)",
+    "rgba(255, 167, 87, 0.15)",
+  ];
+  const BORDER_COLORS = ["#FF5757", "#5797FF", "#57FF9F", "#FFE557", "#FFA757"];
 
   useEffect(() => {
-    if (response && response.type === "matching") {
-      setMatches(response.matches);
+    console.log("Current matches:", matches);
+  }, [matches]);
+  useEffect(() => {
+    if (response && response.type === "matching" && response.selectedOptionId) {
+      const parsedMatches = response.selectedOptionId
+        .split(";")
+        .filter(Boolean)
+        .map((pair) => {
+          const [leftId, rightId] = pair.split("-");
+          return { leftId: Number(leftId), rightId: Number(rightId) };
+        });
+      setMatches(parsedMatches);
     } else {
       setMatches([]);
     }
   }, [response]);
 
   const handleSelect = (side: "left" | "right", id: number) => {
+    // If clicking a matched item (left or right), unmatch it.
+    const existingMatch = matches.find(
+      (m) =>
+        (side === "left" && m.leftId === id) ||
+        (side === "right" && m.rightId === id)
+    );
+
+    if (existingMatch) {
+      const newMatches = matches.filter(
+        (m) => m.leftId !== existingMatch.leftId
+      );
+      setMatches(newMatches);
+      onSelect(newMatches);
+      setSelectedLeft(null);
+      return;
+    }
+
     if (side === "left") {
-      // If the same left item is clicked again, deselect it
+      // If clicking the currently selected left item, deselect it.
       if (selectedLeft === id) {
         setSelectedLeft(null);
       } else {
+        // Otherwise, select it.
         setSelectedLeft(id);
       }
     } else if (side === "right" && selectedLeft !== null) {
-      // If the right item is already matched, do nothing to prevent re-matching
-      if (matches.some((m) => m.rightId === id)) {
-        return;
-      }
-      const newMatches = matches.filter((m) => m.leftId !== selectedLeft);
+      // If a left item is selected and a right item is clicked, create a match.
+      // Break any existing matches for either the selected left or the clicked right item.
+      const newMatches = matches.filter(
+        (m) => m.leftId !== selectedLeft && m.rightId !== id
+      );
       const updatedMatches = [
         ...newMatches,
         { leftId: selectedLeft, rightId: id },
@@ -489,30 +531,63 @@ function MatchingQuestionComponent({
   };
 
   const getMatchForLeft = (leftId: number) => {
-    return matches.find((m) => m.leftId === leftId);
+    return matches.find((m) => m.leftId == leftId);
   };
 
   const getMatchForRight = (rightId: number) => {
-    return matches.find((m) => m.rightId === rightId);
+    return matches.find((m) => m.rightId == rightId);
   };
+
+  const getColorForMatch = (side: "left" | "right", id: number) => {
+    let index = -1;
+    if (side === "left") {
+      index = question.leftSide.findIndex((item) => item._id == id);
+    } else {
+      const matchIndex = matches.findIndex((item) => item.rightId == id);
+      if (matchIndex !== -1) {
+        const leftId = matches[matchIndex].leftId;
+        index = question.leftSide.findIndex((item) => item._id == leftId);
+      }
+    }
+    if (index === -1) return null;
+    return {
+      bg: COLORS[index % COLORS.length],
+      border: BORDER_COLORS[index % BORDER_COLORS.length],
+    };
+  };
+
+  // const getSelectionColor = (leftId: number) => {
+  //   const index = question.leftSide.findIndex((item) => item._id === leftId);
+  //   if (index === -1) return null;
+  //   return {
+  //     bg: COLORS[index % COLORS.length],
+  //     border: BORDER_COLORS[index % BORDER_COLORS.length],
+  //   };
+  // };
 
   return (
     <div className="flex gap-4">
       {/* Left Side */}
-      <div className="w-1/2 space-y-3">
+      <div className="space-y-3">
         {question.leftSide.map((item) => {
           const match = getMatchForLeft(item._id);
+          const color =
+            match || selectedLeft === item._id
+              ? getColorForMatch("left", item._id)
+              : null;
           return (
             <div
               key={item._id}
               onClick={() => handleSelect("left", item._id)}
-              className={`p-3 rounded-lg border transition-all cursor-pointer flex justify-between items-center ${
-                selectedLeft === item._id
-                  ? "bg-blue-500 border-blue-400"
-                  : match
-                  ? "bg-green-700 border-green-500"
-                  : "border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark"
+              className={`w-fit p-3.5 rounded-lg border transition-all cursor-pointer flex items-center ${
+                !color
+                  ? "border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark"
+                  : "backdrop-blur-md"
               }`}
+              style={{
+                backgroundColor: color?.bg || "",
+                borderColor: color?.border || "",
+              }}
             >
               <span>{item.text}</span>
               {item.image && (
@@ -529,20 +604,23 @@ function MatchingQuestionComponent({
         })}
       </div>
       {/* Right Side */}
-      <div className="w-1/2 space-y-3">
+      <div className="space-y-3">
         {question.rightSide.map((item) => {
           const match = getMatchForRight(item._id);
+          const color = match ? getColorForMatch("right", item._id) : null;
           return (
             <div
               key={item._id}
               onClick={() => handleSelect("right", item._id)}
-              className={`p-3 rounded-lg border transition-all cursor-pointer flex justify-between items-center ${
+              className={`p-3 rounded-lg border transition-all cursor-pointer flex justify-between items-center border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark ${
                 match
-                  ? "bg-green-700 border-green-500 cursor-not-allowed"
-                  : selectedLeft
-                  ? "border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark"
-                  : "border-gray-500 bg-gray-700 cursor-not-allowed"
+                  ? "backdrop-blur-md"
+                  : ""
               }`}
+              style={{
+                backgroundColor: color?.bg || "",
+                borderColor: color?.border || "",
+              }}
             >
               <span>{item.text}</span>
               {item.image && (
@@ -568,32 +646,31 @@ function GroupQuestionComponent({
   response,
 }: {
   question: any;
-  onSelect: (selectedIds: number[]) => void;
+  onSelect: (selectedIds: Record<number, number>) => void;
   response: AnyResponse | undefined;
 }) {
   const [selected, setSelected] = useState<Record<number, number>>({});
 
   useEffect(() => {
-    if (response && response.type === "group") {
+    if (response && response.type === "group" && response.selectedOptionId) {
       const newSelected: Record<number, number> = {};
-      question.options.forEach((group: any) => {
-        const found = group.subOptions.find((sub: any) =>
-          response.selectedSubOptionIds.includes(sub._id)
-        );
-        if (found) {
-          newSelected[group._id] = found._id;
-        }
-      });
+      response.selectedOptionId
+        .split(";")
+        .filter(Boolean)
+        .forEach((pair) => {
+          const [groupId, subOptionId] = pair.split("-");
+          newSelected[Number(groupId)] = Number(subOptionId);
+        });
       setSelected(newSelected);
     } else {
       setSelected({});
     }
-  }, [response, question.options]);
+  }, [response]);
 
   const handleSelect = (groupId: number, subOptionId: number) => {
     const newSelected = { ...selected, [groupId]: subOptionId };
     setSelected(newSelected);
-    onSelect(Object.values(newSelected));
+    onSelect(newSelected);
   };
 
   return (
@@ -615,7 +692,7 @@ function GroupQuestionComponent({
                 <input
                   type="radio"
                   name={`group-${group._id}`}
-                  checked={selected[group._id] === subOption._id}
+                  checked={selected[group._id] == subOption._id}
                   onChange={() => handleSelect(group._id, subOption._id)}
                   className="mr-2"
                 />

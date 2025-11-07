@@ -170,6 +170,10 @@ class QuestionService:
         finally:
             db.close()
 
+    def get_test_version(self) -> str:
+        """Get the version of the test questions"""
+        return self.__questions.get("version", "1.0.0")
+
     def delete_submission(self, submission_id: str) -> bool:
         """Delete a submission by ID from PostgreSQL database"""
         db: Session = SessionLocal()

@@ -1,212 +1,248 @@
 {
   "_id": "BASE",
+  "version": "1.0.0",
   "name": "Base Question Set",
   "questions": [
     {
-      "_id": "INS1",
-      "question": "Operate machines to make products",
+      "_id": "q1254862",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "question": "A rule in your workshop says, “If a safety check is missed, the machine cannot be used.” While inspecting the lab, you notice the machine is running. What must be true?",
+      "type": "text",
       "options": [
         {
-          "text": "Strongly Like",
-          "_id": 5
+          "text": "The safety check was missed",
+          "_id": "101"
         },
         {
-          "text": "Like",
-          "_id": 4
+          "text": "The safety check was done",
+          "_id": "102"
         },
         {
-          "text": "Neither Like or Dislike",
-          "_id": 3
+          "text": "The machine is unsafe",
+          "_id": "103"
         },
         {
-          "text": "Dislike",
-          "_id": 2
-        },
-        {
-          "text": "Strongly Dislike",
-          "_id": 1
+          "text": "The rule was ignored",
+          "_id": "104"
         }
       ]
     },
     {
-      "_id": "INS2",
-      "question": "Investigate crimes",
-      "options": [
+      "_id": "q4",
+      "image": "/s3/q2.png",
+      "question": "You need to combine data from Geography and Math for a research project.",
+      "optionInstruction": "Arrange these steps in the correct order:",
+      "type": "matching",
+      "leftSide": [
         {
-          "text": "Strongly Like",
-          "_id": 5
+          "text": "a",
+          "_id": "401"
         },
         {
-          "text": "Like",
-          "_id": 4
+          "text": "b",
+          "_id": "402"
         },
         {
-          "text": "Neither Like or Dislike",
-          "_id": 3
+          "text": "c",
+          "_id": "403"
         },
         {
-          "text": "Dislike",
-          "_id": 2
+          "text": "d",
+          "_id": "404"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "clarify the question",
+          "_id": "411"
         },
         {
-          "text": "Strongly Dislike",
-          "_id": 1
+          "text": "collect data",
+          "_id": "412"
+        },
+        {
+          "text": "merge datasets",
+          "_id": "413"
+        },
+        {
+          "text": "make graphs of results",
+          "_id": "414"
         }
       ]
     },
     {
-      "_id": "INS3",
-      "question": "Write books or plays",
-      "options": [
+      "_id": "q4",
+      "image": "/s3/q1.png",
+      "question": "Your team must choose tools to explore a large AI dataset.",
+      "optionInstruction": "Rank them from most useful (1) to least (4):",
+      "type": "matching",
+      "leftSide": [
         {
-          "text": "Strongly Like",
-          "_id": 5
+          "text": "1",
+          "_id": "401"
         },
         {
-          "text": "Like",
-          "_id": 4
+          "text": "2",
+          "_id": "402"
         },
         {
-          "text": "Neither Like or Dislike",
-          "_id": 3
+          "text": "3",
+          "_id": "403"
         },
         {
-          "text": "Dislike",
-          "_id": 2
+          "text": "4",
+          "_id": "404"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "AI Simulations",
+          "_id": "411"
         },
         {
-          "text": "Strongly Dislike",
-          "_id": 1
+          "text": "Lab Experiments",
+          "_id": "412"
+        },
+        {
+          "text": "Peer Discussions",
+          "_id": "413"
+        },
+        {
+          "text": "Textbook References",
+          "_id": "414"
         }
       ]
     },
     {
-      "_id": "INS4",
-      "question": "Operate machines to make products",
+      "_id": "q451546848",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "question": "Your school can choose between building a cheaper classroom or a solar-powered one. Which would you recommend?",
+      "type": "text",
       "options": [
         {
-          "text": "Strongly Like",
-          "_id": 5
+          "text": "Choose cheaper",
+          "_id": "101"
         },
         {
-          "text": "Like",
-          "_id": 4
+          "text": "Choose faster",
+          "_id": "102"
         },
         {
-          "text": "Neither Like or Dislike",
-          "_id": 3
+          "text": "Choose the energy-efficient design",
+          "_id": "103"
         },
         {
-          "text": "Dislike",
-          "_id": 2
-        },
-        {
-          "text": "Strongly Dislike",
-          "_id": 1
+          "text": "Let others decide",
+          "_id": "104"
         }
       ]
     },
     {
-      "_id": "INS5",
-      "question": "Operate machines to make products",
-      "options": [
+      "_id": "q4",
+      "image": "/s3/q1.png",
+      "question": "Your device fails during the final round of a competition.",
+      "optionInstruction": "Rank these possible responses from best (1) to worst (4):",
+      "type": "matching",
+      "leftSide": [
         {
-          "text": "Strongly Like",
-          "_id": 5
+          "text": "1",
+          "_id": "401"
         },
         {
-          "text": "Like",
-          "_id": 4
+          "text": "2",
+          "_id": "402"
         },
         {
-          "text": "Neither Like or Dislike",
-          "_id": 3
+          "text": "3",
+          "_id": "403"
         },
         {
-          "text": "Dislike",
-          "_id": 2
+          "text": "4",
+          "_id": "404"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Re-organise and present what you learned ",
+          "_id": "411"
         },
         {
-          "text": "Strongly Dislike",
-          "_id": 1
+          "text": "Submit old work",
+          "_id": "412"
+        },
+        {
+          "text": "Blame materials",
+          "_id": "413"
+        },
+        {
+          "text": "Stop competing",
+          "_id": "414"
         }
       ]
     },
     {
-      "_id": "INS6",
-      "question": "Investigate crimes",
+      "_id": "q5",
+      "image": "/s3/q2.png",
+      "question": "Build-a-Sentence – Ethical Compliance",
+      "description": "Choose one phrase from each block (Action + Principle + Result) to form the sentence that best represents correct scientific behaviour. ",
+      "optionInstruction": "Choose one phrase from each block",
+      "type": "group",
       "options": [
         {
-          "text": "Strongly Like",
-          "_id": 5
+          "_id": "501",
+          "groupName": "Block 1 – Action",
+          "subOptions": [
+            {
+              "text": "Skip checks",
+              "_id": "511"
+            },
+            {
+              "text": "Copy designs without permission",
+              "_id": "512"
+            },
+            {
+              "text": "Ensure safety and fairness",
+              "_id": "513"
+            }
+          ]
         },
         {
-          "text": "Like",
-          "_id": 4
+          "_id": "502",
+          "groupName": "Block 2 – Principle",
+          "subOptions": [
+            {
+              "text": "in all experiments",
+              "_id": "521"
+            },
+            {
+              "text": "to protect integrity",
+              "_id": "522"
+            },
+            {
+              "text": "to save time",
+              "_id": "523"
+            }
+          ]
         },
         {
-          "text": "Neither Like or Dislike",
-          "_id": 3
-        },
-        {
-          "text": "Dislike",
-          "_id": 2
-        },
-        {
-          "text": "Strongly Dislike",
-          "_id": 1
-        }
-      ]
-    },
-    {
-      "_id": "INS7",
-      "question": "Write books or plays",
-      "options": [
-        {
-          "text": "Strongly Like",
-          "_id": 5
-        },
-        {
-          "text": "Like",
-          "_id": 4
-        },
-        {
-          "text": "Neither Like or Dislike",
-          "_id": 3
-        },
-        {
-          "text": "Dislike",
-          "_id": 2
-        },
-        {
-          "text": "Strongly Dislike",
-          "_id": 1
-        }
-      ]
-    },
-    {
-      "_id": "INS8",
-      "question": "Operate machines to make products",
-      "options": [
-        {
-          "text": "Strongly Like",
-          "_id": 5
-        },
-        {
-          "text": "Like",
-          "_id": 4
-        },
-        {
-          "text": "Neither Like or Dislike",
-          "_id": 3
-        },
-        {
-          "text": "Dislike",
-          "_id": 2
-        },
-        {
-          "text": "Strongly Dislike",
-          "_id": 1
+          "_id": "503",
+          "groupName": "Block 3 – Result",
+          "subOptions": [
+            {
+              "text": "reduces credibility",
+              "_id": "531"
+            },
+            {
+              "text": "and risk errors",
+              "_id": "532"
+            },
+            {
+              "text": "promotes responsible research",
+              "_id": "533"
+            }
+          ]
         }
       ]
     }

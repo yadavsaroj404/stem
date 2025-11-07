@@ -19,6 +19,19 @@ def get_all_questions():
         import traceback
         raise HTTPException(status_code=500, detail=f"Error retrieving questions: {str(e)}\nTraceback: {traceback.format_exc()}")
 
+@router.get("/questions/version")
+def get_test_version():
+    """Get test version"""
+    try:
+        version = question_service.get_test_version()
+        return {
+            "status": "success",
+            "data": {"version": version},
+        }
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=f"Error retrieving test version: {str(e)}\nTraceback: {traceback.format_exc()}")
+
 @router.get("/test-sets")
 def get_test_sets(filter: Optional[str] = Query(None, description="Filter test sets by name")):
     """Get all test sets with optional filtering"""
