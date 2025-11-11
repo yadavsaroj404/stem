@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect, ReactElement, Fragment } from "react";
+import { useState, useRef, useEffect, ReactElement } from "react";
 import Image from "next/image";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { fetchQuestions } from "@/helpers/data-fetch";
 import {
   AnyQuestion,
-  AnyResponse,
   GroupOption as GroupOptionParams,
   MatchingQuestion,
+  Response,
   TextImageOption as TextImageOptionParams,
   TextOption as TextOptionParams,
 } from "@/interfaces/tests";
@@ -19,13 +19,14 @@ import PauseModal from "@/components/Modals/Pause";
 import StillThereModal from "@/components/Modals/StillThere";
 import PartialCompletionModal from "@/components/Modals/PartialCompletion";
 import UserProfile from "@/components/UserProfile";
+import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
 
 export default function TestPage() {
   const router = useRouter();
   const [currIndex, setCurrIndex] = useState(0);
   const [questions, setQuestions] = useState<AnyQuestion[]>([]);
   const [loading, setLoading] = useState(true);
-  const [responses, setResponses] = useState<AnyResponse[]>([]);
+  const [responses, setResponses] = useState<Response[]>([]);
   const [shownModal, setShownModal] = useState<
     "PAUSE" | "STILL_THERE" | "PARTIAL_COMPLETION" | "NONE"
   >("NONE");
@@ -130,7 +131,7 @@ export default function TestPage() {
     }
   };
 
-  const updateResponse = (newResponse: AnyResponse) => {
+  const updateResponse = (newResponse: Response) => {
     setResponses((prevResponses) => {
       const existingResponseIndex = prevResponses.findIndex(
         (response) => response.questionId === newResponse.questionId
@@ -146,14 +147,9 @@ export default function TestPage() {
     });
   };
 
-  const isOptionSelected = (questionId: string, optionId: number) => {
+  const isOptionSelected = (questionId: string, optionId: string) => {
     const response = responses.find((resp) => resp.questionId === questionId);
-    if (!response) return false;
-
-    if (response.type === "text" || response.type === "text-image") {
-      return response.selectedOptionId === optionId;
-    }
-    return false;
+    return response?.selectedOptionId === optionId;
   };
 
   if (loading) {
@@ -184,7 +180,6 @@ export default function TestPage() {
             onSelect={(optionId) =>
               updateResponse({
                 questionId: currentQuestion._id,
-                type: "text",
                 selectedOptionId: optionId,
               })
             }
@@ -202,7 +197,6 @@ export default function TestPage() {
                 onSelect={(optionId) =>
                   updateResponse({
                     questionId: currentQuestion._id,
-                    type: "text-image",
                     selectedOptionId: optionId,
                   })
                 }
@@ -217,27 +211,27 @@ export default function TestPage() {
       case "matching":
         return (
           <MatchingQuestionComponent
+            key={currIndex}
             question={currentQuestion}
-            onSelect={(matches) => {
-              const selectedOptionId = matches
-                .map((m) => `${m.leftId}-${m.rightId}`)
-                .join(";");
+            onSelect={(selectedOptionId) => {
               updateResponse({
                 questionId: currentQuestion._id,
-                type: "matching",
                 selectedOptionId,
               });
             }}
-            response={
-              responses.find(
-                (r) => r.questionId === currentQuestion._id
-              ) as AnyResponse
+            matchedOptions={
+              (
+                responses.find(
+                  (r) => r.questionId === currentQuestion._id
+                ) as Response
+              )?.selectedOptionId || ""
             }
           />
         );
       case "group":
         return (
           <GroupQuestionComponent
+            key={currIndex}
             question={currentQuestion}
             onSelect={(selectedSubOptionIds) => {
               const selectedOptionId = Object.entries(selectedSubOptionIds)
@@ -245,14 +239,15 @@ export default function TestPage() {
                 .join(";");
               updateResponse({
                 questionId: currentQuestion._id,
-                type: "group",
                 selectedOptionId,
               });
             }}
-            response={
-              responses.find(
-                (r) => r.questionId === currentQuestion._id
-              ) as AnyResponse
+            matchedOptions={
+              (
+                responses.find(
+                  (r) => r.questionId === currentQuestion._id
+                ) as Response
+              )?.selectedOptionId || ""
             }
           />
         );
@@ -392,7 +387,7 @@ function TextOption({
 }: {
   option: TextOptionParams;
   index: number;
-  onSelect: (id: number) => void;
+  onSelect: (id: string) => void;
   isOptionSelected: boolean;
 }): ReactElement {
   return (
@@ -421,7 +416,7 @@ function TextImageOption({
 }: {
   option: TextImageOptionParams;
   index: number;
-  onSelect: (id: number) => void;
+  onSelect: (id: string) => void;
   isOptionSelected: boolean;
 }): ReactElement {
   return (
@@ -451,44 +446,39 @@ function TextImageOption({
 function MatchingQuestionComponent({
   question,
   onSelect,
-  response,
+  matchedOptions,
 }: {
   question: MatchingQuestion;
-  onSelect: (matches: { leftId: number; rightId: number }[]) => void;
-  response: AnyResponse | undefined;
+  onSelect: (selectedOptionId: string) => void;
+  matchedOptions: string;
 }) {
-  const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
-  const [matches, setMatches] = useState<{ leftId: number; rightId: number }[]>(
+  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
+  const [matches, setMatches] = useState<{ leftId: string; rightId: string }[]>(
     []
   );
   const COLORS = [
-    "rgba(255, 87, 87, 0.15)",
-    "rgba(87, 151, 255, 0.15)",
-    "rgba(87, 255, 159, 0.15)",
-    "rgba(255, 229, 87, 0.15)",
-    "rgba(255, 167, 87, 0.15)",
+    // More distinguishable, theme-friendly glass colors (yellow, magenta, red, green, orange)
+    "rgba(255, 221, 0, 0.15)",
+    "rgba(212, 0, 255, 0.15)",
+    "rgba(255, 69, 58, 0.15)",
+    "rgba(0, 209, 102, 0.15)",
+    "rgba(255, 159, 28, 0.15)",
   ];
-  const BORDER_COLORS = ["#FF5757", "#5797FF", "#57FF9F", "#FFE557", "#FFA757"];
+  const BORDER_COLORS = ["#FFDD00", "#D400FF", "#FF453A", "#00D166", "#FF9F1C"];
 
   useEffect(() => {
-    console.log("Current matches:", matches);
-  }, [matches]);
-  useEffect(() => {
-    if (response && response.type === "matching" && response.selectedOptionId) {
-      const parsedMatches = response.selectedOptionId
-        .split(";")
-        .filter(Boolean)
-        .map((pair) => {
-          const [leftId, rightId] = pair.split("-");
-          return { leftId: Number(leftId), rightId: Number(rightId) };
-        });
+    if (matchedOptions) {
+      const parsedMatches = matchedOptions.split(";").map((pair) => {
+        const [leftId, rightId] = pair.split("-");
+        return { leftId: leftId, rightId: rightId };
+      });
       setMatches(parsedMatches);
     } else {
       setMatches([]);
     }
-  }, [response]);
+  }, [matchedOptions]);
 
-  const handleSelect = (side: "left" | "right", id: number) => {
+  const handleSelect = (side: "left" | "right", id: string) => {
     // If clicking a matched item (left or right), unmatch it.
     const existingMatch = matches.find(
       (m) =>
@@ -500,8 +490,10 @@ function MatchingQuestionComponent({
       const newMatches = matches.filter(
         (m) => m.leftId !== existingMatch.leftId
       );
+
       setMatches(newMatches);
-      onSelect(newMatches);
+      // Invalidate the answer as it's no longer complete
+      onSelect("");
       setSelectedLeft(null);
       return;
     }
@@ -525,20 +517,26 @@ function MatchingQuestionComponent({
         { leftId: selectedLeft, rightId: id },
       ];
       setMatches(updatedMatches);
-      onSelect(updatedMatches);
+
+      // Only call onSelect if all items are matched
+      if (updatedMatches.length === question.leftSide.length) {
+        onSelect(
+          updatedMatches.map((m) => `${m.leftId}-${m.rightId}`).join(";")
+        );
+      }
       setSelectedLeft(null);
     }
   };
 
-  const getMatchForLeft = (leftId: number) => {
+  const getMatchForLeft = (leftId: string) => {
     return matches.find((m) => m.leftId == leftId);
   };
 
-  const getMatchForRight = (rightId: number) => {
+  const getMatchForRight = (rightId: string) => {
     return matches.find((m) => m.rightId == rightId);
   };
 
-  const getColorForMatch = (side: "left" | "right", id: number) => {
+  const getColorForMatch = (side: "left" | "right", id: string) => {
     let index = -1;
     if (side === "left") {
       index = question.leftSide.findIndex((item) => item._id == id);
@@ -555,15 +553,6 @@ function MatchingQuestionComponent({
       border: BORDER_COLORS[index % BORDER_COLORS.length],
     };
   };
-
-  // const getSelectionColor = (leftId: number) => {
-  //   const index = question.leftSide.findIndex((item) => item._id === leftId);
-  //   if (index === -1) return null;
-  //   return {
-  //     bg: COLORS[index % COLORS.length],
-  //     border: BORDER_COLORS[index % BORDER_COLORS.length],
-  //   };
-  // };
 
   return (
     <div className="flex gap-4">
@@ -613,9 +602,7 @@ function MatchingQuestionComponent({
               key={item._id}
               onClick={() => handleSelect("right", item._id)}
               className={`p-3 rounded-lg border transition-all cursor-pointer flex justify-between items-center border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark ${
-                match
-                  ? "backdrop-blur-md"
-                  : ""
+                match ? "backdrop-blur-md" : ""
               }`}
               style={{
                 backgroundColor: color?.bg || "",
@@ -643,34 +630,34 @@ function MatchingQuestionComponent({
 function GroupQuestionComponent({
   question,
   onSelect,
-  response,
+  matchedOptions,
 }: {
   question: any;
-  onSelect: (selectedIds: Record<number, number>) => void;
-  response: AnyResponse | undefined;
+  onSelect: (selectedIds: Record<string, string>) => void;
+  matchedOptions: string;
 }) {
-  const [selected, setSelected] = useState<Record<number, number>>({});
+  const [selected, setSelected] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    if (response && response.type === "group" && response.selectedOptionId) {
-      const newSelected: Record<number, number> = {};
-      response.selectedOptionId
-        .split(";")
-        .filter(Boolean)
-        .forEach((pair) => {
-          const [groupId, subOptionId] = pair.split("-");
-          newSelected[Number(groupId)] = Number(subOptionId);
-        });
+    if (matchedOptions) {
+      const newSelected: Record<string, string> = {};
+      matchedOptions.split(";").forEach((pair) => {
+        const [groupId, subOptionId] = pair.split("-");
+        newSelected[groupId] = subOptionId;
+      });
       setSelected(newSelected);
     } else {
       setSelected({});
     }
-  }, [response]);
+  }, [matchedOptions]);
 
-  const handleSelect = (groupId: number, subOptionId: number) => {
+  const handleSelect = (groupId: string, subOptionId: string) => {
     const newSelected = { ...selected, [groupId]: subOptionId };
     setSelected(newSelected);
-    onSelect(newSelected);
+    // Notify parent of the updated selections only if all groups have a selection
+    if (Object.keys(newSelected).length === question.options.length) {
+      onSelect(newSelected);
+    }
   };
 
   return (
@@ -678,26 +665,33 @@ function GroupQuestionComponent({
       {question.options.map((group: GroupOptionParams) => (
         <div
           key={group._id}
-          className="w-full p-4 rounded-lg border border-primary-brand-color bg-[#1B0244] bg-opacity-50"
+          className="w-full max-w-60 p-4 rounded-lg border border-primary-brand-color bg-[#1B0244] bg-opacity-50"
         >
-          <h3 className="font-semibold mb-2 text-sm text-nowrap">
+          <h3 className="font-semibold mb-4 text-base pb-2 border-b-2 border-[#D400FF]/30">
             {group.groupName}
           </h3>
-          <div className="space-y-2">
+          <div className="space-y-4">
             {group.subOptions.map((subOption) => (
-              <label
+              <div
                 key={subOption._id}
-                className="flex items-center cursor-pointer text-sm text-nowrap"
+                className="flex items-start cursor-pointer"
+                onClick={() => handleSelect(group._id, subOption._id)}
               >
-                <input
-                  type="radio"
-                  name={`group-${group._id}`}
-                  checked={selected[group._id] == subOption._id}
-                  onChange={() => handleSelect(group._id, subOption._id)}
-                  className="mr-2"
-                />
-                {subOption.text}
-              </label>
+                {selected[group._id] === subOption._id ? (
+                  <IoMdRadioButtonOn
+                    size={20}
+                    className="mr-2 flex-shrink-0"
+                  />
+                ) : (
+                  <IoMdRadioButtonOff
+                    size={20}
+                    className="mr-2 flex-shrink-0"
+                  />
+                )}
+                <span className="text-sm font-semibold">
+                  {subOption.text}
+                </span>
+              </div>
             ))}
           </div>
         </div>

@@ -21,7 +21,7 @@ class QuestionService:
 
     def __init__(self):
         questions_path = settings.questions_absolute_path
-        with open(questions_path, "r") as f:
+        with open(questions_path, "r", encoding="utf-8") as f:
             self.__questions = json.load(f)
 
     def get_questions(self) -> dict:

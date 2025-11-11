@@ -9,29 +9,29 @@ export type OptionType = "text" | "text-image" | "matching" | "group";
 
 // --- Base Option Structures ---
 export interface TextOption {
-  _id: number;
+  _id: string;
   text: string;
 }
 
 export interface TextImageOption {
-  _id: number;
+  _id: string;
   text: string;
   image: string;
 }
 
 export interface MatchingItem {
-  _id: number;
+  _id: string;
   text: string;
   image?: string;
 }
 
 export interface SubOption {
-  _id: number;
+  _id: string;
   text: string;
 }
 
 export interface GroupOption {
-  _id: number;
+  _id: string;
   groupName: string;
   subOptions: SubOption[];
 }
@@ -57,6 +57,8 @@ export interface TextImageQuestion extends BaseQuestion {
 
 export interface MatchingQuestion extends BaseQuestion {
   type: "matching";
+  leftSideTitle?: string;
+  rightSideTitle?: string;
   leftSide: MatchingItem[];
   rightSide: MatchingItem[];
 }
@@ -73,23 +75,7 @@ export type AnyQuestion =
   | GroupQuestion;
 
 // --- Response Structures ---
-
-export interface SimpleResponse {
+export interface Response {
   questionId: string;
-  type: "text" | "text-image";
-  selectedOptionId: number;
-}
-
-export interface MatchingResponse {
-  questionId: string;
-  type: "matching";
-  selectedOptionId: string; // e.g., "l401-r403;l402-r402;"
-}
-
-export interface GroupResponse {
-  questionId: string;
-  type: "group";
   selectedOptionId: string; // e.g., "501-511;502-523;"
 }
-
-export type AnyResponse = SimpleResponse | MatchingResponse | GroupResponse;

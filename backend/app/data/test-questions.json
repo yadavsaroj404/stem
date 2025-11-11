@@ -1,248 +1,1685 @@
 {
-  "_id": "BASE",
-  "version": "1.0.0",
+  "_id": "94636af6a39e44e0a4719622830e70a0",
+  "version": "1.0.1",
   "name": "Base Question Set",
   "questions": [
     {
-      "_id": "q1254862",
+      "_id": "93185184db6c4cd4a77b8c5d37b178a1",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "cluster1",
       "question": "A rule in your workshop says, “If a safety check is missed, the machine cannot be used.” While inspecting the lab, you notice the machine is running. What must be true?",
       "type": "text",
       "options": [
         {
           "text": "The safety check was missed",
-          "_id": "101"
+          "_id": "56603bb2f74f42bfb5a09bacf4a0c015"
         },
         {
           "text": "The safety check was done",
-          "_id": "102"
+          "_id": "31bdccb9e2924e34b232804e8df70de5"
         },
         {
           "text": "The machine is unsafe",
-          "_id": "103"
+          "_id": "783a3f28dd0143f783ed3d89059a0ed7"
         },
         {
           "text": "The rule was ignored",
-          "_id": "104"
+          "_id": "07c2abacdb614a3e96980f98bca0270d"
         }
       ]
     },
     {
-      "_id": "q4",
+      "_id": "05f1cef9a1f9409182ac35e575ca229c",
       "image": "/s3/q2.png",
+      "clusterId": "cluster1",
       "question": "You need to combine data from Geography and Math for a research project.",
       "optionInstruction": "Arrange these steps in the correct order:",
       "type": "matching",
       "leftSide": [
         {
           "text": "a",
-          "_id": "401"
+          "_id": "2fb531d4172148c9bf5b94deb8efc5bb"
         },
         {
           "text": "b",
-          "_id": "402"
+          "_id": "bf1d10f4763b4f34bfc13b8930cc48ee"
         },
         {
           "text": "c",
-          "_id": "403"
+          "_id": "518c36e7d35e4390868200ef83af4042"
         },
         {
           "text": "d",
-          "_id": "404"
+          "_id": "ef86e0f436ae4ab5bc543c6894b90c1f"
         }
       ],
       "rightSide": [
         {
           "text": "clarify the question",
-          "_id": "411"
+          "_id": "d728f34fb9bc40969e285267d2d14b72"
         },
         {
           "text": "collect data",
-          "_id": "412"
+          "_id": "0ae242bdd2984cb6b740f6fc8aa9143e"
         },
         {
           "text": "merge datasets",
-          "_id": "413"
+          "_id": "3c7243e927e94d41b15089662174f5c2"
         },
         {
           "text": "make graphs of results",
-          "_id": "414"
+          "_id": "dc9df4f790ab479b8bdd17a0c05776b4"
         }
       ]
     },
     {
-      "_id": "q4",
+      "_id": "1cf0f9f8c10d4736b8fe8cc8ca70503a",
       "image": "/s3/q1.png",
+      "clusterId": "cluster1",
       "question": "Your team must choose tools to explore a large AI dataset.",
       "optionInstruction": "Rank them from most useful (1) to least (4):",
       "type": "matching",
       "leftSide": [
         {
           "text": "1",
-          "_id": "401"
+          "_id": "472a2904d2d442d6a7f82d30eab5b417"
         },
         {
           "text": "2",
-          "_id": "402"
+          "_id": "8c39668a6ac14dd1bdc45574853eed17"
         },
         {
           "text": "3",
-          "_id": "403"
+          "_id": "d586b261500947f5bf138ecede2dad60"
         },
         {
           "text": "4",
-          "_id": "404"
+          "_id": "a896b084c28c4f7a988d959fdcc7ed46"
         }
       ],
       "rightSide": [
         {
           "text": "AI Simulations",
-          "_id": "411"
+          "_id": "49bcec43d29c47c5a88500504859238e"
         },
         {
           "text": "Lab Experiments",
-          "_id": "412"
+          "_id": "2683a1bfe2d74559a9a826dccbe5d02f"
         },
         {
           "text": "Peer Discussions",
-          "_id": "413"
+          "_id": "572001ba70594522851e78bfa80cfe3e"
         },
         {
           "text": "Textbook References",
-          "_id": "414"
+          "_id": "a4b327225526426fb63fbc9d1a892005"
         }
       ]
     },
     {
-      "_id": "q451546848",
+      "_id": "3c37708e3be44152b96b16cadbd8db59",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "cluster1",
       "question": "Your school can choose between building a cheaper classroom or a solar-powered one. Which would you recommend?",
       "type": "text",
       "options": [
         {
           "text": "Choose cheaper",
-          "_id": "101"
+          "_id": "245b4e9f6dde483bab2bb291f86d6f5d"
         },
         {
           "text": "Choose faster",
-          "_id": "102"
+          "_id": "3a46d34f7a61482b86d5f4de4b1d974c"
         },
         {
           "text": "Choose the energy-efficient design",
-          "_id": "103"
+          "_id": "7eb7cb9ee2e545968a4a6c6bb248ede2"
         },
         {
           "text": "Let others decide",
-          "_id": "104"
+          "_id": "5794c237502d49b0b2927e318b460fd3"
         }
       ]
     },
     {
-      "_id": "q4",
+      "_id": "ef4319e8b2c94326bc514e5f73db4990",
       "image": "/s3/q1.png",
+      "clusterId": "cluster1",
       "question": "Your device fails during the final round of a competition.",
       "optionInstruction": "Rank these possible responses from best (1) to worst (4):",
       "type": "matching",
       "leftSide": [
         {
           "text": "1",
-          "_id": "401"
+          "_id": "67e67ae3032847b99480fd1a67800353"
         },
         {
           "text": "2",
-          "_id": "402"
+          "_id": "5f99f05b8a334b2c9c6282336dc662da"
         },
         {
           "text": "3",
-          "_id": "403"
+          "_id": "287dcee4acaf4895b2579c63ac8964e7"
         },
         {
           "text": "4",
-          "_id": "404"
+          "_id": "f3cde9a6259f4b15ad2802f8eb4ab63b"
         }
       ],
       "rightSide": [
         {
           "text": "Re-organise and present what you learned ",
-          "_id": "411"
+          "_id": "6094503d65664bd5aa3e5e15eb48bd01"
         },
         {
           "text": "Submit old work",
-          "_id": "412"
+          "_id": "21105bcb71d34131a77fade4c1c96a22"
         },
         {
           "text": "Blame materials",
-          "_id": "413"
+          "_id": "3aa97ff869d648b6956c2962f9210216"
         },
         {
           "text": "Stop competing",
-          "_id": "414"
+          "_id": "5ac6a4567bb141aca6745fc8832932ad"
         }
       ]
     },
     {
-      "_id": "q5",
+      "_id": "20dd48610f414c60a3f6d3b30ba09ed1",
       "image": "/s3/q2.png",
+      "clusterId": "cluster1",
       "question": "Build-a-Sentence – Ethical Compliance",
       "description": "Choose one phrase from each block (Action + Principle + Result) to form the sentence that best represents correct scientific behaviour. ",
       "optionInstruction": "Choose one phrase from each block",
       "type": "group",
       "options": [
         {
-          "_id": "501",
+          "_id": "889dc45a2392488e8c170b08e25f4eac",
           "groupName": "Block 1 – Action",
           "subOptions": [
             {
               "text": "Skip checks",
-              "_id": "511"
+              "_id": "4f8e3c8d307d4948a8b6f113187bdafc"
             },
             {
               "text": "Copy designs without permission",
-              "_id": "512"
+              "_id": "c9e4c152bbd4485cafc18f7b7a576e2b"
             },
             {
               "text": "Ensure safety and fairness",
-              "_id": "513"
+              "_id": "86e5765b1eea40ce85de0771f752d753"
             }
           ]
         },
         {
-          "_id": "502",
+          "_id": "14c66a77b79e4770ad543f1281a2dbc8",
           "groupName": "Block 2 – Principle",
           "subOptions": [
             {
               "text": "in all experiments",
-              "_id": "521"
+              "_id": "3f47feeb0a66491980d37cd46c0787ef"
             },
             {
               "text": "to protect integrity",
-              "_id": "522"
+              "_id": "baafa54f6c20436b9049f9ba880282b1"
             },
             {
               "text": "to save time",
-              "_id": "523"
+              "_id": "e5124e583d604edd93e4b9baa0fade99"
             }
           ]
         },
         {
-          "_id": "503",
+          "_id": "78c437a00b084d228444f948e77a7b9d",
           "groupName": "Block 3 – Result",
           "subOptions": [
             {
               "text": "reduces credibility",
-              "_id": "531"
+              "_id": "99070326faa74697983ca1fdcd904665"
             },
             {
               "text": "and risk errors",
-              "_id": "532"
+              "_id": "f278392adf8b490ebd5a2daddcafe090"
             },
             {
               "text": "promotes responsible research",
-              "_id": "533"
+              "_id": "e102bd4660fd45b6a6b34b58a1e5930c"
             }
           ]
+        }
+      ]
+    },
+    {
+      "_id": "1ca10d52fcc745aba4f68bb7986fdce4",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster2",
+      "question": "You are leading a climate-smart-city project. Two teammates, Aisha and Rohan, argue about the presentation design—Aisha wants infographics, Rohan prefers text. The deadline is next week. ",
+      "optionInstruction": "Rank these responses from most effective (1) to least (4):",
+      "type": "matching",
+      "leftSide": [
+        {
+          "text": "1",
+          "_id": "2611488c5ad645a4ac0c20f2ed8cef21"
+        },
+        {
+          "text": "2",
+          "_id": "db93147312b54f6b8da1cb9646b9494c"
+        },
+        {
+          "text": "3",
+          "_id": "d4818b1aa1194f068be49df7090887db"
+        },
+        {
+          "text": "4",
+          "_id": "f9b9ee7eb0694179b4d33872cbd6a671"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Let’s pause—each gets two minutes to pitch, then we’ll merge or vote.",
+          "_id": "615d06a2a0834a54802bf0d5f7632c40"
+        },
+        {
+          "text": "We’re short on time—just follow my call.",
+          "_id": "82e9be379860434b8314a7a9c41c8410"
+        },
+        {
+          "text": "Ask the teacher to decide.",
+          "_id": "e3a5a554ff514f2fa705dbe3db8c88aa"
+        },
+        {
+          "text": " Stay silent and hope they settle it. ",
+          "_id": "5b3d298b96824aa0a1cc293d94fe3f55"
+        }
+      ]
+    },
+    {
+      "_id": "0e9d4eb4a6574790b338e262fa194d09",
+      "image": "/s3/q3.png",
+      "clusterId": "cluster2",
+      "question": "Build-a-Sentence – Creativity & AI",
+      "optionInstruction": "Choose one phrase from each block to complete the best statement about AI creativity. ",
+      "type": "group",
+      "options": [
+        {
+          "_id": "c745938baa48455294c3bf98755cfe49",
+          "groupName": "Block 1 – Subject",
+          "subOptions": [
+            {
+              "text": "AI creativity",
+              "_id": "830f9a20061742a0bad8d0b76be2c24f"
+            },
+            {
+              "text": "Human artists",
+              "_id": "426ab7ab984644b48e4e5db2b954d5af"
+            },
+            {
+              "text": "Machines",
+              "_id": "5fd29bf3a0dd47fc8d3dbd6e1f36fa04"
+            }
+          ]
+        },
+        {
+          "_id": "f61582b4e1924296a65bd11f96ae1991",
+          "groupName": "Block 2 – Connector",
+          "subOptions": [
+            {
+              "text": "includes",
+              "_id": "2d3b590ab9234adeaf403df34c9ee311"
+            },
+            {
+              "text": "depend on",
+              "_id": "d87eba39e9f348a98b52789c9edc5a6c"
+            },
+            {
+              "text": "replace",
+              "_id": "a59bb4a9ff3a42a881214dd50b41cda6"
+            }
+          ]
+        },
+        {
+          "_id": "5aa863a657c34d78b76dfecf9cc06bb2",
+          "groupName": "Block 3 – Idea",
+          "subOptions": [
+            {
+              "text": "combining existing ideas in new ways",
+              "_id": "a314030872d14b328dfc4030c0effe85"
+            },
+            {
+              "text": "copying data only",
+              "_id": "e7caca293f174eedb97377f989291101"
+            },
+            {
+              "text": "imagination completely",
+              "_id": "27c81f86cbb441f190d6d663d27ffdc2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "26a4fcfa3ae3445c991a8a7acc01d218",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster2",
+      "question": "Matching Task – Social-Media Strategy",
+      "optionInstruction": "Match each Action with the Outcome it best supports.",
+      "type": "matching",
+      "leftSideTitle": "Action",
+      "rightSideTitle": "Outcome",
+      "leftSide": [
+        {
+          "text": "Identify your audience before posting",
+          "_id": "dc50ad32cfe2407faf664fd9f6d16a90"
+        },
+        {
+          "text": "Post randomly without plan",
+          "_id": "9d55c3a3363c4545b8485446b76e51b2"
+        },
+        {
+          "text": "Copy another school’s trend",
+          "_id": "48df244d618741fc85ccbaaf3ea5c81c"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Builds relevant and engaging content",
+          "_id": "060f1e75188a4d96a84fb7c946cbb0d3"
+        },
+        {
+          "text": "Creates confusion and low engagement",
+          "_id": "f6935e62fee7411c93789fbd285ba754"
+        },
+        {
+          "text": "Reduces originality and credibility",
+          "_id": "35550dcc8c25410bbf767f01f93528a3"
+        }
+      ]
+    },
+    {
+      "_id": "135a4acdcea5466cb42f0fdfe5ef9648",
+      "image": "/s3/q1.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "cluster2",
+      "question": "You are posting an Instagram caption to explain AI in everyday life. Which caption fits best?",
+      "type": "text",
+      "options": [
+        {
+          "text": "AI is a digital helper—it can suggest music or complete your sentences in seconds.",
+          "_id": "9131baf3a9dd42b09da24f2a0abc1bfa"
+        },
+        {
+          "text": "AI is scary; avoid it.",
+          "_id": "e94a9dcfb0d14a2cbdf04f36bf3175a7"
+        },
+        {
+          "text": "AI means robots.",
+          "_id": "1918f39203984301821e5016f4e2a3b9"
+        },
+        {
+          "text": "AI replaces humans.",
+          "_id": "26dcaf82bcfe4759aeb20c08e42396d2"
+        }
+      ]
+    },
+    {
+      "_id": "7b5c295241184a2489aea684adb6c2f3",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster2",
+      "question": "Media Production – Ranking Features",
+      "description": "Your team must create a short video promoting Digital Balance Week.",
+      "optionInstruction": "Rank these production features from most to least effective: ",
+      "type": "matching",
+      "leftSide": [
+        {
+          "text": "A",
+          "_id": "c696220f10de4957bba6aafea0bb0c4f"
+        },
+        {
+          "text": "B",
+          "_id": "a5035d1d44ab4d2d8ab510b698b8cc33"
+        },
+        {
+          "text": "C",
+          "_id": "a13ede3bc0f7497195f07eb059fe9077"
+        },
+        {
+          "text": "D",
+          "_id": "93605650f38c42a3a76a8e4836929062"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Clear persuasive message with call-to-action",
+          "_id": "90b67d18618745b1b99cdc642122d15a"
+        },
+        {
+          "text": "Random loud music",
+          "_id": "4015be74f7f74cfa94ca7dd1e0de4b0e"
+        },
+        {
+          "text": "Listing statistics only",
+          "_id": "abec0ecf2f0f4188b4ba06db6e887838"
+        },
+        {
+          "text": "Unrelated montage clips",
+          "_id": "68a87a677f40463b9b7aa0a0fa2a9fb7"
+        }
+      ]
+    },
+    {
+      "_id": "340569d47e244bf5be1726cf354bb1e8",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster3",
+      "question": "You are analysing a graph showing global CO₂ emissions and average temperature both rising from 1950 to 2020.",
+      "optionInstruction": "Rank these statements from most accurate (1) to least (4): ",
+      "type": "matching",
+      "leftSide": [
+        {
+          "text": "A",
+          "_id": "9e292af7c8f44ff6bd55a14453370749"
+        },
+        {
+          "text": "B",
+          "_id": "304f33bc9dad44b9845815616bbaca41"
+        },
+        {
+          "text": "C",
+          "_id": "1f566fecde8d4d8584fbad86f2896773"
+        },
+        {
+          "text": "D",
+          "_id": "68890d0d46de4a0ca55cb5017a23309a"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Rising CO₂ may be linked to temperature, but correlation does not prove causation",
+          "_id": "9c3dc1cabd5c4864858a069449ea7268"
+        },
+        {
+          "text": "CO₂ causes temperature rise",
+          "_id": "08cd35f5f0ca43ed8e9aa16f10aa8bd6"
+        },
+        {
+          "text": "Temperature rise causes CO₂",
+          "_id": "0850ba54c41b4987b7243dc829f68bd6"
+        },
+        {
+          "text": "They are unrelated",
+          "_id": "a0edc3b555cc43f7b8c4b9f65a3b85cd"
+        }
+      ]
+    },
+    {
+      "_id": "25adcf1f6fa740308360085fe1c1af32",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster3",
+      "question": "Grades in your school are dropping while sports performance is improving. What should the student council investigate first? ",
+      "type": "text",
+      "options": [
+        {
+          "text": "Add more study hours",
+          "_id": "cdd057206c7a4315a78477bd6d81d571"
+        },
+        {
+          "text": "Reduce sports time",
+          "_id": "b180d0efaa8e428ba99766e087e629f7"
+        },
+        {
+          "text": "Check causes such as sleep, stress, and workload",
+          "_id": "b88e97da0f964feebfeb80f7e1e20ee1"
+        },
+        {
+          "text": "Ignore the trend ",
+          "_id": "dfb4b7a3ece946d48f8a20de0135f81c"
+        }
+      ]
+    },
+    {
+      "_id": "91477b645b524077a16bea200957279e",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster3",
+      "question": "A blog headline claims, “Energy drinks make students smarter.”",
+      "description": "Which question should you ask first?",
+      "type": "text",
+      "options": [
+        {
+          "text": "Sounds true!",
+          "_id": "1e025157b79f46299d24ffcdd755fa16"
+        },
+        {
+          "text": "Where’s the study?",
+          "_id": "131408b05e1a4205a9aed16ec696616c"
+        },
+        {
+          "text": "Tasty?",
+          "_id": "858d7640329a43378cbed68d50260820"
+        },
+        {
+          "text": "Does it matter?",
+          "_id": "4417513b11cf4660a8f2af1fc4cd3b7f"
+        }
+      ]
+    },
+    {
+      "_id": "0fccdaffaa694e95be42f714c7ee7bb1",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster3",
+      "question": "A chart shows unemployment falling while inflation rises.",
+      "description": "Which statement best explains this?",
+      "type": "text",
+      "options": [
+        {
+          "text": "Lower unemployment always causes inflation",
+          "_id": "90a1c085422440a5b26608c902914ff3"
+        },
+        {
+          "text": "There may be a trade-off, but further analysis is needed",
+          "_id": "86f64ae3e25c4915b911cf0892d67554"
+        },
+        {
+          "text": "They are unrelated",
+          "_id": "1c1593ce62a94aedb35f19952cb26bd7"
+        },
+        {
+          "text": "Inflation always creates jobs",
+          "_id": "a4eaa4559a564dd89d217cd930b7da07"
+        }
+      ]
+    },
+    {
+      "_id": "18da0933200c49fd838df8771ed337f5",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster3",
+      "question": "Correlation Insight Task – Health Data Analysis",
+      "description": "A graph shows that people who exercise more tend to have higher heart-health scores. However, the data also varies across diet, age, and sleep quality.",
+      "optionInstruction": "Match each possible explanation to its interpretation type.",
+      "type": "matching",
+      "leftSideTitle": "Possible Explanation ",
+      "rightSideTitle": "Interpretation Type",
+      "leftSide": [
+        {
+          "text": "Exercise directly improves heart function",
+          "_id": "b1b98ce6b14543fe976f28c538bd6832"
+        },
+        {
+          "text": "Healthy people are more likely to exercise",
+          "_id": "d16b8187110e47c78b79f430e20150b3"
+        },
+        {
+          "text": "People who exercise also eat better or sleep more",
+          "_id": "af84a3ab7b0b4319a8416d2bf616ac9a"
+        },
+        {
+          "text": "There is no connection at all",
+          "_id": "97337f6c4fa94d42a6ca81f3e6b13008"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": " Causal relationship",
+          "_id": "48c79e3b59fe4f009aae924ed95e0137"
+        },
+        {
+          "text": "Reverse causation",
+          "_id": "6f0abc398a5145aab295d73d0d44d020"
+        },
+        {
+          "text": "Confounding variable",
+          "_id": "23bd571c9b36456c8a9bbb373aa94104"
+        },
+        {
+          "text": "Invalid conclusion",
+          "_id": "9df95efe85804f098317435f526943d4"
+        }
+      ]
+    },
+    {
+      "_id": "275c0f4941364153b044f2e8ac08cf14",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster4",
+      "question": "Your school team’s prototype to reduce plastic waste breaks a day before the Innovation Showcase. Everyone feels discouraged. What will you do?",
+      "optionInstruction": "What is the best immediate response?",
+      "type": "text",
+      "options": [
+        {
+          "text": "Give up on the project",
+          "_id": "b7eab717c71344b69f7206522b7c9807"
+        },
+        {
+          "text": "Blame the materials",
+          "_id": "f18c079640594167b90c6341a3b66e84"
+        },
+        {
+          "text": "Re-organise quickly, show your process, and explain what you learned",
+          "_id": "2320757cebbf4b0ab7c1fbedc3ca270e"
+        },
+        {
+          "text": "Submit a backup idea",
+          "_id": "21075a6ca5394f27af18b75d927cb127"
+        }
+      ]
+    },
+    {
+      "_id": "141c385ba12c45b79f4de745fb4ec657",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster4",
+      "question": "You are pitching your creative project to potential investors.",
+      "optionInstruction": "Choose one phrase from each block (Focus + Connector + Value) to create the most persuasive and logical pitch line.",
+      "type": "group",
+      "options": [
+        {
+          "_id": "0cd23a715c494d6f9652d3c171f5c98a",
+          "groupName": "Block 1 – Focus",
+          "subOptions": [
+            {
+              "text": "The design",
+              "_id": "b1cf844f715f4e949f4d92ecfea26ae9"
+            },
+            {
+              "text": "Our project",
+              "_id": "32aeb88438d24c7f980bc9f380dfad70"
+            },
+            {
+              "text": "This idea",
+              "_id": "deeb5ef77c4d4e61890cc20986414db9"
+            }
+          ]
+        },
+        {
+          "_id": "ad0def561c304ff586e6598a543e642b",
+          "groupName": "Block 2 – Connector",
+          "subOptions": [
+            {
+              "text": "solves",
+              "_id": "30363e1c55c54361bfd2ef6007eb7bd6"
+            },
+            {
+              "text": "hides",
+              "_id": "dae42ef6ee1549c7a5c2017fc75a4f26"
+            },
+            {
+              "text": "copies",
+              "_id": "b014999faac24d3aa986052c37cc2183"
+            }
+          ]
+        },
+        {
+          "_id": "5b0a2d06bb64463d8395301b913a1bfb",
+          "groupName": "Block 3 – Value",
+          "subOptions": [
+            {
+              "text": "a real problem for students",
+              "_id": "5dbe317096bc4899a9f6b5908a23b263"
+            },
+            {
+              "text": "its purpose",
+              "_id": "f62b62ff7f9c49bfb7d81af5eb7e69d1"
+            },
+            {
+              "text": "existing products",
+              "_id": "a6ee5812a81a452f8cfd9d7ce18a7468"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "42fbb2c950fd4e4b866e839b167ac8af",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster4",
+      "question": "Arrange the steps of an innovation project in the correct order:",
+      "type": "matching",
+      "leftSideTitle": "Order",
+      "rightSideTitle": "Steps",
+      "leftSide": [
+        {
+          "text": "1",
+          "_id": "a63c1f9d89f74da9b93e1c368b938a69"
+        },
+        {
+          "text": "2",
+          "_id": "6a767abf05d54be4ab635d964cf66dc0"
+        },
+        {
+          "text": "3",
+          "_id": "f72e9f704e764e96ba86a98d1c30fcd2"
+        },
+        {
+          "text": "4",
+          "_id": "6339b827602c427095bc44af671aa574"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "brainstorm ideas",
+          "_id": "a92b60d8bb9e4d45824d9430a187b1c2"
+        },
+        {
+          "text": "build prototype",
+          "_id": "3100e7675adb4757ba27376bfef41b89"
+        },
+        {
+          "text": "collect feedback",
+          "_id": "dc6a51b50b82458cac4d9c3feb9cf1ad"
+        },
+        {
+          "text": "present solution",
+          "_id": "1db0da8c86574fb6988621ab27e97189"
+        }
+      ]
+    },
+    {
+      "_id": "5f1e3160bbe4426d859d1f4d8f9675d7",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster4",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "question": "The student council wants to make a new school app inclusive. Which approach is best?",
+      "type": "text",
+      "options": [
+        {
+          "text": " Decide everything themselves",
+          "_id": "80587beb92044b70be0fc78172e319dc"
+        },
+        {
+          "text": "Ask only one grade for feedback",
+          "_id": "0be31ab1b1c3436bafa3df76bf39a842"
+        },
+        {
+          "text": "Collect input from students, teachers, and parents",
+          "_id": "2a79db427f4848b08d37c277f6d07937"
+        },
+        {
+          "text": "Launch and fix later",
+          "_id": "3561186a9b7f46c69a767877679e28f6"
+        }
+      ]
+    },
+    {
+      "_id": "4bc25911b56e419e97d0b5915daf7ed9",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster5",
+      "question": "Your teacher asks you to combine Geography and Economics in one project. What should you do first?",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "type": "text",
+      "options": [
+        {
+          "text": "Start merging data",
+          "_id": "d0698189895241b2999e1bcc4acf3dd2"
+        },
+        {
+          "text": "Make graphs",
+          "_id": "717510cea44c4eb8a7617d79ea5298c0"
+        },
+        {
+          "text": "Clarify your research question and key variables",
+          "_id": "fb45d10a9234435986ebd0099e2f05fd"
+        },
+        {
+          "text": "Drop one subject",
+          "_id": "8cf357aea81741b5be108fecde52d8e7"
+        }
+      ]
+    },
+    {
+      "_id": "b0f46198e1ce4b43815816b6bdb0edc1",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster5",
+      "question": "Your class is collaborating online with teams from the UAE, Europe, and the U.S. How will you keep everyone included? ",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "type": "text",
+      "options": [
+        {
+          "text": "Meet only at your local time",
+          "_id": "15214bfbb2dd4ceca259a63a2abc7c7e"
+        },
+        {
+          "text": "Skip meetings",
+          "_id": "9967efe9a18c4b33a921fd88ae84cc09"
+        },
+        {
+          "text": "Rotate meeting times and check schedules",
+          "_id": "c370b672371a420badc7eb8ca4dfc00a"
+        },
+        {
+          "text": "Fix one time that suits you",
+          "_id": "86a74b285a614ad19827363484631b74"
+        }
+      ]
+    },
+    {
+      "_id": "2a2a9e2ac8584d53af1804159cb8fd8e",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster5",
+      "question": "Imagine education in 2075.",
+      "optionInstruction": "Pick one phrase from each block (Setting + Process + Impact) to create a statement that best represents the future of learning.",
+      "type": "group",
+      "options": [
+        {
+          "_id": "3b84551458904f89a2b1276d3ebdb60d",
+          "groupName": "Block 1 – Setting",
+          "subOptions": [
+            {
+              "text": "Paper textbooks",
+              "_id": "76c391cd59574af2a27dc31093d1eb58"
+            },
+            {
+              "text": "Virtual classrooms",
+              "_id": "9e5393dbd8d64174bcd62ab9abc0ef00"
+            },
+            {
+              "text": "Traditional exams",
+              "_id": "ac55969660fa4f6ca3dee5e57097269a"
+            }
+          ]
+        },
+        {
+          "_id": "6b20e64d3b62426880c13dd2cfdd8d61",
+          "groupName": "Block 2 – Process",
+          "subOptions": [
+            {
+              "text": "connect",
+              "_id": "3ff5abe8458141549f660219302f492a"
+            },
+            {
+              "text": "replace",
+              "_id": "e51450959f794fcda53eac10d006f1b1"
+            },
+            {
+              "text": "limit",
+              "_id": "2ff23f0e041945b196145a15386a4e88"
+            }
+          ]
+        },
+        {
+          "_id": "94fbf278671048598826f387c8aae33b",
+          "groupName": "Block 3 – Impact",
+          "subOptions": [
+            {
+              "text": "creativity with stress",
+              "_id": "50be16582103445997a191d0cf92a758"
+            },
+            {
+              "text": "access to new information",
+              "_id": "5488d205e7454215a1d08d0d2928c474"
+            },
+            {
+              "text": "learners across the world",
+              "_id": "22a89aaa87bd4fdb842dcfcf775db691"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "e096ee2badac40f992c3c9e0f0ef8d94",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster5",
+      "question": "You are designing a digital tool for your community. Which idea shows systems thinking?",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "type": "text",
+      "options": [
+        {
+          "text": "Use the fanciest interface",
+          "_id": "c1d67362f28b4e8fb81294263c9f7235"
+        },
+        {
+          "text": "Map how each function affects users and the environment",
+          "_id": "7e3c307282934838afb9629c2d5fe146"
+        },
+        {
+          "text": "Copy an existing app",
+          "_id": "f853c620491f4f73b7752380ea81109e"
+        },
+        {
+          "text": "Focus only on speed",
+          "_id": "df1d816c1cb944578225049745b37002"
+        }
+      ]
+    },
+    {
+      "_id": "17a9405ae59b4931adfa71faec822f64",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster5",
+      "question": "A rule says, “All teams must submit references one day before.” Your team submits two hours late.",
+      "description": "What is the most likely outcome?",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "type": "text",
+      "options": [
+        {
+          "text": "Allowed with a warning",
+          "_id": "d90cbe6fa97d45f0a21b1f462eb49874"
+        },
+        {
+          "text": "Disqualified",
+          "_id": "6934620010ae401e9d54299229410be1"
+        },
+        {
+          "text": " Asked to submit later",
+          "_id": "63555bbf26714291a35f4d22ae94150a"
+        },
+        {
+          "text": "Given extra time",
+          "_id": "b0e1994101d342139eab61072951c5ee"
+        }
+      ]
+    },
+    {
+      "_id": "258cf8e0de7c401486784f18d9dee7c9",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster6",
+      "question": "Decision Prioritization Task – Strategic Leadership",
+      "description": "A new project involves choosing between a risky short-term gain and a safer long-term investment.",
+      "optionInstruction": "Rank the following actions from most effective (1) to least (4) for a responsible leader.",
+      "type": "matching",
+      "leftSideTitle": "Rank",
+      "rightSideTitle": "Actions",
+      "leftSide": [
+        {
+          "text": "1",
+          "_id": "0b5a2b31626247acb38ec1c42e39f0a8"
+        },
+        {
+          "text": "2",
+          "_id": "be64031584034ed183f9f3cf9967a282"
+        },
+        {
+          "text": "3",
+          "_id": "7f56ef73efa44e66ab89657159778dda"
+        },
+        {
+          "text": "4",
+          "_id": "6fba1452782e46e1a8e050fd0bf6a157"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Gather full data and align with long-term vision",
+          "_id": "bcccb55ef22a4e49ae2991028f92b327"
+        },
+        {
+          "text": "Choose the safest option without consultation",
+          "_id": "a9018bee493d4b36bd4053b1169ce0a8"
+        },
+        {
+          "text": "Let the team vote randomly",
+          "_id": "1f3b47822cec4ae1b3019d6adba67937"
+        },
+        {
+          "text": "Pick faster results for short-term visibility",
+          "_id": "4890d8659ebe4764a08d3b528599fe14"
+        }
+      ]
+    },
+    {
+      "_id": "c8886018c97148a086a44b214c455286",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster6",
+      "question": "Conflict Mediation – Build-a-Sentence ",
+      "description": "Two classmates have a conflict and ask for your help.",
+      "optionInstruction": "Choose one phrase from each block (Approach + Method + Outcome) to form the most effective leadership response.",
+      "type": "group",
+      "options": [
+        {
+          "_id": "fa8472e322de4533b4e9ab2c060fca7c",
+          "groupName": "Block 1 – Approach",
+          "subOptions": [
+            {
+              "text": "Avoid the issue entirely",
+              "_id": "b681828cadce48008943baf9b3c80558"
+            },
+            {
+              "text": "Pick a side quickly",
+              "_id": "02396ca1c2234ae783e51db12a1c5b83"
+            },
+            {
+              "text": "Listen to each side separately ",
+              "_id": "c1922baa45494b93834a21d0134d4119"
+            }
+          ]
+        },
+        {
+          "_id": "8d91b16a1dc2421a884d1af52eb3df15",
+          "groupName": "Block 2 – Method",
+          "subOptions": [
+            {
+              "text": "before guiding a joint discussion",
+              "_id": "b8d7c1b25b3f490ab150ce6bd5cc4f6b"
+            },
+            {
+              "text": "to ensure fairness",
+              "_id": "2110e8fc4aa64bdf90d3f950e675b843"
+            },
+            {
+              "text": "to reduce tension",
+              "_id": "f0946e14d4fd422d96d6eaffa3211138"
+            }
+          ]
+        },
+        {
+          "_id": "677ab3cc3a154429a78d2cbe6c640f18",
+          "groupName": "Block 3 – Outcome",
+          "subOptions": [
+            {
+              "text": "to save time",
+              "_id": "d42203771760474bbfef5d4f7e121858"
+            },
+            {
+              "text": "but lose trust as a leader",
+              "_id": "e82ca6187cb5480693671b93357dbac8"
+            },
+            {
+              "text": "and end the argument",
+              "_id": "a66c22bae8f94af7b0365e3fdc37f2cb"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "0c345be580b542098cc131fed49b66e8",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster6",
+      "question": "Resource Allocation Task – Problem Solving",
+      "description": "Two clubs both want the same room after school, and arguments begin.",
+      "optionInstruction": "Match each Leadership Response with its Outcome.",
+      "type": "matching",
+      "leftSideTitle": "Leadership Response",
+      "rightSideTitle": "Outcome",
+      "leftSide": [
+        {
+          "text": "Help both groups agree on a shared schedule",
+          "_id": "56b8d0b26cc54f28a7900c3194565c36"
+        },
+        {
+          "text": "Give the room to one club",
+          "_id": "aaf9ef0b029144819cc1540d4b87ef07"
+        },
+        {
+          "text": "Avoid the issue",
+          "_id": "0c611105d6404037b979649df7724ccc"
+        },
+        {
+          "text": "Ask the principal to decide",
+          "_id": "945a249b1bd8414bb2608186b1373123"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Win–win compromise and fair access",
+          "_id": "d7820e94a92342599684b51033aed0f8"
+        },
+        {
+          "text": "Creates resentment or bias",
+          "_id": "b6bd671130264ba6a8cb6dfc13056d97"
+        },
+        {
+          "text": "Leaves the problem unresolved",
+          "_id": "fdb2b58e5af841daa9f8680defc47a05"
+        },
+        {
+          "text": "Passes responsibility upward",
+          "_id": "d5fde2b27d984a85a0faa8fa00f5d93a"
+        }
+      ]
+    },
+    {
+      "_id": "9171442248974ed2ae767b85e086cbfd",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster6",
+      "question": "Students and city officials disagree about cycling routes in Abu Dhabi. ",
+      "optionInstruction": "Arrange these steps in correct order for an effective leader:",
+      "type": "matching",
+      "leftSide": [
+        {
+          "text": "1",
+          "_id": "88df75650aab43c4a6ab5ed4df09adb9"
+        },
+        {
+          "text": "2",
+          "_id": "8d8095c9b85a49dfb7655604b8d967be"
+        },
+        {
+          "text": "3",
+          "_id": "5a66dfb5ca054e869e699c89f115094b"
+        },
+        {
+          "text": "4",
+          "_id": "d6adacee6c35478b896070e0e8ab0cd0"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "listen to both sides",
+          "_id": "c2abb679a7b74cb183b776b761a11fca"
+        },
+        {
+          "text": "identify shared goals",
+          "_id": "66eb8a75e4184602b796a11ddf56a915"
+        },
+        {
+          "text": "draft solutions together",
+          "_id": "1f12f84772dc479d97691175374f3554"
+        },
+        {
+          "text": " finalize with consensus. ",
+          "_id": "290d93ca84f84e98876403bf18ee2039"
+        }
+      ]
+    },
+    {
+      "_id": "270ae4ffb9b6479aa5e9a35a673dd6b3",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster6",
+      "question": "Your school is testing an AI grading system and some students worry about bias. What should leaders do first?",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "type": "text",
+      "options": [
+        {
+          "text": "Test it for fairness and transparency before use",
+          "_id": "483f9dadef6d4aa48132f19258dd9fa0"
+        },
+        {
+          "text": "Launch it anyway",
+          "_id": "e58acc881a8b4cc3a869986bca046997"
+        },
+        {
+          "text": "Ignore concerns",
+          "_id": "acf4faddd7bf4955a1b97c3ca5b24264"
+        },
+        {
+          "text": "Let the vendor decide ",
+          "_id": "a7cc17fceace4b109b7560816240f8dc"
+        }
+      ]
+    },
+    {
+      "_id": "5c4fa526db894469af33c176cbc3e7f8",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster7",
+      "question": "Your friend has a fever and sore throat and wants to take antibiotics.",
+      "optionInstruction": "Match each possible advice with its accuracy level.",
+      "type": "matching",
+      "leftSideTitle": "Advice Given",
+      "rightSideTitle": "Accuracy Level",
+      "leftSide": [
+        {
+          "text": "Check if it’s viral before using antibiotics",
+          "_id": "f09eddb6ee584b119b0f30f4fd56e0df"
+        },
+        {
+          "text": "Take antibiotics just in case",
+          "_id": "bb3d98d613ca47fb8267aa6262f34493"
+        },
+        {
+          "text": "Take if over 12 years old",
+          "_id": "b3c4fe97056c4d97aa6835b137471131"
+        },
+        {
+          "text": "Use vitamins instead",
+          "_id": "035a8d9c080c4d4bb9f7d9d05a5323e8"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Correct and medically responsible",
+          "_id": "d0141e295398412a83c75bf5131f9ffe"
+        },
+        {
+          "text": "Incorrect – promotes misuse",
+          "_id": "9c528cd096d940ff9386e465ff193610"
+        },
+        {
+          "text": "Irrelevant – not age-based",
+          "_id": "f85e88bbe15340f88e07fc3dd4e32c12"
+        },
+        {
+          "text": " Partial – not curative for infection",
+          "_id": "16985de67baf4059869ae94921fe8001"
+        }
+      ]
+    },
+    {
+      "_id": "c1a9cd005f6047f689e2d75b656407c1",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster7",
+      "question": "A classmate who was absent for a week feels behind.",
+      "optionInstruction": "Rank the following actions from most supportive (1) to least (4):",
+      "type": "matching",
+      "leftSide": [
+        {
+          "text": "1",
+          "_id": "24cc4e21e19a4021bbc5c43f742c34a3"
+        },
+        {
+          "text": "2",
+          "_id": "800989f8289a444ca208f322a9e9a193"
+        },
+        {
+          "text": "3",
+          "_id": "e9e20d7cdd3e47e6b36c37d0643ad4df"
+        },
+        {
+          "text": "4",
+          "_id": "a6fa50bebf3e49609fc0565673bcb4dc"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Share notes and plan a short catch-up",
+          "_id": "cae0e0795bc741cb9eb7db2e49c574fa"
+        },
+        {
+          "text": "Encourage them but not help academically",
+          "_id": "fcb4d47cee9b4b3498fc38d6461639ae"
+        },
+        {
+          "text": "Say you are too busy",
+          "_id": "0b2d7707c0504c2d9c685937e3584c43"
+        },
+        {
+          "text": "Do their work for them",
+          "_id": "dbbac209782c4db193e0b6cb315f62dd"
+        }
+      ]
+    },
+    {
+      "_id": "d741c4d65278427a8d233f3be007cf7d",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster7",
+      "question": "Your school is planning Well-being Week.",
+      "optionInstruction": "Select TWO actions that would have the greatest impact on students’ mental health:",
+      "type": "text",
+      "options": [
+        {
+          "text": "Yoga session",
+          "_id": "040908788649495ab84577f3f1b59b4b"
+        },
+        {
+          "text": "Posters about stress",
+          "_id": "24e7d2bcbde044baa915da8d0765e7a2"
+        },
+        {
+          "text": "Peer-support groups",
+          "_id": "06f6cc4a9bde420db4c5ef7651c9a96d"
+        },
+        {
+          "text": "Peer-support groups",
+          "_id": "c2ee639a972a4fa395f6bbfdad8fc0f6"
+        }
+      ]
+    },
+    {
+      "_id": "dfa17c7ab69e4fe1a35cb3140380b607",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster7",
+      "question": "A student plays loud music in the library after hours. ",
+      "optionInstruction": "Match the response to the likely outcome.",
+      "leftSideTitle": "Response",
+      "rightSideTitle": "Likely Outcome",
+      "type": "matching",
+      "leftSide": [
+        {
+          "text": "Ask politely to lower it",
+          "_id": "e12625b0087145babf9829ea89d79805"
+        },
+        {
+          "text": "Ignore it",
+          "_id": "71af7f3b36bb48ab8feb7627f3c344ad"
+        },
+        {
+          "text": "Join in",
+          "_id": "26b1cfa6550b4296973fc9eb0513be4a"
+        },
+        {
+          "text": "Report immediately",
+          "_id": "d949e42971d748c1b1d15a4e33df893c"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Report immediately",
+          "_id": "a5f05bbe42c6424a9b78c88f548a1a34"
+        },
+        {
+          "text": "Report immediately",
+          "_id": "ed5e0edca6ff42ada5fd6d2563ea6214"
+        },
+        {
+          "text": "Report immediately",
+          "_id": "388a302cce32410ca27d4002542036ac"
+        },
+        {
+          "text": "Escalates unnecessarily if not first warned",
+          "_id": "f58f021638f347f7a34be62633032760"
+        }
+      ]
+    },
+    {
+      "_id": "0b9d2f7f047b46c895848ac4a479d7bb",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster7",
+      "question": "You see a deepfake video of a public figure spreading online. Some students are sharing it for fun.",
+      "optionInstruction": "What is the most responsible action? ",
+      "type": "text",
+      "options": [
+        {
+          "text": "Share it for views to raise awareness",
+          "_id": "f5da220a1b574fb7a6f30e97a6338ec7"
+        },
+        {
+          "text": "Report or flag the video and explain why it is false",
+          "_id": "a0a6b9d3feb64335b92737c35276a5b0"
+        },
+        {
+          "text": "Ignore it",
+          "_id": "46c4c3bdcacd461682e45ee90bfd7fd4"
+        },
+        {
+          "text": "Edit and repost for humour",
+          "_id": "8034004fa502411887c1ee9f077c5d81"
+        }
+      ]
+    },
+    {
+      "_id": "c952b7eec6d348b1b0f4fbb36cae1088",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster8",
+      "question": "Your school’s new sustainability drive offers four choices: ",
+      "optionInstruction": "Which action creates the most lasting impact?",
+      "type": "text",
+      "options": [
+        {
+          "text": "Put up recycling posters",
+          "_id": "b8cde916259f4c04b2ab5262a6ba98a9"
+        },
+        {
+          "text": "Organise a one-day clean-up",
+          "_id": "92300c78c4d44500b2b2349cb04b601e"
+        },
+        {
+          "text": "Install solar panels on the roof",
+          "_id": "8abd44e62f5d4379a3b607c89a14f2d6"
+        },
+        {
+          "text": "Wait for new government rules",
+          "_id": "4471712244aa4fce9dbc2725d183aef3"
+        }
+      ]
+    },
+    {
+      "_id": "1898ad4fd3e94c49b44e3a02e0d8ff41",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster8",
+      "question": "Your class sets up a phone-recycling box.",
+      "optionInstruction": "Choose one phrase from each block (Object + Action + Outcome) to form the most accurate explanation of what happens next.",
+      "type": "group",
+      "options": [
+        {
+          "_id": "7f4961cc463845faa182c9872a262cd3",
+          "groupName": "Block 1 – Object",
+          "subOptions": [
+            {
+              "text": "Broken screens",
+              "_id": "d3b95e0e4ced40e387c3af1bc0945a27"
+            },
+            {
+              "text": "Old batteries",
+              "_id": "dbf3b580e17a40a3a5b296b05588e178"
+            },
+            {
+              "text": "Collected phones",
+              "_id": "d26b82bef228440cb37e716ff7400eaf"
+            }
+          ]
+        },
+        {
+          "_id": "c9ea0401520f420ab0939e86f74440d0",
+          "groupName": "Block 2 – Action",
+          "subOptions": [
+            {
+              "text": "Are sent",
+              "_id": "d9b95a9f340d42648a586bc602ded314"
+            },
+            {
+              "text": "Are reused",
+              "_id": "1adeb0d0dfa5454d93e1dab2f9234ea7"
+            },
+            {
+              "text": "Are thrown",
+              "_id": "f28e999c9999422e8efb0eaf23eafcf3"
+            }
+          ]
+        },
+        {
+          "_id": "28c04bc0e0464b6c86857c4addfdbf4b",
+          "groupName": "Block 3 – Outcome",
+          "subOptions": [
+            {
+              "text": "To a recycling centre for safe processing",
+              "_id": "36135dfb39e44aef9313a447d051bf7b"
+            },
+            {
+              "text": "Without inspection",
+              "_id": "01e4dd5d668f41edb50d4685d2880e64"
+            },
+            {
+              "text": "into general waste",
+              "_id": "197340edbc7d4d4b9a79022f7088bd54"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "f3fcc7f27d8a4a40a5df12ed251e9fde",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster8",
+      "question": "A company advertises its bottles as “eco-friendly.”",
+      "optionInstruction": "A company advertises its bottles as “eco-friendly.”",
+      "type": "matching",
+      "leftSideTitle": "A company advertises its bottles as “eco-friendly.”",
+      "rightSideTitle": "A company advertises its bottles as “eco-friendly.”",
+      "leftSide": [
+        {
+          "text": "Can you show proof or certification of sustainability?",
+          "_id": "65f6dc7bacc84b5b84a8af51e907a613"
+        },
+        {
+          "text": "Do you like the colour of the bottle?",
+          "_id": "c9d816664f7e440bb3379a6e67bf51a3"
+        },
+        {
+          "text": "Should we ignore the materials used?",
+          "_id": "5385a97bb65643ec94877263c3c8dce2"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Evidence-based verification",
+          "_id": "187e111782a8416ea3203a5dfa47a39b"
+        },
+        {
+          "text": "Irrelevant personal preference",
+          "_id": "55c48dce807f436196d27f863df8818e"
+        },
+        {
+          "text": "Faulty or dismissive reasoning",
+          "_id": "a63616bb15f74af59fa8b5327e9c6c2d"
+        }
+      ]
+    },
+    {
+      "_id": "ae6a3992d809464da8929605949af601",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster8",
+      "question": "Air-conditioning runs all day in your school.",
+      "description": "If the school cuts energy waste, what long-term effect is most likely? ",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "type": "text",
+      "options": [
+        {
+          "text": "Higher costs",
+          "_id": "27bd56e2424249458db868a7eed3262d"
+        },
+        {
+          "text": "Lower energy use and carbon emissions with cost savings",
+          "_id": "fe2137535c59472682d38f21f656053c"
+        },
+        {
+          "text": "Colder classrooms",
+          "_id": "d445932fc5264fdca4da0356a6004c5b"
+        },
+        {
+          "text": "More maintenance",
+          "_id": "a00095f5ab6346d98213b7d3a8b1830a"
+        }
+      ]
+    },
+    {
+      "_id": "6eceb41e22fd4c549688b2b42ebe834f",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster9",
+      "question": " The school plans to install AI cameras for attendance, but students raise privacy concerns.",
+      "optionInstruction": "Rank these statements from most accurate (1) to least (4):",
+      "type": "matching",
+      "leftSideTitle": "Action",
+      "rightSideTitle": "Outcome",
+      "leftSide": [
+        {
+          "text": "1",
+          "_id": "b59e20bfeeb446c7a909a8f10195f48e"
+        },
+        {
+          "text": "2",
+          "_id": "bc8c485177a54bd4b3535e2693d17d6e"
+        },
+        {
+          "text": "3",
+          "_id": "865bb61ba16d467aa548d6f71cae5bf0"
+        },
+        {
+          "text": "4",
+          "_id": "6f66623dc53f4472babc9f6f0dc97440"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "Ask how data will be stored and used before deciding",
+          "_id": "87768308fd124da78db9eaf01c21c03d"
+        },
+        {
+          "text": "Approve immediately",
+          "_id": "7685f33adbb14950b6b261ff2339d08c"
+        },
+        {
+          "text": "Ignore the concern",
+          "_id": "25b528a9b6184eb3a8eeadf0ef8fe35a"
+        },
+        {
+          "text": "Reject immediately",
+          "_id": "b083bd4293164d658d436b4c8f17e13f"
+        }
+      ]
+    },
+    {
+      "_id": "940741fc88ff405a9ce87fd5b2391ede",
+      "image": "/s3/q2.png",
+      "clusterId": "cluster9",
+      "question": "A blog reports: “Coffee drinkers score higher on exams.”",
+      "optionInstruction": "Match each explanation to the reasoning it represents.",
+      "type": "matching",
+      "leftSideTitle": "Explanation",
+      "rightSideTitle": "Reasoning Type",
+      "leftSide": [
+        {
+          "text": "Coffee causes better scores",
+          "_id": "303521981b70402299039ad119b5a51f"
+        },
+        {
+          "text": "Coffee drinkers may also sleep more or study better",
+          "_id": "b10041ba8d054df9b0e88ed09b2d7f6b"
+        },
+        {
+          "text": "Correlation does not mean causation",
+          "_id": "358ac405bebd4577b2192c2c2027a4d1"
+        },
+        {
+          "text": "Coffee is harmful",
+          "_id": "285b742a60ff4ed68bafc1228fea339b"
+        }
+      ],
+      "rightSide": [
+        {
+          "text": "False cause (post hoc)",
+          "_id": "14c57c0b409142908b6698634cccf00c"
+        },
+        {
+          "text": "Confounding variable",
+          "_id": "384eac584ec74ba0bbd6402c1cdd1c22"
+        },
+        {
+          "text": "Correct statistical reasoning",
+          "_id": "c3504ef442c64848801ee876cd6141c7"
+        },
+        {
+          "text": "Irrelevant assumption",
+          "_id": "f3d8898d7cfe49838ac2c74bddedb9b1"
+        }
+      ]
+    },
+    {
+      "_id": "15881c0c2a574239ad7c4223c98a0e90",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster9",
+      "question": "Your class average quiz score rose from 60 to 75.",
+      "optionInstruction": "What is the percentage increase?",
+      "type": "text",
+      "options": [
+        {
+          "text": "10%",
+          "_id": "0f8d613600c74791888c36615e8c3c89"
+        },
+        {
+          "text": "15%",
+          "_id": "264f01e3d3de4359803b2ee10190136e"
+        },
+        {
+          "text": "20%",
+          "_id": "30b24e1f5dde4d1a926adaa28f08fd19"
+        },
+        {
+          "text": "25%",
+          "_id": "6879873f0c88461f9872fa7338f27007"
+        }
+      ]
+    },
+    {
+      "_id": "10f433b2f1ec40ec98390732fb7212a7",
+      "image": "/s3/q1.png",
+      "clusterId": "cluster9",
+      "question": "A rule in your school says, “If a safety inspection is missed, the system must be paused.”\nWhile auditing, you find the system is still running. ",
+      "optionInstruction": "What does this mean?",
+      "type": "text",
+      "options": [
+        {
+          "text": "The safety inspection was done",
+          "_id": "f951fa43ce444904a14797877bc54d38"
+        },
+        {
+          "text": "The rule was ignored",
+          "_id": "65c5231d2b744720959f48060fad1c67"
+        },
+        {
+          "text": "The system is automatically safe",
+          "_id": "da5f73b5304547f78f6319352cbfeefd"
+        },
+        {
+          "text": "Nothing is wrong",
+          "_id": "9da48b6f47c145e49996dfd6146aa1ae"
         }
       ]
     }

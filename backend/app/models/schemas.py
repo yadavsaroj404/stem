@@ -1,10 +1,8 @@
 from typing import List, Literal, Optional
 from pydantic import BaseModel
-from datetime import datetime
 
 class Response(BaseModel):
     questionId: str
-    type: str
     selectedOptionId: str
 
 class TestSubmissionPayload(BaseModel):
@@ -14,7 +12,7 @@ class TestSubmissionPayload(BaseModel):
     responses: List[Response]
 
 class TestSubmissionResponse(BaseModel):
-    id: str  # Changed from _id to id (FastAPI doesn't like underscores in response models)
+    id: str 
     userId: str
     createdAt: str
     name: str
