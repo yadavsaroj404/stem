@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect, ReactElement } from "react";
+import { useState, useRef, useEffect, ReactElement, useMemo } from "react";
 import Image from "next/image";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { fetchQuestions } from "@/helpers/data-fetch";
 import {
   AnyQuestion,
   GroupOption as GroupOptionParams,
+  MatchingItem,
   MatchingQuestion,
   Response,
   TextImageOption as TextImageOptionParams,
@@ -20,6 +21,432 @@ import StillThereModal from "@/components/Modals/StillThere";
 import PartialCompletionModal from "@/components/Modals/PartialCompletion";
 import UserProfile from "@/components/UserProfile";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
+
+function GroupQuestionComponent({
+  question,
+  onSelect,
+  matchedOptions,
+}: {
+  question: any;
+  onSelect: (selectedIds: Record<string, string>) => void;
+  matchedOptions: string;
+}) {
+  const [selected, setSelected] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (matchedOptions) {
+      const newSelected: Record<string, string> = {};
+      matchedOptions.split(";").forEach((pair) => {
+        const [groupId, subOptionId] = pair.split("-");
+        newSelected[groupId] = subOptionId;
+      });
+      setSelected(newSelected);
+    } else {
+      setSelected({});
+    }
+  }, [matchedOptions]);
+
+  const handleSelect = (groupId: string, subOptionId: string) => {
+    const newSelected = { ...selected, [groupId]: subOptionId };
+    setSelected(newSelected);
+    // Notify parent of the updated selections only if all groups have a selection
+    if (Object.keys(newSelected).length === question.options.length) {
+      onSelect(newSelected);
+    }
+  };
+
+  return (
+    <div className="flex gap-2.5">
+      {question.options.map((group: GroupOptionParams) => (
+        <div
+          key={group._id}
+          className="w-full max-w-60 p-4 rounded-lg border border-primary-brand-color bg-[#1B0244] bg-opacity-50"
+        >
+          <h3 className="font-semibold mb-4 text-base pb-2 border-b-2 border-[#D400FF]/30">
+            {group.groupName}
+          </h3>
+          <div className="space-y-4">
+            {group.subOptions.map((subOption) => (
+              <div
+                key={subOption._id}
+                className="flex items-start cursor-pointer"
+                onClick={() => handleSelect(group._id, subOption._id)}
+              >
+                {selected[group._id] === subOption._id ? (
+                  <IoMdRadioButtonOn size={20} className="mr-2 flex-shrink-0" />
+                ) : (
+                  <IoMdRadioButtonOff
+                    size={20}
+                    className="mr-2 flex-shrink-0"
+                  />
+                )}
+                <span className="text-sm font-semibold">{subOption.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MatchingQuestionComponent({
+  question,
+  onSelect,
+  matchedOptions,
+}: {
+  question: MatchingQuestion;
+  onSelect: (selectedOptionId: string) => void;
+  matchedOptions: string;
+}) {
+  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
+  const [matches, setMatches] = useState<{ leftId: string; rightId: string }[]>(
+    []
+  );
+  const [positions, setPositions] = useState<
+    Record<string, { top: number; left: number; width: number; height: number }>
+  >({});
+  const [isMeasuring, setIsMeasuring] = useState(true);
+  const [mousePosition, setMousePosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const itemRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const COLORS = [
+    "rgba(255, 221, 0, 0.15)",
+    "rgba(212, 0, 255, 0.15)",
+    "rgba(255, 69, 58, 0.15)",
+    "rgba(0, 209, 102, 0.15)",
+    "rgba(255, 159, 28, 0.15)",
+  ];
+  const BORDER_COLORS = ["#FFDD00", "#D400FF", "#FF453A", "#00D166", "#FF9F1C"];
+
+  // Create the visual order for the right side using useMemo
+  const rightSideDisplayOrder = useMemo(() => {
+    const orderedRightSide = [...question.rightSide];
+    const leftSideOrder = question.leftSide.map((item) => item._id);
+
+    orderedRightSide.sort((a, b) => {
+      const matchA = matches.find((m) => m.rightId === a._id);
+      const matchB = matches.find((m) => m.rightId === b._id);
+
+      if (matchA && matchB) {
+        return (
+          leftSideOrder.indexOf(matchA.leftId) -
+          leftSideOrder.indexOf(matchB.leftId)
+        );
+      }
+      if (matchA) return -1;
+      if (matchB) return 1;
+      // For unmatched items, maintain their original relative order
+      return (
+        question.rightSide.findIndex((i) => i._id === a._id) -
+        question.rightSide.findIndex((i) => i._id === b._id)
+      );
+    });
+
+    return orderedRightSide;
+  }, [matches, question.leftSide, question.rightSide]);
+
+  // Add mouse move listener when a left item is selected
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      setMousePosition({
+        x: e.clientX - containerRect.left,
+        y: e.clientY - containerRect.top,
+      });
+    };
+
+    if (selectedLeft) {
+      window.addEventListener("mousemove", handleMouseMove);
+    } else {
+      window.removeEventListener("mousemove", handleMouseMove);
+      setMousePosition(null);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [selectedLeft]);
+
+  // Parse matchedOptions from props
+  useEffect(() => {
+    if (matchedOptions) {
+      const parsedMatches = matchedOptions
+        .split(";")
+        .filter(Boolean)
+        .map((pair) => {
+          const [leftId, rightId] = pair.split("-");
+          return { leftId, rightId };
+        });
+      setMatches(parsedMatches);
+    } else {
+      setMatches([]);
+    }
+    setIsMeasuring(true);
+  }, [matchedOptions, question._id]);
+
+  // FLIP animation logic
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const newPositions: Record<
+      string,
+      { top: number; left: number; width: number; height: number }
+    > = {};
+    const containerRect = containerRef.current.getBoundingClientRect();
+
+    Object.keys(itemRefs.current).forEach((id) => {
+      const el = itemRefs.current[id];
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        newPositions[id] = {
+          top: rect.top - containerRect.top,
+          left: rect.left - containerRect.left,
+          width: rect.width,
+          height: rect.height,
+        };
+      }
+    });
+
+    if (isMeasuring) {
+      setPositions(newPositions);
+      setIsMeasuring(false);
+      return;
+    }
+
+    Object.keys(newPositions).forEach((id) => {
+      const el = itemRefs.current[id];
+      const oldPos = positions[id];
+      const newPos = newPositions[id];
+
+      if (el && oldPos && newPos) {
+        const deltaY = oldPos.top - newPos.top;
+        if (Math.abs(deltaY) > 0.5) {
+          // Only animate if there's a noticeable change
+          el.style.transform = `translateY(${deltaY}px)`;
+          el.style.transition = "transform 0s";
+          requestAnimationFrame(() => {
+            el.style.transform = "";
+            el.style.transition = "transform 0.5s ease-in-out";
+          });
+        }
+      }
+    });
+
+    setPositions(newPositions);
+  }, [rightSideDisplayOrder, isMeasuring]);
+
+  const handleSelect = (side: "left" | "right", id: string) => {
+    setIsMeasuring(true);
+
+    const existingMatch = matches.find(
+      (m) =>
+        (side === "left" && m.leftId === id) ||
+        (side === "right" && m.rightId === id)
+    );
+
+    if (existingMatch) {
+      const newMatches = matches.filter(
+        (m) => m.leftId !== existingMatch.leftId
+      );
+      setMatches(newMatches);
+      onSelect(newMatches.map((m) => `${m.leftId}-${m.rightId}`).join(";"));
+      setSelectedLeft(null);
+      return;
+    }
+
+    if (side === "left") {
+      setSelectedLeft(selectedLeft === id ? null : id);
+    } else if (side === "right" && selectedLeft !== null) {
+      const newMatches = matches.filter(
+        (m) => m.leftId !== selectedLeft && m.rightId !== id
+      );
+      const updatedMatches = [
+        ...newMatches,
+        { leftId: selectedLeft, rightId: id },
+      ];
+      setMatches(updatedMatches);
+
+      if (updatedMatches.length === question.leftSide.length) {
+        onSelect(
+          updatedMatches.map((m) => `${m.leftId}-${m.rightId}`).join(";")
+        );
+      }
+      setSelectedLeft(null);
+    }
+  };
+
+  const getMatchForLeft = (leftId: string) =>
+    matches.find((m) => m.leftId === leftId);
+  const getMatchForRight = (rightId: string) =>
+    matches.find((m) => m.rightId === rightId);
+
+  const getColorForMatch = (side: "left" | "right", id: string) => {
+    let index = -1;
+    if (side === "left") {
+      index = question.leftSide.findIndex((item) => item._id === id);
+    } else {
+      const match = getMatchForRight(id);
+      if (match) {
+        index = question.leftSide.findIndex(
+          (item) => item._id === match.leftId
+        );
+      }
+    }
+    if (index === -1) return null;
+    return {
+      bg: COLORS[index % COLORS.length],
+      border: BORDER_COLORS[index % BORDER_COLORS.length],
+    };
+  };
+
+  return (
+    <div className="relative flex justify-between gap-8" ref={containerRef}>
+      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-10">
+        {matches.map((match) => {
+          const leftPos = positions[match.leftId];
+          const rightPos = positions[match.rightId];
+          const leftIndex = question.leftSide.findIndex(
+            (item) => item._id === match.leftId
+          );
+          if (!leftPos || !rightPos || leftIndex === -1) return null;
+
+          const startX = leftPos.left + leftPos.width;
+          const startY = leftPos.top + leftPos.height / 2;
+          const endX = rightPos.left;
+          const endY = rightPos.top + rightPos.height / 2;
+          const controlX1 = startX + (endX - startX) / 2;
+          const controlY1 = startY;
+          const controlX2 = endX - (endX - startX) / 2;
+          const controlY2 = endY;
+          const color = BORDER_COLORS[leftIndex % BORDER_COLORS.length];
+
+          return (
+            <g key={match.leftId}>
+              <path
+                d={`M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`}
+                stroke={color}
+                strokeWidth="2"
+                fill="none"
+              />
+              <circle cx={startX} cy={startY} r="4" fill={color} />
+              <circle cx={endX} cy={endY} r="4" fill={color} />
+            </g>
+          );
+        })}
+        {selectedLeft &&
+          positions[selectedLeft] &&
+          mousePosition &&
+          (() => {
+            const leftPos = positions[selectedLeft];
+            const startX = leftPos.left + leftPos.width;
+            const startY = leftPos.top + leftPos.height / 2;
+            const endX = mousePosition.x;
+            const endY = mousePosition.y;
+            const controlX1 = startX + (endX - startX) / 2;
+            const controlY1 = startY;
+            const controlX2 = endX - (endX - startX) / 2;
+            const controlY2 = endY;
+            const color =
+              getColorForMatch("left", selectedLeft)?.border || "white";
+
+            return (
+              <g>
+                <path
+                  d={`M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`}
+                  stroke={color}
+                  strokeWidth="2"
+                  fill="none"
+                />
+                <circle cx={startX} cy={startY} r="4" fill={color} />
+                <circle cx={endX} cy={endY} r="4" fill={color} />
+              </g>
+            );
+          })()}
+      </svg>
+
+      <div className="space-y-3 z-20 w-[45%]">
+        {question.leftSide.map((item) => {
+          const match = getMatchForLeft(item._id);
+          const color =
+            match || selectedLeft === item._id
+              ? getColorForMatch("left", item._id)
+              : null;
+          return (
+            <div
+              key={item._id}
+              ref={(el) => {
+                itemRefs.current[item._id] = el;
+              }}
+              onClick={() => handleSelect("left", item._id)}
+              className={`w-full p-3.5 rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
+                !color
+                  ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
+                  : "backdrop-blur-md"
+              }`}
+              style={{
+                backgroundColor: color?.bg || "",
+                borderColor: color?.border || "",
+              }}
+            >
+              <span>{item.text}</span>
+              {item.image && (
+                <Image
+                  src={item.image}
+                  alt={item.text}
+                  width={40}
+                  height={40}
+                  className="rounded-md ml-2"
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <div className="relative z-20 space-y-3 w-[45%]">
+        {rightSideDisplayOrder.map((item: MatchingItem) => {
+          const match = getMatchForRight(item._id);
+          const color = match ? getColorForMatch("right", item._id) : null;
+          return (
+            <div
+              key={item._id}
+              ref={(el) => {
+                itemRefs.current[item._id] = el;
+              }}
+              onClick={() => handleSelect("right", item._id)}
+              className={`w-full p-3.5 rounded-lg border transition-colors cursor-pointer flex items-center bg-opacity-50 ${
+                !color
+                  ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
+                  : "backdrop-blur-md"
+              }`}
+              style={{
+                backgroundColor: color?.bg || "",
+                borderColor: color?.border || "",
+              }}
+            >
+              <span>{item.text}</span>
+              {item.image && (
+                <Image
+                  src={item.image}
+                  alt={item.text}
+                  width={40}
+                  height={40}
+                  className="rounded-md ml-2"
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export default function TestPage() {
   const router = useRouter();
@@ -439,263 +866,6 @@ function TextImageOption({
         alt={option.text}
         className="mx-auto my-5"
       />
-    </div>
-  );
-}
-
-function MatchingQuestionComponent({
-  question,
-  onSelect,
-  matchedOptions,
-}: {
-  question: MatchingQuestion;
-  onSelect: (selectedOptionId: string) => void;
-  matchedOptions: string;
-}) {
-  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
-  const [matches, setMatches] = useState<{ leftId: string; rightId: string }[]>(
-    []
-  );
-  const COLORS = [
-    // More distinguishable, theme-friendly glass colors (yellow, magenta, red, green, orange)
-    "rgba(255, 221, 0, 0.15)",
-    "rgba(212, 0, 255, 0.15)",
-    "rgba(255, 69, 58, 0.15)",
-    "rgba(0, 209, 102, 0.15)",
-    "rgba(255, 159, 28, 0.15)",
-  ];
-  const BORDER_COLORS = ["#FFDD00", "#D400FF", "#FF453A", "#00D166", "#FF9F1C"];
-
-  useEffect(() => {
-    if (matchedOptions) {
-      const parsedMatches = matchedOptions.split(";").map((pair) => {
-        const [leftId, rightId] = pair.split("-");
-        return { leftId: leftId, rightId: rightId };
-      });
-      setMatches(parsedMatches);
-    } else {
-      setMatches([]);
-    }
-  }, [matchedOptions]);
-
-  const handleSelect = (side: "left" | "right", id: string) => {
-    // If clicking a matched item (left or right), unmatch it.
-    const existingMatch = matches.find(
-      (m) =>
-        (side === "left" && m.leftId === id) ||
-        (side === "right" && m.rightId === id)
-    );
-
-    if (existingMatch) {
-      const newMatches = matches.filter(
-        (m) => m.leftId !== existingMatch.leftId
-      );
-
-      setMatches(newMatches);
-      // Invalidate the answer as it's no longer complete
-      onSelect("");
-      setSelectedLeft(null);
-      return;
-    }
-
-    if (side === "left") {
-      // If clicking the currently selected left item, deselect it.
-      if (selectedLeft === id) {
-        setSelectedLeft(null);
-      } else {
-        // Otherwise, select it.
-        setSelectedLeft(id);
-      }
-    } else if (side === "right" && selectedLeft !== null) {
-      // If a left item is selected and a right item is clicked, create a match.
-      // Break any existing matches for either the selected left or the clicked right item.
-      const newMatches = matches.filter(
-        (m) => m.leftId !== selectedLeft && m.rightId !== id
-      );
-      const updatedMatches = [
-        ...newMatches,
-        { leftId: selectedLeft, rightId: id },
-      ];
-      setMatches(updatedMatches);
-
-      // Only call onSelect if all items are matched
-      if (updatedMatches.length === question.leftSide.length) {
-        onSelect(
-          updatedMatches.map((m) => `${m.leftId}-${m.rightId}`).join(";")
-        );
-      }
-      setSelectedLeft(null);
-    }
-  };
-
-  const getMatchForLeft = (leftId: string) => {
-    return matches.find((m) => m.leftId == leftId);
-  };
-
-  const getMatchForRight = (rightId: string) => {
-    return matches.find((m) => m.rightId == rightId);
-  };
-
-  const getColorForMatch = (side: "left" | "right", id: string) => {
-    let index = -1;
-    if (side === "left") {
-      index = question.leftSide.findIndex((item) => item._id == id);
-    } else {
-      const matchIndex = matches.findIndex((item) => item.rightId == id);
-      if (matchIndex !== -1) {
-        const leftId = matches[matchIndex].leftId;
-        index = question.leftSide.findIndex((item) => item._id == leftId);
-      }
-    }
-    if (index === -1) return null;
-    return {
-      bg: COLORS[index % COLORS.length],
-      border: BORDER_COLORS[index % BORDER_COLORS.length],
-    };
-  };
-
-  return (
-    <div className="flex gap-4">
-      {/* Left Side */}
-      <div className="space-y-3">
-        {question.leftSide.map((item) => {
-          const match = getMatchForLeft(item._id);
-          const color =
-            match || selectedLeft === item._id
-              ? getColorForMatch("left", item._id)
-              : null;
-          return (
-            <div
-              key={item._id}
-              onClick={() => handleSelect("left", item._id)}
-              className={`w-fit p-3.5 rounded-lg border transition-all cursor-pointer flex items-center ${
-                !color
-                  ? "border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark"
-                  : "backdrop-blur-md"
-              }`}
-              style={{
-                backgroundColor: color?.bg || "",
-                borderColor: color?.border || "",
-              }}
-            >
-              <span>{item.text}</span>
-              {item.image && (
-                <Image
-                  src={item.image}
-                  alt={item.text}
-                  width={40}
-                  height={40}
-                  className="rounded-md"
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-      {/* Right Side */}
-      <div className="space-y-3">
-        {question.rightSide.map((item) => {
-          const match = getMatchForRight(item._id);
-          const color = match ? getColorForMatch("right", item._id) : null;
-          return (
-            <div
-              key={item._id}
-              onClick={() => handleSelect("right", item._id)}
-              className={`p-3 rounded-lg border transition-all cursor-pointer flex justify-between items-center border-primary-brand-color bg-[#1B0244] bg-opacity-50 hover:bg-primary-dark ${
-                match ? "backdrop-blur-md" : ""
-              }`}
-              style={{
-                backgroundColor: color?.bg || "",
-                borderColor: color?.border || "",
-              }}
-            >
-              <span>{item.text}</span>
-              {item.image && (
-                <Image
-                  src={item.image}
-                  alt={item.text}
-                  width={40}
-                  height={40}
-                  className="rounded-md"
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function GroupQuestionComponent({
-  question,
-  onSelect,
-  matchedOptions,
-}: {
-  question: any;
-  onSelect: (selectedIds: Record<string, string>) => void;
-  matchedOptions: string;
-}) {
-  const [selected, setSelected] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    if (matchedOptions) {
-      const newSelected: Record<string, string> = {};
-      matchedOptions.split(";").forEach((pair) => {
-        const [groupId, subOptionId] = pair.split("-");
-        newSelected[groupId] = subOptionId;
-      });
-      setSelected(newSelected);
-    } else {
-      setSelected({});
-    }
-  }, [matchedOptions]);
-
-  const handleSelect = (groupId: string, subOptionId: string) => {
-    const newSelected = { ...selected, [groupId]: subOptionId };
-    setSelected(newSelected);
-    // Notify parent of the updated selections only if all groups have a selection
-    if (Object.keys(newSelected).length === question.options.length) {
-      onSelect(newSelected);
-    }
-  };
-
-  return (
-    <div className="flex gap-2.5">
-      {question.options.map((group: GroupOptionParams) => (
-        <div
-          key={group._id}
-          className="w-full max-w-60 p-4 rounded-lg border border-primary-brand-color bg-[#1B0244] bg-opacity-50"
-        >
-          <h3 className="font-semibold mb-4 text-base pb-2 border-b-2 border-[#D400FF]/30">
-            {group.groupName}
-          </h3>
-          <div className="space-y-4">
-            {group.subOptions.map((subOption) => (
-              <div
-                key={subOption._id}
-                className="flex items-start cursor-pointer"
-                onClick={() => handleSelect(group._id, subOption._id)}
-              >
-                {selected[group._id] === subOption._id ? (
-                  <IoMdRadioButtonOn
-                    size={20}
-                    className="mr-2 flex-shrink-0"
-                  />
-                ) : (
-                  <IoMdRadioButtonOff
-                    size={20}
-                    className="mr-2 flex-shrink-0"
-                  />
-                )}
-                <span className="text-sm font-semibold">
-                  {subOption.text}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
     </div>
   );
 }
