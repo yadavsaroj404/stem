@@ -49,6 +49,10 @@ export interface TextQuestion extends BaseQuestion {
   type: "text";
   options: TextOption[];
 }
+export interface RankQuestion extends BaseQuestion {
+  type: "rank";
+  options: TextOption[];
+}
 
 export interface TextImageQuestion extends BaseQuestion {
   type: "text-image";
@@ -72,7 +76,8 @@ export type AnyQuestion =
   | TextQuestion
   | TextImageQuestion
   | MatchingQuestion
-  | GroupQuestion;
+  | GroupQuestion
+  | RankQuestion;
 
 // --- Response Structures ---
 export interface Response {

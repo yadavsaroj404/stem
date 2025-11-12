@@ -9,6 +9,7 @@ import {
   GroupOption as GroupOptionParams,
   MatchingItem,
   MatchingQuestion,
+  RankQuestion,
   Response,
   TextImageOption as TextImageOptionParams,
   TextOption as TextOptionParams,
@@ -21,6 +22,107 @@ import StillThereModal from "@/components/Modals/StillThere";
 import PartialCompletionModal from "@/components/Modals/PartialCompletion";
 import UserProfile from "@/components/UserProfile";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
+
+function RankQuestionComponent({
+  question,
+  arrangement,
+  onArrangement,
+}: {
+  question: RankQuestion;
+  arrangement: string;
+  onArrangement: (arrangement: string) => void;
+}) {
+  const [orderedOptions, setOrderedOptions] = useState(question.options);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    itemRefs.current = itemRefs.current.slice(0, orderedOptions.length);
+  }, [orderedOptions]);
+
+  useEffect(() => {
+    if (arrangement) {
+      const arrangedIds = arrangement.split(";");
+      const newOrderedOptions = arrangedIds
+        .map((id) => question.options.find((opt) => opt._id === id))
+        .filter((opt): opt is TextOptionParams => !!opt);
+      if (newOrderedOptions.length === question.options.length) {
+        setOrderedOptions(newOrderedOptions);
+      }
+    } else {
+      setOrderedOptions(question.options);
+    }
+  }, [arrangement, question.options]);
+
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragEnter = (index: number) => {
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const items = Array.from(orderedOptions);
+    const [reorderedItem] = items.splice(draggedIndex, 1);
+    items.splice(index, 0, reorderedItem);
+
+    setOrderedOptions(items);
+    setDraggedIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    const newArrangement = orderedOptions.map((item) => item._id).join(";");
+    onArrangement(newArrangement);
+    setDraggedIndex(null);
+  };
+
+  return (
+    <div>
+      {orderedOptions.map((option, index) => {
+        const isBeingDragged = draggedIndex === index;
+        return (
+          <div
+            key={option._id}
+            ref={(el: HTMLDivElement | null) => {
+              if (el) {
+                itemRefs.current[index] = el;
+              }
+            }}
+            draggable
+            onDragStart={() => handleDragStart(index)}
+            onDragEnter={() => handleDragEnter(index)}
+            onDragEnd={handleDragEnd}
+            onDragOver={(e) => e.preventDefault()}
+            className={`flex items-center gap-x-4 flex-nowrap mb-4 cursor-grab active:cursor-grabbing transition-all duration-300 ease-in-out ${
+              isBeingDragged ? "opacity-50 scale-105" : "opacity-100 scale-100"
+            }`}
+            style={{
+              transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+            }}
+          >
+            <div className="w-6.5 h-6.5 relative">
+              <div className="absolute top-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+              <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+              <div className="absolute bottom-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+            </div>
+            <div
+              className={`flex grow-1 items-center px-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color`}
+            >
+              <span className="text-base font-medium mr-2 ">
+                (
+                {String.fromCharCode(
+                  65 + question.options.findIndex((o) => o._id === option._id)
+                )}
+                )
+              </span>
+              <span className="text-base font-medium">{option.text}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 function GroupQuestionComponent({
   question,
@@ -126,30 +228,8 @@ function MatchingQuestionComponent({
 
   // Create the visual order for the right side using useMemo
   const rightSideDisplayOrder = useMemo(() => {
-    const orderedRightSide = [...question.rightSide];
-    const leftSideOrder = question.leftSide.map((item) => item._id);
-
-    orderedRightSide.sort((a, b) => {
-      const matchA = matches.find((m) => m.rightId === a._id);
-      const matchB = matches.find((m) => m.rightId === b._id);
-
-      if (matchA && matchB) {
-        return (
-          leftSideOrder.indexOf(matchA.leftId) -
-          leftSideOrder.indexOf(matchB.leftId)
-        );
-      }
-      if (matchA) return -1;
-      if (matchB) return 1;
-      // For unmatched items, maintain their original relative order
-      return (
-        question.rightSide.findIndex((i) => i._id === a._id) -
-        question.rightSide.findIndex((i) => i._id === b._id)
-      );
-    });
-
-    return orderedRightSide;
-  }, [matches, question.leftSide, question.rightSide]);
+    return [...question.rightSide];
+  }, [question.rightSide]);
 
   // Add mouse move listener when a left item is selected
   useEffect(() => {
@@ -220,27 +300,9 @@ function MatchingQuestionComponent({
       return;
     }
 
-    Object.keys(newPositions).forEach((id) => {
-      const el = itemRefs.current[id];
-      const oldPos = positions[id];
-      const newPos = newPositions[id];
-
-      if (el && oldPos && newPos) {
-        const deltaY = oldPos.top - newPos.top;
-        if (Math.abs(deltaY) > 0.5) {
-          // Only animate if there's a noticeable change
-          el.style.transform = `translateY(${deltaY}px)`;
-          el.style.transition = "transform 0s";
-          requestAnimationFrame(() => {
-            el.style.transform = "";
-            el.style.transition = "transform 0.5s ease-in-out";
-          });
-        }
-      }
-    });
-
+    // Since we are not re-ordering, we only need to update positions
     setPositions(newPositions);
-  }, [rightSideDisplayOrder, isMeasuring]);
+  }, [isMeasuring]);
 
   const handleSelect = (side: "left" | "right", id: string) => {
     setIsMeasuring(true);
@@ -371,85 +433,83 @@ function MatchingQuestionComponent({
           })()}
       </svg>
 
-      <div className="space-y-3">
-        {question.leftSide.map((leftItem, index) => {
-          const rightItem = rightSideDisplayOrder[index];
-          if (!rightItem) return null; // Should not happen if lengths are same
-
-          const leftMatch = getMatchForLeft(leftItem._id);
-          const leftColor =
-            leftMatch || selectedLeft === leftItem._id
-              ? getColorForMatch("left", leftItem._id)
-              : null;
-
-          const rightMatch = getMatchForRight(rightItem._id);
-          const rightColor = rightMatch
-            ? getColorForMatch("right", rightItem._id)
-            : null;
-
-          return (
-            <div
-              key={leftItem._id}
-              className="flex justify-between items-center gap-8"
-            >
-              {/* Left Item */}
+      <div className="flex justify-between gap-8">
+        {/* Left Column */}
+        <div className="w-[45%] space-y-3">
+          {question.leftSide.map((item) => {
+            const match = getMatchForLeft(item._id);
+            const color =
+              match || selectedLeft === item._id
+                ? getColorForMatch("left", item._id)
+                : null;
+            return (
               <div
+                key={item._id}
                 ref={(el) => {
-                  itemRefs.current[leftItem._id] = el;
+                  itemRefs.current[item._id] = el;
                 }}
-                onClick={() => handleSelect("left", leftItem._id)}
-                className={`w-[45%] p-3.5 rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
-                  !leftColor
+                onClick={() => handleSelect("left", item._id)}
+                className={`p-3.5 rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
+                  !color
                     ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
                     : "backdrop-blur-md"
                 }`}
                 style={{
-                  backgroundColor: leftColor?.bg || "",
-                  borderColor: leftColor?.border || "",
+                  backgroundColor: color?.bg || "",
+                  borderColor: color?.border || "",
                 }}
               >
-                <span>{leftItem.text}</span>
-                {leftItem.image && (
+                <span>{item.text}</span>
+                {item.image && (
                   <Image
-                    src={leftItem.image}
-                    alt={leftItem.text}
+                    src={item.image}
+                    alt={item.text}
                     width={40}
                     height={40}
                     className="rounded-md ml-2"
                   />
                 )}
               </div>
+            );
+          })}
+        </div>
 
-              {/* Right Item */}
+        {/* Right Column */}
+        <div className="w-[45%] space-y-3">
+          {rightSideDisplayOrder.map((item) => {
+            const match = getMatchForRight(item._id);
+            const color = match ? getColorForMatch("right", item._id) : null;
+            return (
               <div
+                key={item._id}
                 ref={(el) => {
-                  itemRefs.current[rightItem._id] = el;
+                  itemRefs.current[item._id] = el;
                 }}
-                onClick={() => handleSelect("right", rightItem._id)}
-                className={`w-[45%] p-3.5 rounded-lg border transition-colors cursor-pointer flex items-center bg-opacity-50 ${
-                  !rightColor
+                onClick={() => handleSelect("right", item._id)}
+                className={`p-3.5 rounded-lg border transition-colors cursor-pointer flex items-center bg-opacity-50 ${
+                  !color
                     ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
                     : "backdrop-blur-md"
                 }`}
                 style={{
-                  backgroundColor: rightColor?.bg || "",
-                  borderColor: rightColor?.border || "",
+                  backgroundColor: color?.bg || "",
+                  borderColor: color?.border || "",
                 }}
               >
-                <span>{rightItem.text}</span>
-                {rightItem.image && (
+                <span>{item.text}</span>
+                {item.image && (
                   <Image
-                    src={rightItem.image}
-                    alt={rightItem.text}
+                    src={item.image}
+                    alt={item.text}
                     width={40}
                     height={40}
                     className="rounded-md ml-2"
                   />
                 )}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -457,7 +517,7 @@ function MatchingQuestionComponent({
 
 export default function TestPage() {
   const router = useRouter();
-  const [currIndex, setCurrIndex] = useState(0);
+  const [currIndex, setCurrIndex] = useState(1);
   const [questions, setQuestions] = useState<AnyQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [responses, setResponses] = useState<Response[]>([]);
@@ -501,6 +561,13 @@ export default function TestPage() {
       };
     }
   }, [responses, questions.length]);
+
+  const getSelectedOption = (questionId: string): string => {
+    return (
+      responses.find((resp) => resp.questionId === questionId)
+        ?.selectedOptionId || ""
+    );
+  };
 
   const submitAnswer = async () => {
     const testData = {
@@ -653,13 +720,7 @@ export default function TestPage() {
                 selectedOptionId,
               });
             }}
-            matchedOptions={
-              (
-                responses.find(
-                  (r) => r.questionId === currentQuestion._id
-                ) as Response
-              )?.selectedOptionId || ""
-            }
+            matchedOptions={getSelectedOption(currentQuestion._id)}
           />
         );
       case "group":
@@ -676,13 +737,21 @@ export default function TestPage() {
                 selectedOptionId,
               });
             }}
-            matchedOptions={
-              (
-                responses.find(
-                  (r) => r.questionId === currentQuestion._id
-                ) as Response
-              )?.selectedOptionId || ""
-            }
+            matchedOptions={getSelectedOption(currentQuestion._id)}
+          />
+        );
+      case "rank":
+        return (
+          <RankQuestionComponent
+            key={currIndex}
+            question={currentQuestion}
+            onArrangement={(arrangement) => {
+              updateResponse({
+                questionId: currentQuestion._id,
+                selectedOptionId: arrangement,
+              });
+            }}
+            arrangement={getSelectedOption(currentQuestion._id)}
           />
         );
       default:

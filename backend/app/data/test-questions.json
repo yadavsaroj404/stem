@@ -1,6 +1,6 @@
 {
   "_id": "94636af6a39e44e0a4719622830e70a0",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "Base Question Set",
   "questions": [
     {
@@ -35,26 +35,8 @@
       "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "You need to combine data from Geography and Math for a research project.",
       "optionInstruction": "Arrange these steps in the correct order:",
-      "type": "matching",
-      "leftSide": [
-        {
-          "text": "a",
-          "_id": "2fb531d4172148c9bf5b94deb8efc5bb"
-        },
-        {
-          "text": "b",
-          "_id": "bf1d10f4763b4f34bfc13b8930cc48ee"
-        },
-        {
-          "text": "c",
-          "_id": "518c36e7d35e4390868200ef83af4042"
-        },
-        {
-          "text": "d",
-          "_id": "ef86e0f436ae4ab5bc543c6894b90c1f"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "clarify the question",
           "_id": "d728f34fb9bc40969e285267d2d14b72"
@@ -79,26 +61,8 @@
       "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "Your team must choose tools to explore a large AI dataset.",
       "optionInstruction": "Rank them from most useful (1) to least (4):",
-      "type": "matching",
-      "leftSide": [
-        {
-          "text": "1",
-          "_id": "472a2904d2d442d6a7f82d30eab5b417"
-        },
-        {
-          "text": "2",
-          "_id": "8c39668a6ac14dd1bdc45574853eed17"
-        },
-        {
-          "text": "3",
-          "_id": "d586b261500947f5bf138ecede2dad60"
-        },
-        {
-          "text": "4",
-          "_id": "a896b084c28c4f7a988d959fdcc7ed46"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "AI Simulations",
           "_id": "49bcec43d29c47c5a88500504859238e"
@@ -149,26 +113,8 @@
       "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "Your device fails during the final round of a competition.",
       "optionInstruction": "Rank these possible responses from best (1) to worst (4):",
-      "type": "matching",
-      "leftSide": [
-        {
-          "text": "1",
-          "_id": "67e67ae3032847b99480fd1a67800353"
-        },
-        {
-          "text": "2",
-          "_id": "5f99f05b8a334b2c9c6282336dc662da"
-        },
-        {
-          "text": "3",
-          "_id": "287dcee4acaf4895b2579c63ac8964e7"
-        },
-        {
-          "text": "4",
-          "_id": "f3cde9a6259f4b15ad2802f8eb4ab63b"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "Re-organise and present what you learned ",
           "_id": "6094503d65664bd5aa3e5e15eb48bd01"
@@ -258,26 +204,8 @@
       "clusterId": "6b2c3f06e755485992c2d8d2ff1eee33",
       "question": "You are leading a climate-smart-city project. Two teammates, Aisha and Rohan, argue about the presentation design—Aisha wants infographics, Rohan prefers text. The deadline is next week. ",
       "optionInstruction": "Rank these responses from most effective (1) to least (4):",
-      "type": "matching",
-      "leftSide": [
-        {
-          "text": "1",
-          "_id": "2611488c5ad645a4ac0c20f2ed8cef21"
-        },
-        {
-          "text": "2",
-          "_id": "db93147312b54f6b8da1cb9646b9494c"
-        },
-        {
-          "text": "3",
-          "_id": "d4818b1aa1194f068be49df7090887db"
-        },
-        {
-          "text": "4",
-          "_id": "f9b9ee7eb0694179b4d33872cbd6a671"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "Let’s pause—each gets two minutes to pitch, then we’ll merge or vote.",
           "_id": "615d06a2a0834a54802bf0d5f7632c40"
@@ -431,26 +359,8 @@
       "question": "Media Production – Ranking Features",
       "description": "Your team must create a short video promoting Digital Balance Week.",
       "optionInstruction": "Rank these production features from most to least effective: ",
-      "type": "matching",
-      "leftSide": [
-        {
-          "text": "A",
-          "_id": "c696220f10de4957bba6aafea0bb0c4f"
-        },
-        {
-          "text": "B",
-          "_id": "a5035d1d44ab4d2d8ab510b698b8cc33"
-        },
-        {
-          "text": "C",
-          "_id": "a13ede3bc0f7497195f07eb059fe9077"
-        },
-        {
-          "text": "D",
-          "_id": "93605650f38c42a3a76a8e4836929062"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "Clear persuasive message with call-to-action",
           "_id": "90b67d18618745b1b99cdc642122d15a"
@@ -475,26 +385,8 @@
       "clusterId": "4b01afba8864424086abc744dcf43f38",
       "question": "You are analysing a graph showing global CO₂ emissions and average temperature both rising from 1950 to 2020.",
       "optionInstruction": "Rank these statements from most accurate (1) to least (4): ",
-      "type": "matching",
-      "leftSide": [
-        {
-          "text": "A",
-          "_id": "9e292af7c8f44ff6bd55a14453370749"
-        },
-        {
-          "text": "B",
-          "_id": "304f33bc9dad44b9845815616bbaca41"
-        },
-        {
-          "text": "C",
-          "_id": "1f566fecde8d4d8584fbad86f2896773"
-        },
-        {
-          "text": "D",
-          "_id": "68890d0d46de4a0ca55cb5017a23309a"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "Rising CO₂ may be linked to temperature, but correlation does not prove causation",
           "_id": "9c3dc1cabd5c4864858a069449ea7268"
@@ -732,28 +624,8 @@
       "image": "/s3/q2.png",
       "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
       "question": "Arrange the steps of an innovation project in the correct order:",
-      "type": "matching",
-      "leftSideTitle": "Order",
-      "rightSideTitle": "Steps",
-      "leftSide": [
-        {
-          "text": "1",
-          "_id": "a63c1f9d89f74da9b93e1c368b938a69"
-        },
-        {
-          "text": "2",
-          "_id": "6a767abf05d54be4ab635d964cf66dc0"
-        },
-        {
-          "text": "3",
-          "_id": "f72e9f704e764e96ba86a98d1c30fcd2"
-        },
-        {
-          "text": "4",
-          "_id": "6339b827602c427095bc44af671aa574"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "brainstorm ideas",
           "_id": "a92b60d8bb9e4d45824d9430a187b1c2"
@@ -974,28 +846,8 @@
       "question": "Decision Prioritization Task – Strategic Leadership",
       "description": "A new project involves choosing between a risky short-term gain and a safer long-term investment.",
       "optionInstruction": "Rank the following actions from most effective (1) to least (4) for a responsible leader.",
-      "type": "matching",
-      "leftSideTitle": "Rank",
-      "rightSideTitle": "Actions",
-      "leftSide": [
-        {
-          "text": "1",
-          "_id": "0b5a2b31626247acb38ec1c42e39f0a8"
-        },
-        {
-          "text": "2",
-          "_id": "be64031584034ed183f9f3cf9967a282"
-        },
-        {
-          "text": "3",
-          "_id": "7f56ef73efa44e66ab89657159778dda"
-        },
-        {
-          "text": "4",
-          "_id": "6fba1452782e46e1a8e050fd0bf6a157"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "Gather full data and align with long-term vision",
           "_id": "bcccb55ef22a4e49ae2991028f92b327"
@@ -1132,26 +984,8 @@
       "clusterId": "941534b978d143b9930a719de3f2db39",
       "question": "Students and city officials disagree about cycling routes in Abu Dhabi. ",
       "optionInstruction": "Arrange these steps in correct order for an effective leader:",
-      "type": "matching",
-      "leftSide": [
-        {
-          "text": "1",
-          "_id": "88df75650aab43c4a6ab5ed4df09adb9"
-        },
-        {
-          "text": "2",
-          "_id": "8d8095c9b85a49dfb7655604b8d967be"
-        },
-        {
-          "text": "3",
-          "_id": "5a66dfb5ca054e869e699c89f115094b"
-        },
-        {
-          "text": "4",
-          "_id": "d6adacee6c35478b896070e0e8ab0cd0"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "listen to both sides",
           "_id": "c2abb679a7b74cb183b776b761a11fca"
@@ -1248,26 +1082,8 @@
       "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "A classmate who was absent for a week feels behind.",
       "optionInstruction": "Rank the following actions from most supportive (1) to least (4):",
-      "type": "matching",
-      "leftSide": [
-        {
-          "text": "1",
-          "_id": "24cc4e21e19a4021bbc5c43f742c34a3"
-        },
-        {
-          "text": "2",
-          "_id": "800989f8289a444ca208f322a9e9a193"
-        },
-        {
-          "text": "3",
-          "_id": "e9e20d7cdd3e47e6b36c37d0643ad4df"
-        },
-        {
-          "text": "4",
-          "_id": "a6fa50bebf3e49609fc0565673bcb4dc"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "Share notes and plan a short catch-up",
           "_id": "cae0e0795bc741cb9eb7db2e49c574fa"
@@ -1545,28 +1361,8 @@
       "clusterId": "35631ac2b9f340519242dbe29c34c3c3",
       "question": " The school plans to install AI cameras for attendance, but students raise privacy concerns.",
       "optionInstruction": "Rank these statements from most accurate (1) to least (4):",
-      "type": "matching",
-      "leftSideTitle": "Action",
-      "rightSideTitle": "Outcome",
-      "leftSide": [
-        {
-          "text": "1",
-          "_id": "b59e20bfeeb446c7a909a8f10195f48e"
-        },
-        {
-          "text": "2",
-          "_id": "bc8c485177a54bd4b3535e2693d17d6e"
-        },
-        {
-          "text": "3",
-          "_id": "865bb61ba16d467aa548d6f71cae5bf0"
-        },
-        {
-          "text": "4",
-          "_id": "6f66623dc53f4472babc9f6f0dc97440"
-        }
-      ],
-      "rightSide": [
+      "type": "rank",
+      "options": [
         {
           "text": "Ask how data will be stored and used before deciding",
           "_id": "87768308fd124da78db9eaf01c21c03d"
