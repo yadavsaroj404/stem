@@ -7,7 +7,7 @@
       "_id": "93185184db6c4cd4a77b8c5d37b178a1",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "cluster1",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "A rule in your workshop says, “If a safety check is missed, the machine cannot be used.” While inspecting the lab, you notice the machine is running. What must be true?",
       "type": "text",
       "options": [
@@ -32,7 +32,7 @@
     {
       "_id": "05f1cef9a1f9409182ac35e575ca229c",
       "image": "/s3/q2.png",
-      "clusterId": "cluster1",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "You need to combine data from Geography and Math for a research project.",
       "optionInstruction": "Arrange these steps in the correct order:",
       "type": "matching",
@@ -76,7 +76,7 @@
     {
       "_id": "1cf0f9f8c10d4736b8fe8cc8ca70503a",
       "image": "/s3/q1.png",
-      "clusterId": "cluster1",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "Your team must choose tools to explore a large AI dataset.",
       "optionInstruction": "Rank them from most useful (1) to least (4):",
       "type": "matching",
@@ -121,7 +121,7 @@
       "_id": "3c37708e3be44152b96b16cadbd8db59",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "cluster1",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "Your school can choose between building a cheaper classroom or a solar-powered one. Which would you recommend?",
       "type": "text",
       "options": [
@@ -146,7 +146,7 @@
     {
       "_id": "ef4319e8b2c94326bc514e5f73db4990",
       "image": "/s3/q1.png",
-      "clusterId": "cluster1",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "Your device fails during the final round of a competition.",
       "optionInstruction": "Rank these possible responses from best (1) to worst (4):",
       "type": "matching",
@@ -190,7 +190,7 @@
     {
       "_id": "20dd48610f414c60a3f6d3b30ba09ed1",
       "image": "/s3/q2.png",
-      "clusterId": "cluster1",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "Build-a-Sentence – Ethical Compliance",
       "description": "Choose one phrase from each block (Action + Principle + Result) to form the sentence that best represents correct scientific behaviour. ",
       "optionInstruction": "Choose one phrase from each block",
@@ -255,7 +255,7 @@
     {
       "_id": "1ca10d52fcc745aba4f68bb7986fdce4",
       "image": "/s3/q2.png",
-      "clusterId": "cluster2",
+      "clusterId": "6b2c3f06e755485992c2d8d2ff1eee33",
       "question": "You are leading a climate-smart-city project. Two teammates, Aisha and Rohan, argue about the presentation design—Aisha wants infographics, Rohan prefers text. The deadline is next week. ",
       "optionInstruction": "Rank these responses from most effective (1) to least (4):",
       "type": "matching",
@@ -299,7 +299,7 @@
     {
       "_id": "0e9d4eb4a6574790b338e262fa194d09",
       "image": "/s3/q3.png",
-      "clusterId": "cluster2",
+      "clusterId": "6b2c3f06e755485992c2d8d2ff1eee33",
       "question": "Build-a-Sentence – Creativity & AI",
       "optionInstruction": "Choose one phrase from each block to complete the best statement about AI creativity. ",
       "type": "group",
@@ -363,7 +363,7 @@
     {
       "_id": "26a4fcfa3ae3445c991a8a7acc01d218",
       "image": "/s3/q2.png",
-      "clusterId": "cluster2",
+      "clusterId": "6b2c3f06e755485992c2d8d2ff1eee33",
       "question": "Matching Task – Social-Media Strategy",
       "optionInstruction": "Match each Action with the Outcome it best supports.",
       "type": "matching",
@@ -402,7 +402,7 @@
       "_id": "135a4acdcea5466cb42f0fdfe5ef9648",
       "image": "/s3/q1.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "cluster2",
+      "clusterId": "6b2c3f06e755485992c2d8d2ff1eee33",
       "question": "You are posting an Instagram caption to explain AI in everyday life. Which caption fits best?",
       "type": "text",
       "options": [
@@ -427,7 +427,7 @@
     {
       "_id": "7b5c295241184a2489aea684adb6c2f3",
       "image": "/s3/q2.png",
-      "clusterId": "cluster2",
+      "clusterId": "6b2c3f06e755485992c2d8d2ff1eee33",
       "question": "Media Production – Ranking Features",
       "description": "Your team must create a short video promoting Digital Balance Week.",
       "optionInstruction": "Rank these production features from most to least effective: ",
@@ -472,7 +472,7 @@
     {
       "_id": "340569d47e244bf5be1726cf354bb1e8",
       "image": "/s3/q2.png",
-      "clusterId": "cluster3",
+      "clusterId": "4b01afba8864424086abc744dcf43f38",
       "question": "You are analysing a graph showing global CO₂ emissions and average temperature both rising from 1950 to 2020.",
       "optionInstruction": "Rank these statements from most accurate (1) to least (4): ",
       "type": "matching",
@@ -516,7 +516,7 @@
     {
       "_id": "25adcf1f6fa740308360085fe1c1af32",
       "image": "/s3/q1.png",
-      "clusterId": "cluster3",
+      "clusterId": "4b01afba8864424086abc744dcf43f38",
       "question": "Grades in your school are dropping while sports performance is improving. What should the student council investigate first? ",
       "type": "text",
       "options": [
@@ -541,7 +541,7 @@
     {
       "_id": "91477b645b524077a16bea200957279e",
       "image": "/s3/q1.png",
-      "clusterId": "cluster3",
+      "clusterId": "4b01afba8864424086abc744dcf43f38",
       "question": "A blog headline claims, “Energy drinks make students smarter.”",
       "description": "Which question should you ask first?",
       "type": "text",
@@ -567,7 +567,7 @@
     {
       "_id": "0fccdaffaa694e95be42f714c7ee7bb1",
       "image": "/s3/q1.png",
-      "clusterId": "cluster3",
+      "clusterId": "4b01afba8864424086abc744dcf43f38",
       "question": "A chart shows unemployment falling while inflation rises.",
       "description": "Which statement best explains this?",
       "type": "text",
@@ -593,7 +593,7 @@
     {
       "_id": "18da0933200c49fd838df8771ed337f5",
       "image": "/s3/q2.png",
-      "clusterId": "cluster3",
+      "clusterId": "4b01afba8864424086abc744dcf43f38",
       "question": "Correlation Insight Task – Health Data Analysis",
       "description": "A graph shows that people who exercise more tend to have higher heart-health scores. However, the data also varies across diet, age, and sleep quality.",
       "optionInstruction": "Match each possible explanation to its interpretation type.",
@@ -640,7 +640,7 @@
     {
       "_id": "275c0f4941364153b044f2e8ac08cf14",
       "image": "/s3/q1.png",
-      "clusterId": "cluster4",
+      "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
       "question": "Your school team’s prototype to reduce plastic waste breaks a day before the Innovation Showcase. Everyone feels discouraged. What will you do?",
       "optionInstruction": "What is the best immediate response?",
       "type": "text",
@@ -666,7 +666,7 @@
     {
       "_id": "141c385ba12c45b79f4de745fb4ec657",
       "image": "/s3/q2.png",
-      "clusterId": "cluster4",
+      "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
       "question": "You are pitching your creative project to potential investors.",
       "optionInstruction": "Choose one phrase from each block (Focus + Connector + Value) to create the most persuasive and logical pitch line.",
       "type": "group",
@@ -730,7 +730,7 @@
     {
       "_id": "42fbb2c950fd4e4b866e839b167ac8af",
       "image": "/s3/q2.png",
-      "clusterId": "cluster4",
+      "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
       "question": "Arrange the steps of an innovation project in the correct order:",
       "type": "matching",
       "leftSideTitle": "Order",
@@ -775,7 +775,7 @@
     {
       "_id": "5f1e3160bbe4426d859d1f4d8f9675d7",
       "image": "/s3/q1.png",
-      "clusterId": "cluster4",
+      "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
       "optionInstruction": "Choose the option that feels most true to you",
       "question": "The student council wants to make a new school app inclusive. Which approach is best?",
       "type": "text",
@@ -801,7 +801,7 @@
     {
       "_id": "4bc25911b56e419e97d0b5915daf7ed9",
       "image": "/s3/q1.png",
-      "clusterId": "cluster5",
+      "clusterId": "1e21c155e6134ee8842fe9fc7a26c786",
       "question": "Your teacher asks you to combine Geography and Economics in one project. What should you do first?",
       "optionInstruction": "Choose the option that feels most true to you",
       "type": "text",
@@ -827,7 +827,7 @@
     {
       "_id": "b0f46198e1ce4b43815816b6bdb0edc1",
       "image": "/s3/q1.png",
-      "clusterId": "cluster5",
+      "clusterId": "1e21c155e6134ee8842fe9fc7a26c786",
       "question": "Your class is collaborating online with teams from the UAE, Europe, and the U.S. How will you keep everyone included? ",
       "optionInstruction": "Choose the option that feels most true to you",
       "type": "text",
@@ -853,7 +853,7 @@
     {
       "_id": "2a2a9e2ac8584d53af1804159cb8fd8e",
       "image": "/s3/q2.png",
-      "clusterId": "cluster5",
+      "clusterId": "1e21c155e6134ee8842fe9fc7a26c786",
       "question": "Imagine education in 2075.",
       "optionInstruction": "Pick one phrase from each block (Setting + Process + Impact) to create a statement that best represents the future of learning.",
       "type": "group",
@@ -917,7 +917,7 @@
     {
       "_id": "e096ee2badac40f992c3c9e0f0ef8d94",
       "image": "/s3/q1.png",
-      "clusterId": "cluster5",
+      "clusterId": "1e21c155e6134ee8842fe9fc7a26c786",
       "question": "You are designing a digital tool for your community. Which idea shows systems thinking?",
       "optionInstruction": "Choose the option that feels most true to you",
       "type": "text",
@@ -943,7 +943,7 @@
     {
       "_id": "17a9405ae59b4931adfa71faec822f64",
       "image": "/s3/q1.png",
-      "clusterId": "cluster5",
+      "clusterId": "1e21c155e6134ee8842fe9fc7a26c786",
       "question": "A rule says, “All teams must submit references one day before.” Your team submits two hours late.",
       "description": "What is the most likely outcome?",
       "optionInstruction": "Choose the option that feels most true to you",
@@ -970,7 +970,7 @@
     {
       "_id": "258cf8e0de7c401486784f18d9dee7c9",
       "image": "/s3/q2.png",
-      "clusterId": "cluster6",
+      "clusterId": "941534b978d143b9930a719de3f2db39",
       "question": "Decision Prioritization Task – Strategic Leadership",
       "description": "A new project involves choosing between a risky short-term gain and a safer long-term investment.",
       "optionInstruction": "Rank the following actions from most effective (1) to least (4) for a responsible leader.",
@@ -1017,7 +1017,7 @@
     {
       "_id": "c8886018c97148a086a44b214c455286",
       "image": "/s3/q2.png",
-      "clusterId": "cluster6",
+      "clusterId": "941534b978d143b9930a719de3f2db39",
       "question": "Conflict Mediation – Build-a-Sentence ",
       "description": "Two classmates have a conflict and ask for your help.",
       "optionInstruction": "Choose one phrase from each block (Approach + Method + Outcome) to form the most effective leadership response.",
@@ -1082,7 +1082,7 @@
     {
       "_id": "0c345be580b542098cc131fed49b66e8",
       "image": "/s3/q2.png",
-      "clusterId": "cluster6",
+      "clusterId": "941534b978d143b9930a719de3f2db39",
       "question": "Resource Allocation Task – Problem Solving",
       "description": "Two clubs both want the same room after school, and arguments begin.",
       "optionInstruction": "Match each Leadership Response with its Outcome.",
@@ -1129,7 +1129,7 @@
     {
       "_id": "9171442248974ed2ae767b85e086cbfd",
       "image": "/s3/q2.png",
-      "clusterId": "cluster6",
+      "clusterId": "941534b978d143b9930a719de3f2db39",
       "question": "Students and city officials disagree about cycling routes in Abu Dhabi. ",
       "optionInstruction": "Arrange these steps in correct order for an effective leader:",
       "type": "matching",
@@ -1173,7 +1173,7 @@
     {
       "_id": "270ae4ffb9b6479aa5e9a35a673dd6b3",
       "image": "/s3/q1.png",
-      "clusterId": "cluster6",
+      "clusterId": "941534b978d143b9930a719de3f2db39",
       "question": "Your school is testing an AI grading system and some students worry about bias. What should leaders do first?",
       "optionInstruction": "Choose the option that feels most true to you",
       "type": "text",
@@ -1199,7 +1199,7 @@
     {
       "_id": "5c4fa526db894469af33c176cbc3e7f8",
       "image": "/s3/q2.png",
-      "clusterId": "cluster7",
+      "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "Your friend has a fever and sore throat and wants to take antibiotics.",
       "optionInstruction": "Match each possible advice with its accuracy level.",
       "type": "matching",
@@ -1245,7 +1245,7 @@
     {
       "_id": "c1a9cd005f6047f689e2d75b656407c1",
       "image": "/s3/q2.png",
-      "clusterId": "cluster7",
+      "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "A classmate who was absent for a week feels behind.",
       "optionInstruction": "Rank the following actions from most supportive (1) to least (4):",
       "type": "matching",
@@ -1289,7 +1289,7 @@
     {
       "_id": "d741c4d65278427a8d233f3be007cf7d",
       "image": "/s3/q1.png",
-      "clusterId": "cluster7",
+      "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "Your school is planning Well-being Week.",
       "optionInstruction": "Select TWO actions that would have the greatest impact on students’ mental health:",
       "type": "text",
@@ -1315,7 +1315,7 @@
     {
       "_id": "dfa17c7ab69e4fe1a35cb3140380b607",
       "image": "/s3/q2.png",
-      "clusterId": "cluster7",
+      "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "A student plays loud music in the library after hours. ",
       "optionInstruction": "Match the response to the likely outcome.",
       "leftSideTitle": "Response",
@@ -1361,7 +1361,7 @@
     {
       "_id": "0b9d2f7f047b46c895848ac4a479d7bb",
       "image": "/s3/q1.png",
-      "clusterId": "cluster7",
+      "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "You see a deepfake video of a public figure spreading online. Some students are sharing it for fun.",
       "optionInstruction": "What is the most responsible action? ",
       "type": "text",
@@ -1387,7 +1387,7 @@
     {
       "_id": "c952b7eec6d348b1b0f4fbb36cae1088",
       "image": "/s3/q1.png",
-      "clusterId": "cluster8",
+      "clusterId": "fc0c680be5874bc2a206ac626c2aeec1",
       "question": "Your school’s new sustainability drive offers four choices: ",
       "optionInstruction": "Which action creates the most lasting impact?",
       "type": "text",
@@ -1413,7 +1413,7 @@
     {
       "_id": "1898ad4fd3e94c49b44e3a02e0d8ff41",
       "image": "/s3/q2.png",
-      "clusterId": "cluster8",
+      "clusterId": "fc0c680be5874bc2a206ac626c2aeec1",
       "question": "Your class sets up a phone-recycling box.",
       "optionInstruction": "Choose one phrase from each block (Object + Action + Outcome) to form the most accurate explanation of what happens next.",
       "type": "group",
@@ -1477,7 +1477,7 @@
     {
       "_id": "f3fcc7f27d8a4a40a5df12ed251e9fde",
       "image": "/s3/q2.png",
-      "clusterId": "cluster8",
+      "clusterId": "fc0c680be5874bc2a206ac626c2aeec1",
       "question": "A company advertises its bottles as “eco-friendly.”",
       "optionInstruction": "A company advertises its bottles as “eco-friendly.”",
       "type": "matching",
@@ -1515,7 +1515,7 @@
     {
       "_id": "ae6a3992d809464da8929605949af601",
       "image": "/s3/q1.png",
-      "clusterId": "cluster8",
+      "clusterId": "fc0c680be5874bc2a206ac626c2aeec1",
       "question": "Air-conditioning runs all day in your school.",
       "description": "If the school cuts energy waste, what long-term effect is most likely? ",
       "optionInstruction": "Choose the option that feels most true to you",
@@ -1542,7 +1542,7 @@
     {
       "_id": "6eceb41e22fd4c549688b2b42ebe834f",
       "image": "/s3/q2.png",
-      "clusterId": "cluster9",
+      "clusterId": "35631ac2b9f340519242dbe29c34c3c3",
       "question": " The school plans to install AI cameras for attendance, but students raise privacy concerns.",
       "optionInstruction": "Rank these statements from most accurate (1) to least (4):",
       "type": "matching",
@@ -1588,7 +1588,7 @@
     {
       "_id": "940741fc88ff405a9ce87fd5b2391ede",
       "image": "/s3/q2.png",
-      "clusterId": "cluster9",
+      "clusterId": "35631ac2b9f340519242dbe29c34c3c3",
       "question": "A blog reports: “Coffee drinkers score higher on exams.”",
       "optionInstruction": "Match each explanation to the reasoning it represents.",
       "type": "matching",
@@ -1634,7 +1634,7 @@
     {
       "_id": "15881c0c2a574239ad7c4223c98a0e90",
       "image": "/s3/q1.png",
-      "clusterId": "cluster9",
+      "clusterId": "35631ac2b9f340519242dbe29c34c3c3",
       "question": "Your class average quiz score rose from 60 to 75.",
       "optionInstruction": "What is the percentage increase?",
       "type": "text",
@@ -1660,7 +1660,7 @@
     {
       "_id": "10f433b2f1ec40ec98390732fb7212a7",
       "image": "/s3/q1.png",
-      "clusterId": "cluster9",
+      "clusterId": "35631ac2b9f340519242dbe29c34c3c3",
       "question": "A rule in your school says, “If a safety inspection is missed, the system must be paused.”\nWhile auditing, you find the system is still running. ",
       "optionInstruction": "What does this mean?",
       "type": "text",
