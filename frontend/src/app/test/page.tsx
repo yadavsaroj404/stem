@@ -307,7 +307,7 @@ function MatchingQuestionComponent({
   };
 
   return (
-    <div className="relative flex justify-between gap-8" ref={containerRef}>
+    <div className="relative" ref={containerRef}>
       <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-10">
         {matches.map((match) => {
           const leftPos = positions[match.leftId];
@@ -371,75 +371,82 @@ function MatchingQuestionComponent({
           })()}
       </svg>
 
-      <div className="space-y-3 z-20 w-[45%]">
-        {question.leftSide.map((item) => {
-          const match = getMatchForLeft(item._id);
-          const color =
-            match || selectedLeft === item._id
-              ? getColorForMatch("left", item._id)
+      <div className="space-y-3">
+        {question.leftSide.map((leftItem, index) => {
+          const rightItem = rightSideDisplayOrder[index];
+          if (!rightItem) return null; // Should not happen if lengths are same
+
+          const leftMatch = getMatchForLeft(leftItem._id);
+          const leftColor =
+            leftMatch || selectedLeft === leftItem._id
+              ? getColorForMatch("left", leftItem._id)
               : null;
+
+          const rightMatch = getMatchForRight(rightItem._id);
+          const rightColor = rightMatch
+            ? getColorForMatch("right", rightItem._id)
+            : null;
+
           return (
             <div
-              key={item._id}
-              ref={(el) => {
-                itemRefs.current[item._id] = el;
-              }}
-              onClick={() => handleSelect("left", item._id)}
-              className={`w-full p-3.5 rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
-                !color
-                  ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
-                  : "backdrop-blur-md"
-              }`}
-              style={{
-                backgroundColor: color?.bg || "",
-                borderColor: color?.border || "",
-              }}
+              key={leftItem._id}
+              className="flex justify-between items-center gap-8"
             >
-              <span>{item.text}</span>
-              {item.image && (
-                <Image
-                  src={item.image}
-                  alt={item.text}
-                  width={40}
-                  height={40}
-                  className="rounded-md ml-2"
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-      <div className="relative z-20 space-y-3 w-[45%]">
-        {rightSideDisplayOrder.map((item: MatchingItem) => {
-          const match = getMatchForRight(item._id);
-          const color = match ? getColorForMatch("right", item._id) : null;
-          return (
-            <div
-              key={item._id}
-              ref={(el) => {
-                itemRefs.current[item._id] = el;
-              }}
-              onClick={() => handleSelect("right", item._id)}
-              className={`w-full p-3.5 rounded-lg border transition-colors cursor-pointer flex items-center bg-opacity-50 ${
-                !color
-                  ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
-                  : "backdrop-blur-md"
-              }`}
-              style={{
-                backgroundColor: color?.bg || "",
-                borderColor: color?.border || "",
-              }}
-            >
-              <span>{item.text}</span>
-              {item.image && (
-                <Image
-                  src={item.image}
-                  alt={item.text}
-                  width={40}
-                  height={40}
-                  className="rounded-md ml-2"
-                />
-              )}
+              {/* Left Item */}
+              <div
+                ref={(el) => {
+                  itemRefs.current[leftItem._id] = el;
+                }}
+                onClick={() => handleSelect("left", leftItem._id)}
+                className={`w-[45%] p-3.5 rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
+                  !leftColor
+                    ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
+                    : "backdrop-blur-md"
+                }`}
+                style={{
+                  backgroundColor: leftColor?.bg || "",
+                  borderColor: leftColor?.border || "",
+                }}
+              >
+                <span>{leftItem.text}</span>
+                {leftItem.image && (
+                  <Image
+                    src={leftItem.image}
+                    alt={leftItem.text}
+                    width={40}
+                    height={40}
+                    className="rounded-md ml-2"
+                  />
+                )}
+              </div>
+
+              {/* Right Item */}
+              <div
+                ref={(el) => {
+                  itemRefs.current[rightItem._id] = el;
+                }}
+                onClick={() => handleSelect("right", rightItem._id)}
+                className={`w-[45%] p-3.5 rounded-lg border transition-colors cursor-pointer flex items-center bg-opacity-50 ${
+                  !rightColor
+                    ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
+                    : "backdrop-blur-md"
+                }`}
+                style={{
+                  backgroundColor: rightColor?.bg || "",
+                  borderColor: rightColor?.border || "",
+                }}
+              >
+                <span>{rightItem.text}</span>
+                {rightItem.image && (
+                  <Image
+                    src={rightItem.image}
+                    alt={rightItem.text}
+                    width={40}
+                    height={40}
+                    className="rounded-md ml-2"
+                  />
+                )}
+              </div>
             </div>
           );
         })}
