@@ -1,0 +1,4 @@
+1. Regular (optional images or optional text) //done
+2. Matching (pair items from two lists)
+3. Blocks //done
+4. Multi select //done
