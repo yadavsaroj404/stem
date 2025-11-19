@@ -816,11 +816,11 @@ export default function TestPage() {
           <div className="mx-4 md:mx-6 lg:mx-14 text-sm font-semibold w-fit border-b-2 border-[#D400FF]/30">
             Question {currIndex + 1} of {questions.length}
           </div>
-          <h1 className="px-4 md:px-6 lg:px-14 mt-5 capitalize text-xl font-bold">
+          <h1 className="px-4 md:px-6 lg:px-14 mt-5 text-xl font-bold">
             {currentQuestion.question}
           </h1>
           {currentQuestion.description && (
-            <p className="px-4 md:px-6 lg:px-14 mt-2 capitalize text-sm font-semibold">
+            <p className="px-4 md:px-6 lg:px-14 mt-2 text-sm font-semibold">
               {currentQuestion.description}
             </p>
           )}
