@@ -22,6 +22,7 @@ import StillThereModal from "@/components/Modals/StillThere";
 import PartialCompletionModal from "@/components/Modals/PartialCompletion";
 import UserProfile from "@/components/UserProfile";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
+import logger from "@/helpers/logger";
 
 function RankQuestionComponent({
   question,
@@ -37,6 +38,7 @@ function RankQuestionComponent({
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
+    logger.debug("RankQuestionComponent mounted or options changed.");
     itemRefs.current = itemRefs.current.slice(0, orderedOptions.length);
   }, [orderedOptions]);
 
@@ -48,6 +50,7 @@ function RankQuestionComponent({
         .filter((opt): opt is TextOptionParams => !!opt);
       if (newOrderedOptions.length === question.options.length) {
         setOrderedOptions(newOrderedOptions);
+        logger.debug("RankQuestionComponent: Arrangement restored from props.");
       }
     } else {
       setOrderedOptions(question.options);
@@ -55,6 +58,7 @@ function RankQuestionComponent({
   }, [arrangement, question.options]);
 
   const handleDragStart = (index: number) => {
+    logger.debug(`Drag started on item index: ${index}`);
     setDraggedIndex(index);
   };
 
@@ -67,12 +71,14 @@ function RankQuestionComponent({
 
     setOrderedOptions(items);
     setDraggedIndex(index);
+    logger.debug(`Item dragged over index: ${index}, reordering.`);
   };
 
   const handleDragEnd = () => {
     const newArrangement = orderedOptions.map((item) => item._id).join(";");
     onArrangement(newArrangement);
     setDraggedIndex(null);
+    logger.info("Drag ended, new arrangement saved.", { arrangement: newArrangement });
   };
 
   return (
@@ -136,6 +142,7 @@ function GroupQuestionComponent({
   const [selected, setSelected] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    logger.debug("GroupQuestionComponent mounted or matchedOptions changed.");
     if (matchedOptions) {
       const newSelected: Record<string, string> = {};
       matchedOptions.split(";").forEach((pair) => {
@@ -143,6 +150,7 @@ function GroupQuestionComponent({
         newSelected[groupId] = subOptionId;
       });
       setSelected(newSelected);
+      logger.debug("GroupQuestionComponent: Selections restored from props.");
     } else {
       setSelected({});
     }
@@ -151,9 +159,11 @@ function GroupQuestionComponent({
   const handleSelect = (groupId: string, subOptionId: string) => {
     const newSelected = { ...selected, [groupId]: subOptionId };
     setSelected(newSelected);
+    logger.debug("Group option selected", { groupId, subOptionId });
     // Notify parent of the updated selections only if all groups have a selection
     if (Object.keys(newSelected).length === question.options.length) {
       onSelect(newSelected);
+      logger.info("All groups answered in GroupQuestionComponent.", { newSelected });
     }
   };
 
@@ -256,6 +266,7 @@ function MatchingQuestionComponent({
 
   // Parse matchedOptions from props
   useEffect(() => {
+    logger.debug("MatchingQuestionComponent mounted or options changed.");
     if (matchedOptions) {
       const parsedMatches = matchedOptions
         .split(";")
@@ -265,6 +276,7 @@ function MatchingQuestionComponent({
           return { leftId, rightId };
         });
       setMatches(parsedMatches);
+      logger.debug("MatchingQuestionComponent: Matches restored from props.");
     } else {
       setMatches([]);
     }
@@ -297,6 +309,7 @@ function MatchingQuestionComponent({
     if (isMeasuring) {
       setPositions(newPositions);
       setIsMeasuring(false);
+      logger.debug("Measured positions of matching items.");
       return;
     }
 
@@ -306,6 +319,7 @@ function MatchingQuestionComponent({
 
   const handleSelect = (side: "left" | "right", id: string) => {
     setIsMeasuring(true);
+    logger.debug(`Selected item in MatchingQuestionComponent`, { side, id });
 
     const existingMatch = matches.find(
       (m) =>
@@ -320,6 +334,7 @@ function MatchingQuestionComponent({
       setMatches(newMatches);
       onSelect(newMatches.map((m) => `${m.leftId}-${m.rightId}`).join(";"));
       setSelectedLeft(null);
+      logger.info("Unmatched an existing pair.", { existingMatch });
       return;
     }
 
@@ -334,11 +349,12 @@ function MatchingQuestionComponent({
         { leftId: selectedLeft, rightId: id },
       ];
       setMatches(updatedMatches);
+      logger.info("New match created.", { leftId: selectedLeft, rightId: id });
 
       if (updatedMatches.length === question.leftSide.length) {
-        onSelect(
-          updatedMatches.map((m) => `${m.leftId}-${m.rightId}`).join(";")
-        );
+        const finalSelection = updatedMatches.map((m) => `${m.leftId}-${m.rightId}`).join(";");
+        onSelect(finalSelection);
+        logger.info("All items matched in MatchingQuestionComponent.", { finalSelection });
       }
       setSelectedLeft(null);
     }
@@ -531,9 +547,21 @@ export default function TestPage() {
   // Fetch questions from the backend
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchQuestions();
-      setQuestions(data?.questions || []);
-      setLoading(false);
+      logger.info("Fetching questions...");
+      try {
+        const data = await fetchQuestions();
+        if (data?.questions) {
+          setQuestions(data.questions);
+          logger.info(`Successfully fetched ${data.questions.length} questions.`);
+        } else {
+          setQuestions([]);
+          logger.warn("No questions found or data is malformed.", { data });
+        }
+        setLoading(false);
+      } catch (error) {
+        logger.error("Failed to fetch questions", error as Error);
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -549,6 +577,7 @@ export default function TestPage() {
         ...shownCompletionsRef.current,
         completion,
       ];
+      logger.info(`Partial completion modal shown for ${completion}%`);
       const showTimer = setTimeout(() => {
         setShownModal("PARTIAL_COMPLETION");
       }, 500);
@@ -570,6 +599,7 @@ export default function TestPage() {
   };
 
   const submitAnswer = async () => {
+    logger.info("Submitting test...");
     const testData = {
       userId: "64a7b1f4e4b0c5b6f8d9e8c1",
       createdAt: new Date().toISOString(),
@@ -589,11 +619,14 @@ export default function TestPage() {
           body: JSON.stringify(testData),
         }
       );
+      logger.info("Test submission response received.", { status: response.status });
       // if (!response.ok) {
       //   throw new Error("Failed to submit test");
       // }
       router.push("/test/complete");
+      logger.info("Redirecting to test complete page.");
     } catch (error) {
+      logger.error("Failed to submit test.", error as Error);
       alert("Failed to submit test. Please try again.");
       setLoading(false);
     }
@@ -601,18 +634,22 @@ export default function TestPage() {
 
   const handleQuestionChange = (newIndex: number) => {
     if (isAnimating) return;
+    logger.debug(`Changing question to index: ${newIndex}`);
     setIsAnimating(true);
     setTimeout(() => {
       if (newIndex === questions.length) {
+        logger.info("Last question answered, submitting test.");
         submitAnswer();
       } else {
         setCurrIndex(newIndex);
         setIsAnimating(false);
+        logger.debug(`Question index changed to: ${newIndex}`);
       }
     }, 200); // Corresponds to the duration of the fade-out animation
   };
 
   const goToNextQuestion = () => {
+    logger.debug("Attempting to go to next question.");
     // go to next question if only the current question is answered
     const currentQuestion = questions[currIndex];
     const currentResponse = responses.find(
@@ -620,6 +657,7 @@ export default function TestPage() {
     );
     // if it is last question, submit the test
     if (!currentResponse) {
+      logger.warn("Next question blocked: current question not answered.", { questionId: currentQuestion._id });
       alert("Please select an option before proceeding.");
       return;
     }
@@ -628,11 +666,13 @@ export default function TestPage() {
 
   const goToPreviousQuestion = () => {
     if (currIndex > 0) {
+      logger.debug("Attempting to go to previous question.");
       handleQuestionChange(currIndex - 1);
     }
   };
 
   const updateResponse = (newResponse: Response) => {
+    logger.debug("Updating response", { newResponse });
     setResponses((prevResponses) => {
       const existingResponseIndex = prevResponses.findIndex(
         (response) => response.questionId === newResponse.questionId
@@ -641,8 +681,10 @@ export default function TestPage() {
       if (existingResponseIndex !== -1) {
         const newResponses = [...prevResponses];
         newResponses[existingResponseIndex] = newResponse;
+        logger.info("Updated existing response.", { questionId: newResponse.questionId });
         return newResponses;
       } else {
+        logger.info("Added new response.", { questionId: newResponse.questionId });
         return [...prevResponses, newResponse];
       }
     });
@@ -661,6 +703,7 @@ export default function TestPage() {
     responses.length > 0 ? (responses.length / questions.length) * 100 : 0;
 
   const currentQuestion = questions[currIndex];
+  logger.debug(`Rendering TestPage for question index: ${currIndex}`, { questionId: currentQuestion?._id });
   const questionSectionClass = `
     transition-all duration-200
     ${
@@ -678,12 +721,13 @@ export default function TestPage() {
             key={option._id}
             index={index}
             option={option}
-            onSelect={(optionId) =>
+            onSelect={(optionId) => {
+              logger.debug("TextOption selected", { optionId });
               updateResponse({
                 questionId: currentQuestion._id,
                 selectedOptionId: optionId,
-              })
-            }
+              });
+            }}
             isOptionSelected={isOptionSelected(currentQuestion._id, option._id)}
           />
         ));
@@ -695,12 +739,13 @@ export default function TestPage() {
                 key={option._id}
                 index={index}
                 option={option}
-                onSelect={(optionId) =>
+                onSelect={(optionId) => {
+                  logger.debug("TextImageOption selected", { optionId });
                   updateResponse({
                     questionId: currentQuestion._id,
                     selectedOptionId: optionId,
-                  })
-                }
+                  });
+                }}
                 isOptionSelected={isOptionSelected(
                   currentQuestion._id,
                   option._id
@@ -764,6 +809,7 @@ export default function TestPage() {
       {shownModal === "PAUSE" && (
         <PauseModal
           onClose={() => {
+            logger.info("Pause modal closed.");
             setIsTimerPaused(false);
             setShownModal("NONE");
           }}
@@ -772,7 +818,10 @@ export default function TestPage() {
       {shownModal === "STILL_THERE" && (
         <StillThereModal
           onClose={() => setShownModal("NONE")}
-          takeABreak={() => setShownModal("PAUSE")}
+          takeABreak={() => {
+            logger.info("User chose to take a break from StillThereModal.");
+            setShownModal("PAUSE");
+          }}
         />
       )}
       {shownModal === "PARTIAL_COMPLETION" && (
@@ -852,6 +901,7 @@ export default function TestPage() {
             <button
               className="block lg:hidden underline decoration-gray-300 hover:decoration-gray-400 underline-offset-4 cursor-pointer text-base w-fit"
               onClick={() => {
+                logger.info("Pause button clicked (mobile).");
                 setIsTimerPaused(true);
                 setShownModal("PAUSE");
               }}
@@ -869,6 +919,7 @@ export default function TestPage() {
           <button
             className="hidden lg:block mt-8 underline decoration-gray-300 hover:decoration-gray-400 underline-offset-4 cursor-pointer text-base w-fit mx-auto lg:ml-auto lg:mr-0"
             onClick={() => {
+              logger.info("Pause button clicked (desktop).");
               setIsTimerPaused(true);
               setShownModal("PAUSE");
             }}

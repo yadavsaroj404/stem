@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     
     questions_path: str = "app/data/test-questions.json"
     submissions_path: str = "app/data/test-submission.json"
+    LOGS_DIR: str = "logs"
     database_url: str = "postgresql://postgres:TrtNJenvDklANjSIStRrrGMTyaCJsDau@switchyard.proxy.rlwy.net:31926/railway"
     # database_url: str = "postgresql://postgres:root@localhost:5432/stem_db"
     

@@ -5,7 +5,7 @@
   "questions": [
     {
       "_id": "93185184db6c4cd4a77b8c5d37b178a1",
-      "image": "/s3/q2.png",
+      "image": "/s3/q1.png",
       "optionInstruction": "Choose the option that feels most true to you",
       "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
       "question": "A rule in your workshop says, “If a safety check is missed, the machine cannot be used.” While inspecting the lab, you notice the machine is running. What must be true?",
