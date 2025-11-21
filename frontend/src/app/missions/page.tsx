@@ -70,7 +70,7 @@ export default function MissionsPage() {
             ))}
           </div>
 
-          <Link href="/missions/mission1">
+          <Link href="/missions/test">
             <button className="px-8 py-3 my-10 group active:shadow-none hover:shadow-md border-b border-primary-brand-color shadow-primary-brand-color rounded-full bg-gradient-to-r from-primary-dark to-primary-brand-color font-semibold text-sm g:text-lg transition cursor-pointer duration-200 flex items-center justify-center space-x-2">
               <span>Start My Test</span>
               <FaArrowRightLong className="ml-1 group-hover:scale-110 group-hover:ml-2 group-hover:translate-x-1 transition-transform duration-200" />

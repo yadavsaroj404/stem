@@ -72,12 +72,25 @@ export interface GroupQuestion extends BaseQuestion {
   options: GroupOption[];
 }
 
+export interface MultiSelectQuestion extends BaseQuestion {
+  type: "multi-select";
+  options: TextOption[];
+  limit: number;
+  optionInstruction?: string;
+}
+
+export interface FillQuestion extends BaseQuestion {
+  type: "fill";
+}
+
 export type AnyQuestion =
   | TextQuestion
   | TextImageQuestion
   | MatchingQuestion
   | GroupQuestion
-  | RankQuestion;
+  | RankQuestion
+  | FillQuestion
+  | MultiSelectQuestion;
 
 // --- Response Structures ---
 export interface Response {

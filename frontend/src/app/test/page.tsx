@@ -7,7 +7,6 @@ import { fetchQuestions } from "@/helpers/data-fetch";
 import {
   AnyQuestion,
   GroupOption as GroupOptionParams,
-  MatchingItem,
   MatchingQuestion,
   RankQuestion,
   Response,
@@ -24,7 +23,7 @@ import UserProfile from "@/components/UserProfile";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
 import logger from "@/helpers/logger";
 
-function RankQuestionComponent({
+export function RankQuestionComponent({
   question,
   arrangement,
   onArrangement,
@@ -38,7 +37,7 @@ function RankQuestionComponent({
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    logger.debug("RankQuestionComponent mounted or options changed.");
+    // logger.debug("RankQuestionComponent mounted or options changed.");
     itemRefs.current = itemRefs.current.slice(0, orderedOptions.length);
   }, [orderedOptions]);
 
@@ -78,7 +77,9 @@ function RankQuestionComponent({
     const newArrangement = orderedOptions.map((item) => item._id).join(";");
     onArrangement(newArrangement);
     setDraggedIndex(null);
-    logger.info("Drag ended, new arrangement saved.", { arrangement: newArrangement });
+    logger.info("Drag ended, new arrangement saved.", {
+      arrangement: newArrangement,
+    });
   };
 
   return (
@@ -102,7 +103,8 @@ function RankQuestionComponent({
               isBeingDragged ? "opacity-50 scale-105" : "opacity-100 scale-100"
             }`}
             style={{
-              transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+              transition:
+                "transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
             }}
           >
             <div className="w-6.5 h-6.5 relative">
@@ -130,14 +132,16 @@ function RankQuestionComponent({
   );
 }
 
-function GroupQuestionComponent({
+export function GroupQuestionComponent({
   question,
   onSelect,
   matchedOptions,
+  blockStyles,
 }: {
   question: any;
   onSelect: (selectedIds: Record<string, string>) => void;
   matchedOptions: string;
+  blockStyles?: React.CSSProperties;
 }) {
   const [selected, setSelected] = useState<Record<string, string>>({});
 
@@ -163,15 +167,18 @@ function GroupQuestionComponent({
     // Notify parent of the updated selections only if all groups have a selection
     if (Object.keys(newSelected).length === question.options.length) {
       onSelect(newSelected);
-      logger.info("All groups answered in GroupQuestionComponent.", { newSelected });
+      logger.info("All groups answered in GroupQuestionComponent.", {
+        newSelected,
+      });
     }
   };
 
   return (
-    <div className="flex gap-2.5">
+    <div className="w-full flex gap-2.5">
       {question.options.map((group: GroupOptionParams) => (
         <div
           key={group._id}
+          style={blockStyles}
           className="w-full max-w-60 p-4 rounded-lg border border-primary-brand-color bg-[#1B0244] bg-opacity-50"
         >
           <h3 className="font-semibold mb-4 text-base pb-2 border-b-2 border-[#D400FF]/30">
@@ -202,7 +209,7 @@ function GroupQuestionComponent({
   );
 }
 
-function MatchingQuestionComponent({
+export function MatchingQuestionComponent({
   question,
   onSelect,
   matchedOptions,
@@ -352,9 +359,13 @@ function MatchingQuestionComponent({
       logger.info("New match created.", { leftId: selectedLeft, rightId: id });
 
       if (updatedMatches.length === question.leftSide.length) {
-        const finalSelection = updatedMatches.map((m) => `${m.leftId}-${m.rightId}`).join(";");
+        const finalSelection = updatedMatches
+          .map((m) => `${m.leftId}-${m.rightId}`)
+          .join(";");
         onSelect(finalSelection);
-        logger.info("All items matched in MatchingQuestionComponent.", { finalSelection });
+        logger.info("All items matched in MatchingQuestionComponent.", {
+          finalSelection,
+        });
       }
       setSelectedLeft(null);
     }
@@ -385,7 +396,7 @@ function MatchingQuestionComponent({
   };
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="w-full relative" ref={containerRef}>
       <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-10">
         {matches.map((match) => {
           const leftPos = positions[match.leftId];
@@ -465,7 +476,7 @@ function MatchingQuestionComponent({
                   itemRefs.current[item._id] = el;
                 }}
                 onClick={() => handleSelect("left", item._id)}
-                className={`p-3.5 rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
+                className={`p-3.5 w-fit rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
                   !color
                     ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
                     : "backdrop-blur-md"
@@ -479,7 +490,7 @@ function MatchingQuestionComponent({
                 {item.image && (
                   <Image
                     src={item.image}
-                    alt={item.text}
+                    alt={item.text || "option"}
                     width={40}
                     height={40}
                     className="rounded-md ml-2"
@@ -502,7 +513,7 @@ function MatchingQuestionComponent({
                   itemRefs.current[item._id] = el;
                 }}
                 onClick={() => handleSelect("right", item._id)}
-                className={`p-3.5 rounded-lg border transition-colors cursor-pointer flex items-center bg-opacity-50 ${
+                className={`p-3.5 w-fit rounded-lg border transition-colors cursor-pointer flex items-center bg-opacity-50 ${
                   !color
                     ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
                     : "backdrop-blur-md"
@@ -516,7 +527,7 @@ function MatchingQuestionComponent({
                 {item.image && (
                   <Image
                     src={item.image}
-                    alt={item.text}
+                    alt={item.text || "option"}
                     width={40}
                     height={40}
                     className="rounded-md ml-2"
@@ -527,6 +538,64 @@ function MatchingQuestionComponent({
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+export function MultiSelectQuestionComponent({
+  question,
+  onSelect,
+  selectedOptions,
+}: {
+  question: any;
+  onSelect: (selectedIds: string) => void;
+  selectedOptions: string;
+}) {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (selectedOptions) {
+      setSelected(selectedOptions.split(";"));
+    } else {
+      setSelected([]);
+    }
+  }, [selectedOptions]);
+
+  const handleSelect = (optionId: string) => {
+    let newSelected: string[];
+    if (selected.includes(optionId)) {
+      newSelected = selected.filter((id) => id !== optionId);
+    } else {
+      if (selected.length < question.limit) {
+        newSelected = [...selected, optionId];
+      } else {
+        // Optional: alert user or provide other feedback
+        alert(`You can only select up to ${question.limit} options.`);
+        return;
+      }
+    }
+    setSelected(newSelected);
+    onSelect(newSelected.join(";"));
+  };
+
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {question.options.map((option: TextOptionParams, index: number) => (
+        <div
+          key={option._id}
+          className={`flex items-center px-4 mb-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color transition duration-150 cursor-pointer ${
+            selected.includes(option._id)
+              ? "bg-primary-brand-color shadow-[inset_0_5px_8px_rgba(255,255,255,0.4)]"
+              : "hover:bg-primary-dark hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)]"
+          }`}
+          onClick={() => handleSelect(option._id)}
+        >
+          <span className="text-base font-medium mr-2 ">
+            ({String.fromCharCode(65 + index)})
+          </span>
+          <span className="text-base font-medium">{option.text}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -552,7 +621,9 @@ export default function TestPage() {
         const data = await fetchQuestions();
         if (data?.questions) {
           setQuestions(data.questions);
-          logger.info(`Successfully fetched ${data.questions.length} questions.`);
+          logger.info(
+            `Successfully fetched ${data.questions.length} questions.`
+          );
         } else {
           setQuestions([]);
           logger.warn("No questions found or data is malformed.", { data });
@@ -619,7 +690,9 @@ export default function TestPage() {
           body: JSON.stringify(testData),
         }
       );
-      logger.info("Test submission response received.", { status: response.status });
+      logger.info("Test submission response received.", {
+        status: response.status,
+      });
       // if (!response.ok) {
       //   throw new Error("Failed to submit test");
       // }
@@ -657,7 +730,9 @@ export default function TestPage() {
     );
     // if it is last question, submit the test
     if (!currentResponse) {
-      logger.warn("Next question blocked: current question not answered.", { questionId: currentQuestion._id });
+      logger.warn("Next question blocked: current question not answered.", {
+        questionId: currentQuestion._id,
+      });
       alert("Please select an option before proceeding.");
       return;
     }
@@ -681,10 +756,14 @@ export default function TestPage() {
       if (existingResponseIndex !== -1) {
         const newResponses = [...prevResponses];
         newResponses[existingResponseIndex] = newResponse;
-        logger.info("Updated existing response.", { questionId: newResponse.questionId });
+        logger.info("Updated existing response.", {
+          questionId: newResponse.questionId,
+        });
         return newResponses;
       } else {
-        logger.info("Added new response.", { questionId: newResponse.questionId });
+        logger.info("Added new response.", {
+          questionId: newResponse.questionId,
+        });
         return [...prevResponses, newResponse];
       }
     });
@@ -703,7 +782,9 @@ export default function TestPage() {
     responses.length > 0 ? (responses.length / questions.length) * 100 : 0;
 
   const currentQuestion = questions[currIndex];
-  logger.debug(`Rendering TestPage for question index: ${currIndex}`, { questionId: currentQuestion?._id });
+  logger.debug(`Rendering TestPage for question index: ${currIndex}`, {
+    questionId: currentQuestion?._id,
+  });
   const questionSectionClass = `
     transition-all duration-200
     ${
@@ -797,6 +878,20 @@ export default function TestPage() {
               });
             }}
             arrangement={getSelectedOption(currentQuestion._id)}
+          />
+        );
+      case "multi-select":
+        return (
+          <MultiSelectQuestionComponent
+            key={currIndex}
+            question={currentQuestion}
+            onSelect={(selectedOptionId) => {
+              updateResponse({
+                questionId: currentQuestion._id,
+                selectedOptionId,
+              });
+            }}
+            selectedOptions={getSelectedOption(currentQuestion._id)}
           />
         );
       default:
@@ -933,7 +1028,7 @@ export default function TestPage() {
 }
 
 // Option component for text-based options
-function TextOption({
+export function TextOption({
   option,
   index,
   onSelect,
@@ -962,7 +1057,7 @@ function TextOption({
 }
 
 // Options for image-text-based options
-function TextImageOption({
+export function TextImageOption({
   option,
   index,
   onSelect,

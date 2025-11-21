@@ -1,4 +1,4 @@
-import fs from 'fs';
+// import fs from 'fs';
 import path from 'path';
 
 enum LogLevel {
@@ -11,9 +11,9 @@ enum LogLevel {
 const LOG_DIR = path.join(process.cwd(), 'logs');
 
 // Ensure log directory exists on the server
-if (typeof window === 'undefined' && !fs.existsSync(LOG_DIR)) {
-  fs.mkdirSync(LOG_DIR, { recursive: true });
-}
+// if (typeof window === 'undefined' && !fs.existsSync(LOG_DIR)) {
+//   fs.mkdirSync(LOG_DIR, { recursive: true });
+// }
 
 const getLogFilePath = () => {
   const date = new Date().toISOString().split('T')[0];
@@ -37,7 +37,7 @@ const formatMessage = (level: LogLevel, message: string, context?: object): stri
 const logToServer = (level: LogLevel, message: string, context?: object) => {
   const formattedMessage = formatMessage(level, message, context) + '\n';
   try {
-    fs.appendFileSync(getLogFilePath(), formattedMessage);
+    // fs.appendFileSync(getLogFilePath(), formattedMessage);
   } catch (error) {
     console.error('Failed to write to log file:', error);
   }

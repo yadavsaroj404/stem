@@ -1,0 +1,550 @@
+[
+  {
+    "name": "Mission 1",
+    "image": "",
+    "video": "/s3/mission1.mp4",
+    "primaryQuestion": {
+      "_id": "9ad1d06df42b434fa10f4654e4c3f566",
+      "image": "/s3/q2.png",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Mix Alloy A and B to make a drone wing that’s both strong and light.",
+      "optionInstruction": "Choose your mix:",
+      "type": "text",
+      "options": [
+        {
+          "text": "Mostly A",
+          "_id": "d8016c1700a5478ba79aef36adfa2285"
+        },
+        {
+          "text": "Equal Mix",
+          "_id": "14b1818eebac46608819359cdb82a44a"
+        },
+        {
+          "text": "Mostly B",
+          "_id": "dccaaa071b2d4dbf9ab4debbce66eddc"
+        }
+      ]
+    },
+    "secondaryQuestion": {
+      "_id": "ccd2f49419ce4ff5be6a96433722cd46",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Your first wing cracks in testing. What do you do?",
+      "type": "text",
+      "options": [
+        {
+          "text": "Recheck the data",
+          "_id": "9ba25aa8bd22498783cdef788309de78"
+        },
+        {
+          "text": "Redesign the shape",
+          "_id": "d2a8af1c5ef54a9bab75c10c3aae29a9"
+        },
+        {
+          "text": "Ask friends for insight",
+          "_id": "e7d5b7c59cfb4b6c9f9babf37e855928"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mission 2",
+    "image": "",
+    "video": "/s3/mission2.mp4",
+    "primaryQuestion": {
+      "_id": "6f426de4517047a18951e669416026ab",
+      "image": "/s3/q2.png",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Spot the anomaly in the dataset (quick visual scan).",
+      "optionInstruction": "Write the odd pattern number:",
+      "type": "group",
+      "options": [
+        {
+          "_id": "47db6310c1824a879b94999cad59b593",
+          "groupName": "Row number",
+          "subOptions": [
+            {
+              "text": "A",
+              "_id": "0f2d6f09037c4e65bb257f1841d104b3"
+            },
+            {
+              "text": "B",
+              "_id": "a429fd14f7694524821f35202e9ad320"
+            },
+            {
+              "text": "C",
+              "_id": "f9438e779907402d9fe1e53ac5b11771"
+            },
+            {
+              "text": "D",
+              "_id": "0a47d76831134fb0a9e25e21b3109704"
+            },
+            {
+              "text": "E",
+              "_id": "bb0f497471794e4aa41aaea93629c598"
+            }
+          ]
+        },
+        {
+          "_id": "24fd7b9f39f64e2883ff6c76907f9879",
+          "groupName": "Column number",
+          "subOptions": [
+            {
+              "text": "1",
+              "_id": "8bc0fe3223a34e9fa2275cd61d127187"
+            },
+            {
+              "text": "2",
+              "_id": "7bde9fb9de51479d988ddd03fde8e9db"
+            },
+            {
+              "text": "3",
+              "_id": "7e8a2bf6a1ea4de7b9d6029e5441180d"
+            },
+            {
+              "text": "4",
+              "_id": "604e8d194d424939b027128dd4e1a246"
+            },
+            {
+              "text": "5",
+              "_id": "4fef4b08d38a418ba6ae9e798ba84230"
+            }
+          ]
+        }
+      ]
+    },
+    "secondaryQuestion": {
+      "_id": "6940e2d72bea449f93a9bcb8018945aa",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Your AI model seems biased. Next step?",
+      "type": "text",
+      "options": [
+        {
+          "text": "Collect more balanced data",
+          "_id": "ac6273d7d88841139956305920477c54"
+        },
+        {
+          "text": "Rewrite the algorithm",
+          "_id": "975a2b2117ee443e940275eb4a44ac33"
+        },
+        {
+          "text": "Make it easier to understand",
+          "_id": "3b61c0e54340406d905c8a4d8b83a012"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mission 3",
+    "image": "/s3/mission3.png",
+    "video": "",
+    "primaryQuestion": {
+      "_id": "be864580fe224e22a6c90bf91b1fa734",
+      "image": "/s3/q2.png",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Program your rescue bot to reach the trapped worker using the fewest steps.",
+      "optionInstruction": "Choose your sequence",
+      "type": "text",
+      "options": [
+        {
+          "text": "Path A",
+          "_id": "eb5e68adda1445cdb3c1e2d513d916d6"
+        },
+        {
+          "text": "Path B",
+          "_id": "0cb152d88b9a4c6aab6f54e3bffb9a22"
+        },
+        {
+          "text": "Path C",
+          "_id": "6b61cd587dd8448b9e10f387fa33df72"
+        }
+      ]
+    },
+    "secondaryQuestion": {
+      "_id": "1d0eea6979b343758804b74a18449cdf",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "The bot stops mid-way. You would…",
+      "type": "text",
+      "options": [
+        {
+          "text": "Pause and troubleshoot",
+          "_id": "a9fb1998b1ae4f40b464d69410f6d6aa"
+        },
+        {
+          "text": "Push it manually",
+          "_id": "fde8197c973f4bdc996f77f846d77648"
+        },
+        {
+          "text": "Radio for help",
+          "_id": "1c7a317b893043c09594037e8f6bfd94"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mission 4",
+    "image": "/s3/mission4.png",
+    "video": "",
+    "primaryQuestion": {
+      "_id": "4d9b1ddb83424e6ba45b9382fc92d266",
+      "image": "/s3/q2.png",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Select which one is/are correct:",
+      "optionInstruction": "Select the correct matches:",
+      "type": "multi-select",
+      "limit": 2,
+      "options": [
+        {
+          "text": "First",
+          "image": "/s3/mission4-left1.png",
+          "_id": "a6a85e5140cc4e4187a7173533dc23b1"
+        },
+        {
+          "text": "Second",
+          "image": "/s3/mission4-left2.png",
+          "_id": "fc982e0cef9341a5870ab03a66a6fb1d"
+        },
+        {
+          "text": "Third",
+          "image": "/s3/mission4-left3.png",
+          "_id": "b9d301b7743a492ebe41e6dfde47c82e"
+        },
+        {
+          "text": "Fourth",
+          "image": "/s3/mission4-left4.png",
+          "_id": "f7fa546933384a09bf6d9abf97d03f09"
+        },
+        {
+          "text": "Fifth",
+          "image": "/s3/mission4-left5.png",
+          "_id": "508a730c192649eb8e380718009cc2c8"
+        }
+      ]
+    },
+    "secondaryQuestion": {
+      "_id": "0d4cbc6eccab4d0bbac3bdd45fa135be",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "You find a security flaw. Do you…",
+      "type": "text",
+      "options": [
+        {
+          "text": "Quietly fix it",
+          "_id": "e6bdf2f1c92d41d0894041ae046cab25"
+        },
+        {
+          "text": "Alert the team lead",
+          "_id": "50be886442fe42aa8ec6be35856fa4e7"
+        },
+        {
+          "text": "Publish the method",
+          "_id": "24cf9ebdb8884c56b35c0426cd401483"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mission 5",
+    "image": "/s3/mission5.png",
+    "video": "",
+    "primaryQuestion": {
+      "_id": "c34d4b1fea9c4bf7a01849ec58859fd6",
+      "image": "/s3/q2.png",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Choose the angle that reaches orbit with least fuel:",
+      "optionInstruction": "Choose your mix:",
+      "type": "text",
+      "options": [
+        {
+          "text": "30°",
+          "_id": "d3f1cf1279fc4c1886e8f80d235690cf"
+        },
+        {
+          "text": "45°",
+          "_id": "3681b6f8ed2349c4b81c58d266082d43"
+        },
+        {
+          "text": "60°",
+          "_id": "7fd4942c29674e3f952520dced128d12"
+        }
+      ]
+    },
+    "secondaryQuestion": {
+      "_id": "4daf3f5db0ab4fb8bd47f71263fc352d",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Offered a riskier route that saves time. You would…",
+      "type": "text",
+      "options": [
+        {
+          "text": "Try it",
+          "_id": "80a9452484104451b9eb5ad9b04d6a7f"
+        },
+        {
+          "text": "Stick to safe route",
+          "_id": "618f9374f43b4e10a62b9dffedfd862c"
+        },
+        {
+          "text": "Re-calculate first",
+          "_id": "ddb169e9e5e9425d9ea8694b31366892"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mission 6",
+    "image": "",
+    "video": "/s3/mission6.mp4",
+    "primaryQuestion": {
+      "_id": "8f16c18820db4f169850a812245dc59b",
+      "image": "/s3/q2.png",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Match similar balls based on their material properties.",
+      "optionInstruction": "Match left side with correct right side",
+      "type": "matching",
+      "leftSide": [
+        {
+          "image": "/s3/ball1.png",
+          "_id": "067ccdd938304da4846e45558ebde6b2"
+        },
+        {
+          "image": "/s3/ball2.png",
+          "_id": "7fde392303a2412bb4f0cb5a897792cd"
+        },
+        {
+          "image": "/s3/ball3.jpg",
+          "_id": "208bf53f0f644c0084a89f9374538e6e"
+        },
+        {
+          "image": "/s3/ball4.jpg",
+          "_id": "e3196bc6f48b42e78d6ab39741825929"
+        }
+      ],
+      "rightSide": [
+        {
+          "image": "/s3/ball5.jpg",
+          "_id": "a115597f57ad4517b1ac1451a8c6aca5"
+        },
+        {
+          "image": "/s3/ball6.jpg",
+          "_id": "eb69591f7bde4eb791d40f60338b408c"
+        },
+        {
+          "image": "/s3/ball7.jpg",
+          "_id": "43cc4f33851d462fb892b5b06f3a9c91"
+        },
+        {
+          "image": "/s3/ball8.jpg",
+          "_id": "b3760deec3c941bc80a316685a0d0aca"
+        }
+      ]
+    },
+    "secondaryQuestion": {
+      "_id": "56a4f12a39c44b37ac63b0e4d8b8adf8",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "The results stay unpredictable. You…",
+      "type": "text",
+      "options": [
+        {
+          "text": "Keep experimenting",
+          "_id": "de051e81dde246af95baf63b4eb4fcff"
+        },
+        {
+          "text": "Record measurements carefully",
+          "_id": "9e53f1d6c43f482da4ab66069b1cdf7d"
+        },
+        {
+          "text": "Move to a hands-on project",
+          "_id": "fe9fc3b0ae7b4dba9d8cc6376cc8cdd9"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mission 7",
+    "image": "",
+    "video": "/s3/mission7.mp4",
+    "primaryQuestion": {
+      "_id": "b9a00ad4f0d048bf90ee3ca4c08d7095",
+      "image": "/s3/q2.png",
+      "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
+      "question": "Balance power so the city does not black out.",
+      "optionInstruction": " Mark your final percentages:",
+      "type": "group",
+      "options": [
+        {
+          "_id": "89f832f01e834053baa76f18dc55cb6c",
+          "groupName": "Solar Energy",
+          "subOptions": [
+            {
+              "text": "0%",
+              "_id": "07e6022af5e2496cbc3f4e49a64d09bc"
+            },
+            {
+              "text": "25%",
+              "_id": "7bcad3caed9c4b8e890076ba156659df"
+            },
+            {
+              "text": "50%",
+              "_id": "3bcaab684f2c454abc69324245ad07f0"
+            },
+            {
+              "text": "75%",
+              "_id": "af5a2dc89d6c4852b05f0557fa276958"
+            },
+            {
+              "text": "100%",
+              "_id": "70c6203800c24b81ab837ee10e29640b"
+            }
+          ]
+        },
+        {
+          "_id": "8585ced7d6f642ec8ddc130c7c4d0e4c",
+          "groupName": "Wind Energy",
+          "subOptions": [
+            {
+              "text": "0%",
+              "_id": "01c92540295845afad810c3d685a965c"
+            },
+            {
+              "text": "25%",
+              "_id": "2995a9a7bba84653ac30e2272311c096"
+            },
+            {
+              "text": "50%",
+              "_id": "70ebbeaf32d944f0b552a94c710058ef"
+            },
+            {
+              "text": "75%",
+              "_id": "1edf7897f82146b0b814300892463a51"
+            },
+            {
+              "text": "100%",
+              "_id": "b1bedccdf6f84ba0bd47c52a8417d595"
+            }
+          ]
+        },
+        {
+          "_id": "23adfc25ade24102ac83934695af173a",
+          "groupName": "Battery",
+          "subOptions": [
+            {
+              "text": "0%",
+              "_id": "5571647450f148c5ac4642c2d604a5bf"
+            },
+            {
+              "text": "25%",
+              "_id": "57f62f2f884a45d69b29be5f8e205b14"
+            },
+            {
+              "text": "50%",
+              "_id": "e538a5934bc441deaae6b21a7ed38596"
+            },
+            {
+              "text": "75%",
+              "_id": "d4e9da69fa18471d9c959572dd880171"
+            },
+            {
+              "text": "100%",
+              "_id": "c4b2191ed2294969a7d48285a50a8efa"
+            }
+          ]
+        }
+      ]
+    },
+    "secondaryQuestion": {
+      "_id": "a28321eccbb5475b9e82b5e338e35ef5",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "A factory demands extra power. You…",
+      "type": "text",
+      "options": [
+        {
+          "text": "Approve",
+          "_id": "4988b0a7c3f94bc19af5ee39e4f46398"
+        },
+        {
+          "text": "Negotiate",
+          "_id": "1c8f5a5000434403b67f715c29ff272b"
+        },
+        {
+          "text": "Enforce limits",
+          "_id": "a6e1e3407a77480c994860b2d87cf718"
+        }
+      ]
+    }
+  },
+  {
+    "name": "mission 8",
+    "image": "/s3/mission8.png",
+    "video": "",
+    "primaryQuestion": {
+      "_id": "0f4bbfc1004a42a48344b67b6c218770",
+      "image": "/s3/q2.png",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "Pick three members for your innovation team:",
+      "optionInstruction": "Choose your mix:",
+      "type": "multi-select",
+      "limit": 3,
+      "options": [
+        {
+          "text": "Scientist",
+          "image": "/s3/mission8-option1.png",
+          "_id": "685724e18cc948598d44b3251433ef5f"
+        },
+        {
+          "text": "Engineer",
+          "image": "/s3/mission8-option2.png",
+          "_id": "e31a9527baa74c9e9520b33cc3f8297a"
+        },
+        {
+          "text": "Designer",
+          "image": "/s3/mission8-option3.png",
+          "_id": "618e9486d54349a792725526ead62ba6"
+        },
+        {
+          "text": "Policy Lead",
+          "image": "/s3/mission8-option4.png",
+          "_id": "484fd9c512aa47e3944143f853231e55"
+        },
+        {
+          "text": "Communicator",
+          "image": "/s3/mission8-option5.png",
+          "_id": "66a9cd1bc2b949d68504a17733f50fd6"
+        }
+      ]
+    },
+    "secondaryQuestion": {
+      "_id": "30c2ab624e9040d5af9050fc819b689a",
+      "image": "/s3/q2.png",
+      "optionInstruction": "Choose the option that feels most true to you",
+      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "question": "The team disagrees. You…",
+      "type": "text",
+      "options": [
+        {
+          "text": "Facilitate discussion",
+          "_id": "a5e130c14c7f430bb5b7a9d85b6b4a8c"
+        },
+        {
+          "text": "Decide quickly",
+          "_id": "5e552e0598d747dfa245a5fb9ef3bc5d"
+        },
+        {
+          "text": "Collect more data",
+          "_id": "7fcea5cf633c4c32903421dee0af1e65"
+        }
+      ]
+    }
+  }
+]
