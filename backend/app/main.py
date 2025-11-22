@@ -3,18 +3,46 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import tests
 from app.models.database import create_tables
+from app.core.config import settings
+from app.core.logging import setup_logging, get_logger
+from app.middleware.logging_middleware import RequestLoggingMiddleware
 import os
+
+# Initialize logging on module load
+setup_logging(
+    level=settings.log_level,
+    format_type=settings.log_format,
+    log_file=settings.log_file
+)
+
+logger = get_logger(__name__)
 
 
 # Initialize database tables on startup
 @asynccontextmanager
 async def startup_event(app: FastAPI):
+    """Application startup handler"""
+    logger.info("Application starting up")
+
     # Only create tables if database URL is available
     try:
+        logger.info("Initializing database tables")
         create_tables()
+        logger.info("Database tables initialized successfully")
     except Exception as e:
-        print(f"Database initialization error: {e}")
+        logger.error(
+            "Database initialization failed",
+            extra={
+                'error': str(e),
+                'error_type': type(e).__name__
+            },
+            exc_info=True
+        )
+
     yield
+
+    # Shutdown
+    logger.info("Application shutting down")
     
 
 app = FastAPI(
@@ -24,6 +52,8 @@ app = FastAPI(
     lifespan=startup_event
 )
 
+# Add logging middleware (first to capture all requests)
+app.add_middleware(RequestLoggingMiddleware)
 
 # Add CORS middleware
 app.add_middleware(
@@ -36,6 +66,14 @@ app.add_middleware(
 
 # Include routers
 app.include_router(tests.router)
+
+logger.info(
+    "Application configured",
+    extra={
+        'cors_origins': ["https://stem-frontend-teal.vercel.app", "http://localhost:3000", "http://192.168.1.2:8000"],
+        'api_version': "1.0.0"
+    }
+)
 
 # add "this is backend" route for '/'
 @app.get("/")
