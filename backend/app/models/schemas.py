@@ -1,5 +1,7 @@
-from typing import List, Literal, Optional
-from pydantic import BaseModel
+from typing import List, Literal, Optional, Dict, Any
+from pydantic import BaseModel, Field
+
+# --- Legacy Response Models (for backward compatibility) ---
 
 class Response(BaseModel):
     questionId: str
@@ -12,7 +14,7 @@ class TestSubmissionPayload(BaseModel):
     responses: List[Response]
 
 class TestSubmissionResponse(BaseModel):
-    id: str 
+    id: str
     userId: str
     createdAt: str
     name: str
@@ -35,3 +37,64 @@ class SubmissionFilter(BaseModel):
     createdAtTo: Optional[str] = None
     limit: Optional[int] = 10
     offset: Optional[int] = 0
+
+
+# --- New Detailed Response Models ---
+
+class CandidateResponseInput(BaseModel):
+    """Input model for a single candidate response"""
+    questionId: str
+    selectedOptionId: Optional[str] = None
+    selectedItems: Optional[List[str]] = None  # For mapping/pattern questions
+    responseTimeMs: Optional[int] = None
+
+class CandidateResponseOutput(BaseModel):
+    """Output model for a single candidate response"""
+    responseId: str
+    questionId: str
+    selectedOptionId: Optional[str] = None
+    selectedItems: Optional[List[str]] = None
+    responseTimeMs: Optional[int] = None
+    isCorrect: Optional[int] = None
+    createdAt: str
+    updatedAt: str
+
+class TestResponseSubmission(BaseModel):
+    """New model for submitting test responses with detailed tracking"""
+    userId: str
+    testId: Optional[str] = None
+    name: str
+    responses: List[CandidateResponseInput]
+
+class ClusterScore(BaseModel):
+    """Score breakdown by cluster"""
+    clusterId: str
+    clusterName: str
+    totalQuestions: int
+    correctAnswers: int
+    incorrectAnswers: int
+    unanswered: int
+    scorePercentage: float
+
+class SubmissionScore(BaseModel):
+    """Overall submission score"""
+    submissionId: str
+    userId: str
+    overallScore: float
+    totalQuestions: int
+    correctAnswers: int
+    incorrectAnswers: int
+    unanswered: int
+    clusterScores: List[ClusterScore]
+    computedAt: str
+
+class SubmissionWithResponses(BaseModel):
+    """Complete submission with responses and scores"""
+    submissionId: str
+    userId: str
+    testId: Optional[str] = None
+    name: str
+    status: str
+    submittedAt: str
+    responses: List[CandidateResponseOutput]
+    score: Optional[SubmissionScore] = None
