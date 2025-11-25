@@ -118,9 +118,12 @@ export function RankQuestionComponent({
             >
               <span className="text-base font-medium mr-2 ">
                 (
-                {String.fromCharCode(
-                  65 + question.options.findIndex((o) => o._id === option._id)
-                )}
+                {question.type === "rank"
+                  ? question.options.findIndex((o) => o._id === option._id) + 1
+                  : String.fromCharCode(
+                      65 +
+                        question.options.findIndex((o) => o._id === option._id)
+                    )}
                 )
               </span>
               <span className="text-base font-medium">{option.text}</span>
