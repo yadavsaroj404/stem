@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     database_url: str  # Must be provided via environment variable
 
     # Logging configuration
+    LOGS_DIR: str = "logs"
     log_level: str = "INFO"
     log_format: str = "dev"  # 'json' for production, 'dev' for development
     log_file: Optional[str] = None  # Optional: path to log file

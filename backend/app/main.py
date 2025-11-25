@@ -5,15 +5,9 @@ from app.api.endpoints import tests
 from app.models.database import create_tables
 from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
-# from app.middleware.logging_middleware import RequestLoggingMiddleware
-import os
 
 # Initialize logging on module load
-setup_logging(
-    level=settings.log_level,
-    format_type=settings.log_format,
-    log_file=settings.log_file
-)
+setup_logging()
 
 logger = get_logger(__name__)
 
@@ -51,9 +45,6 @@ app = FastAPI(
     version="1.0.0",
     lifespan=startup_event
 )
-
-# Add logging middleware (first to capture all requests)
-# app.add_middleware(RequestLoggingMiddleware)
 
 # Add CORS middleware
 app.add_middleware(

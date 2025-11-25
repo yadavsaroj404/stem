@@ -605,7 +605,7 @@ export function MultiSelectQuestionComponent({
 
 export default function TestPage() {
   const router = useRouter();
-  const [currIndex, setCurrIndex] = useState(1);
+  const [currIndex, setCurrIndex] = useState(0);
   const [questions, setQuestions] = useState<AnyQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [responses, setResponses] = useState<Response[]>([]);

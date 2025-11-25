@@ -31,10 +31,15 @@ def setup_logging():
     console_handler.setFormatter(formatter)
 
     # Add the handlers to the logger
-    if not logger.handlers:
-        logger.addHandler(file_handler)
-        logger.addHandler(console_handler)
+    # Get the root logger and add handlers to it
+    root_logger = logging.getLogger()
+    if not root_logger.handlers:
+        root_logger.addHandler(file_handler)
+        root_logger.addHandler(console_handler)
+    root_logger.setLevel(logging.INFO)
 
-    return logger
 
-logger = setup_logging()
+def get_logger(name: str) -> logging.Logger:
+    """Get a logger with the specified name."""
+    return logging.getLogger(name)
+

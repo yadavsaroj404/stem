@@ -4,8 +4,7 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime
 
 # app configurations
-from app.core.config import settings
-from app.core.logging import get_logger, set_request_context
+from app.core.logging import get_logger
 
 # database imports
 from sqlalchemy.orm import Session, joinedload
@@ -176,9 +175,6 @@ class QuestionService:
                 'response_count': len(test_data.responses)
             }
         )
-
-        # Set user context for logging
-        set_request_context(user_id=test_data.userId)
 
         # Ensure tables exist
         create_tables()
