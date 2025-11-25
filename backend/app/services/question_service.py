@@ -10,10 +10,16 @@ from app.core.logging import get_logger, set_request_context
 # database imports
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import create_engine
-from app.models.database import SubmissionDB, SessionLocal, create_tables, engine
-
-# Import new DB models
-from app.models.db_models import Cluster, Question, ListOption, Test
+from app.models.database import (
+    SubmissionDB,
+    SessionLocal,
+    create_tables,
+    engine,
+    Cluster,
+    Question,
+    ListOption,
+    Test,
+)
 
 # type definitions
 from app.models.schemas import (

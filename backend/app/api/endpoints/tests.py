@@ -1,7 +1,12 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException, status, Query
 from app.services.question_service import question_service
-from app.models.schemas import TestSubmissionPayload, SubmissionFilter
+from app.services.response_service import response_service
+from app.models.schemas import (
+    TestSubmissionPayload,
+    SubmissionFilter,
+    TestResponseSubmission,
+)
 from app.core.logging import get_logger
 
 router = APIRouter()
@@ -218,4 +223,107 @@ def delete_submission(submission_id: str):
         raise HTTPException(
             status_code=500,
             detail="An error occurred while deleting submission. Please try again later."
+        )
+
+
+# --- New Response Endpoints with Scoring ---
+
+@router.post("/responses", status_code=status.HTTP_201_CREATED)
+def submit_candidate_responses(response_data: TestResponseSubmission):
+    """
+    Submit candidate responses with automatic scoring
+
+    This endpoint:
+    1. Stores individual responses in the database
+    2. Validates answers against correct answers
+    3. Computes overall and cluster-level scores
+    4. Returns submission ID and scores
+    """
+    try:
+        result = response_service.submit_responses(response_data)
+        return result
+
+    except Exception as e:
+        logger.error(
+            "Failed to submit responses",
+            extra={
+                'error': str(e),
+                'error_type': type(e).__name__,
+                'user_id': response_data.userId
+            },
+            exc_info=True
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while submitting responses. Please try again later."
+        )
+
+
+@router.get("/responses/{session_id}")
+def get_candidate_responses(session_id: str):
+    """
+    Get a test session with all responses and computed scores
+
+    Returns:
+    - Session details
+    - Individual student answers with correctness
+    - Overall score and cluster-level scores
+    """
+    try:
+        session = response_service.get_session_with_responses(session_id)
+        if not session:
+            logger.warning("Session not found", extra={'session_id': session_id})
+            raise HTTPException(status_code=404, detail="Session not found")
+
+        return {
+            "status": "success",
+            "data": session
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(
+            "Failed to retrieve session responses",
+            extra={
+                'error': str(e),
+                'error_type': type(e).__name__,
+                'session_id': session_id
+            },
+            exc_info=True
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while retrieving responses. Please try again later."
+        )
+
+
+@router.get("/responses/user/{user_id}")
+def get_user_response_history(user_id: str):
+    """
+    Get all test sessions for a specific user
+
+    Returns a list of sessions with basic info and overall scores
+    """
+    try:
+        sessions = response_service.get_user_sessions(user_id)
+        return {
+            "status": "success",
+            "data": sessions,
+            "count": len(sessions)
+        }
+
+    except Exception as e:
+        logger.error(
+            "Failed to retrieve user sessions",
+            extra={
+                'error': str(e),
+                'error_type': type(e).__name__,
+                'user_id': user_id
+            },
+            exc_info=True
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while retrieving user sessions. Please try again later."
         )
