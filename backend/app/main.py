@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import tests
+from app.api.endpoints import tests, missions
 from app.models.database import create_tables
 from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
@@ -66,6 +66,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(tests.router)
+app.include_router(missions.router, prefix="/api", tags=["missions"])
 
 logger.info(
     "Application configured",
