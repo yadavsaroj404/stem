@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, ReactElement, useMemo } from "react";
 import Image from "next/image";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
-import { fetchQuestions } from "@/helpers/data-fetch";
+import { fetchQuestions, submitResponses } from "@/helpers/data-fetch";
 import {
   AnyQuestion,
   GroupOption as GroupOptionParams,
@@ -570,28 +570,27 @@ export default function TestPage() {
   };
 
   const submitAnswer = async () => {
-    const testData = {
-      userId: "64a7b1f4e4b0c5b6f8d9e8c1",
-      createdAt: new Date().toISOString(),
-      name: "Default Test Name",
-      responses: responses,
-    };
-
     setLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/submit`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(testData),
-        }
+      // Use unified assessment endpoint
+      const result = await submitResponses(
+        "64a7b1f4e4b0c5b6f8d9e8c1", // userId
+        "Default Test Name", // name
+        responses.map(r => ({
+          questionId: r.questionId,
+          selectedOptionId: r.selectedOptionId,
+        }))
       );
-      // if (!response.ok) {
-      //   throw new Error("Failed to submit test");
-      // }
+
+      if (result && result.status === "success") {
+        // Store session ID and score for results page if needed
+        if (result.sessionId) {
+          localStorage.setItem("lastSessionId", result.sessionId);
+        }
+        if (result.score) {
+          localStorage.setItem("lastScore", JSON.stringify(result.score));
+        }
+      }
       router.push("/test/complete");
     } catch (error) {
       alert("Failed to submit test. Please try again.");

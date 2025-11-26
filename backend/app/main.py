@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import tests, missions
+from app.api.endpoints import tests, missions, assessments
 from app.models.database import create_tables
 from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
@@ -60,13 +60,17 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://stem-frontend-teal.vercel.app", "http://localhost:3000", "http://192.168.1.2:8000"],
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["*"],
 )
 
 # Include routers
-app.include_router(tests.router)
-app.include_router(missions.router, prefix="/api", tags=["missions"])
+# Legacy endpoints (kept for backward compatibility)
+app.include_router(tests.router, tags=["tests-legacy"])
+app.include_router(missions.router, prefix="/api", tags=["missions-legacy"])
+
+# New unified assessment endpoint
+app.include_router(assessments.router, prefix="/api", tags=["assessments"])
 
 logger.info(
     "Application configured",
