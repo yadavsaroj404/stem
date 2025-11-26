@@ -51,37 +51,72 @@ class ScoringService:
     def check_answer(self, question_id: str, selected_option_id: Optional[str],
                      selected_items: Optional[str] = None) -> bool:
         """
-        Check if an answer is correct
+        Check if an answer is correct.
+
+        Handles different question types:
+        - text: Single option ID comparison
+        - rank: Ordered list of option IDs (order matters!)
+        - group: Pairs of groupId-selectedOptionId (order matters!)
+        - matching: Pairs of leftItemId-rightItemId (order matters!)
+        - multi-select: Multiple option IDs (order doesn't matter)
 
         Args:
-            question_id: The question ID
-            selected_option_id: The selected option ID (for MCQ)
-            selected_items: JSON string of selected items (for mapping/pattern questions)
+            question_id: The question ID (with or without hyphens)
+            selected_option_id: The selected option ID (for single-selection MCQ)
+            selected_items: JSON string of selected items (for multi-selection questions)
 
         Returns:
             True if correct, False otherwise
         """
-        if question_id not in self.correct_answers:
-            logger.warning(f"No correct answer found for question {question_id}")
-            return False
+        # Normalize question_id (remove hyphens for lookup)
+        normalized_qid = question_id.replace("-", "")
 
-        correct_answer = self.correct_answers[question_id]
+        if normalized_qid not in self.correct_answers:
+            # Also try with original format
+            if question_id not in self.correct_answers:
+                logger.warning(f"No correct answer found for question {question_id}")
+                return False
+            correct_answer = self.correct_answers[question_id]
+        else:
+            correct_answer = self.correct_answers[normalized_qid]
 
-        # For mapping/pattern questions (multiple selections)
+        # For multi-selection questions (rank, group, matching)
         if selected_items:
             try:
                 selected_list = json.loads(selected_items) if isinstance(selected_items, str) else selected_items
-                # Normalize the format and compare
-                selected_str = ";".join(sorted(selected_list))
-                correct_str = correct_answer
-                return selected_str == correct_str
+
+                if not selected_list:
+                    return False
+
+                # Build the answer string in the same format as answers.json
+                # Format: "item1;item2;item3" or "group1-item1;group2-item2"
+                selected_str = ";".join(selected_list)
+
+                # Normalize both for comparison (remove hyphens from UUIDs if needed)
+                selected_normalized = selected_str.replace("-", "")
+                correct_normalized = correct_answer.replace("-", "")
+
+                # Check if order matters by looking at the correct answer format
+                # If correct answer contains pairs (groupId-itemId), order matters
+                if "-" in correct_answer and ";" in correct_answer:
+                    # Group/Matching/Rank: Order matters - direct comparison
+                    return selected_normalized == correct_normalized
+                else:
+                    # Multi-select: Order might not matter - compare as sets
+                    selected_set = set(selected_normalized.split(";"))
+                    correct_set = set(correct_normalized.split(";"))
+                    return selected_set == correct_set
+
             except Exception as e:
-                logger.error(f"Error comparing mapping answer: {e}")
+                logger.error(f"Error comparing answer for question {question_id}: {e}")
                 return False
 
-        # For MCQ questions (single selection)
+        # For single-selection MCQ questions
         if selected_option_id:
-            return selected_option_id == correct_answer
+            # Normalize for comparison
+            selected_normalized = selected_option_id.replace("-", "")
+            correct_normalized = correct_answer.replace("-", "")
+            return selected_normalized == correct_normalized
 
         return False
 

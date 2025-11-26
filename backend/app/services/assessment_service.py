@@ -143,8 +143,10 @@ class AssessmentService:
         ).options(
             joinedload(MissionsTest.primary_question).joinedload(Question.options),
             joinedload(MissionsTest.primary_question).joinedload(Question.cluster),
+            joinedload(MissionsTest.primary_question).joinedload(Question.item_pools).joinedload(ItemPool.group),
             joinedload(MissionsTest.secondary_question).joinedload(Question.options),
             joinedload(MissionsTest.secondary_question).joinedload(Question.cluster),
+            joinedload(MissionsTest.secondary_question).joinedload(Question.item_pools).joinedload(ItemPool.group),
         ).all()
 
         formatted_missions = []
@@ -167,10 +169,16 @@ class AssessmentService:
         }
 
     def _get_general_test_data(self, db: Session, test: Test) -> Dict[str, Any]:
-        """Get general test data with questions"""
-        questions = db.query(Question).options(
+        """Get general test data with questions linked to this specific test"""
+        # Get questions linked to this test via general_test table
+        questions = db.query(Question).join(
+            GeneralTest, GeneralTest.question_id == Question.question_id
+        ).filter(
+            GeneralTest.test_id == test.test_id
+        ).options(
             joinedload(Question.options),
-            joinedload(Question.cluster)
+            joinedload(Question.cluster),
+            joinedload(Question.item_pools).joinedload(ItemPool.group)
         ).order_by(Question.display_order).all()
 
         formatted_questions = []
@@ -182,7 +190,8 @@ class AssessmentService:
             "version": f"{test.version}.0.0" if test.version else "1.0.0",
             "name": test.test_name,
             "type": test.test_type or "general",
-            "questions": formatted_questions
+            "questions": formatted_questions,
+            "totalQuestions": len(formatted_questions)
         }
 
     def _format_question(self, question: Question) -> Optional[Dict[str, Any]]:
@@ -212,23 +221,42 @@ class AssessmentService:
                 }
                 formatted_q["options"].append(formatted_opt)
 
-        # Check for item pools (for mapping/grouping questions)
+        # Check for item pools (for group/matching questions)
         if hasattr(question, 'item_pools') and question.item_pools:
             items_by_group = {}
+            group_order = {}  # Track group display order
+
             for item in question.item_pools:
                 group_id = str(item.group_id) if item.group_id else "default"
                 if group_id not in items_by_group:
                     items_by_group[group_id] = {
-                        "groupId": group_id,
+                        "_id": group_id,
                         "groupName": item.group.group_name if item.group else None,
+                        "displayOrder": item.group.display_order if item.group else 0,
                         "items": []
                     }
+                    group_order[group_id] = item.group.display_order if item.group else 0
+
                 items_by_group[group_id]["items"].append({
                     "_id": str(item.pool_id),
                     "text": item.item_text,
                     "displayOrder": item.display_order
                 })
-            formatted_q["itemGroups"] = list(items_by_group.values())
+
+            # Sort items within each group by display_order
+            for group in items_by_group.values():
+                group["items"] = sorted(group["items"], key=lambda x: x.get("displayOrder") or 0)
+
+            # Sort groups by display_order
+            sorted_groups = sorted(items_by_group.values(), key=lambda x: x.get("displayOrder") or 0)
+            formatted_q["itemGroups"] = sorted_groups
+
+            # For matching questions, also provide leftSide/rightSide format
+            if question.question_type == "matching" and len(sorted_groups) == 2:
+                formatted_q["leftSide"] = sorted_groups[0]["items"]
+                formatted_q["leftSideTitle"] = sorted_groups[0]["groupName"]
+                formatted_q["rightSide"] = sorted_groups[1]["items"]
+                formatted_q["rightSideTitle"] = sorted_groups[1]["groupName"]
 
         return formatted_q
 
