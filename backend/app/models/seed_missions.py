@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 """
 Seed Missions data from JSON file:
-- missions-test-questions.json -> tests + questions + list_options + missions_test tables
+- missions-test-questions.json -> tests + questions + list_options + items_group + item_pools + missions_test tables
+
+Handles all question types:
+- text: simple MCQ with options (uses list_options)
+- rank: ordered options (uses list_options)
+- multi-select: multiple selection options (uses list_options)
+- group: grouped options with subOptions (uses items_group + item_pools)
+- matching: left/right side matching (uses items_group + item_pools)
 
 The missions JSON can have two formats:
 
@@ -60,7 +67,7 @@ def upsert_row(conn, table, pkcolumn, pkvalue, rowdict):
     return True
 
 
-def insert_question(conn, questions_table, list_options_table, question_data, display_order=None):
+def insert_question(conn, questions_table, list_options_table, items_group_table, item_pools_table, question_data, display_order=None):
     """
     Insert a question and its options.
     Handles various question types: text, rank, group, matching, multi-select
@@ -92,52 +99,20 @@ def insert_question(conn, questions_table, list_options_table, question_data, di
         print(f"    Error inserting question {qid}: {e}")
         return None
 
-    if list_options_table is None:
-        return qid
-
     # Handle different question types
     question_type = question_data.get("type", "text")
 
-    # Standard options (text, rank, multi-select)
-    options = question_data.get("options") or []
-    for idx, opt in enumerate(options):
-        # Handle group type with subOptions
-        if question_type == "group" and "subOptions" in opt:
-            # Insert the group as an option
-            group_id = opt.get("_id") or str(uuid.uuid4())
-            group_row = {
-                "option_id": group_id,
-                "question_id": qid,
-                "option_text": opt.get("groupName"),
-                "option_image_url": opt.get("image"),
-                "display_order": idx + 1,
-            }
-            try:
-                upsert_row(conn, list_options_table, "option_id", group_id, group_row)
-            except SQLAlchemyError as e:
-                print(f"    Error inserting group option {group_id}: {e}")
-
-            # Insert subOptions as separate options with reference to group
-            for sub_idx, sub_opt in enumerate(opt.get("subOptions", [])):
-                sub_id = sub_opt.get("_id") or str(uuid.uuid4())
-                sub_row = {
-                    "option_id": sub_id,
-                    "question_id": qid,
-                    "option_text": f"{opt.get('groupName')}:{sub_opt.get('text')}",
-                    "option_image_url": sub_opt.get("image"),
-                    "display_order": (idx + 1) * 100 + sub_idx + 1,  # Hierarchical ordering
-                }
-                try:
-                    upsert_row(conn, list_options_table, "option_id", sub_id, sub_row)
-                except SQLAlchemyError as e:
-                    print(f"    Error inserting sub-option {sub_id}: {e}")
-        else:
-            # Regular option
+    if question_type in ("text", "rank", "multi-select"):
+        # Standard options - use list_options table
+        if list_options_table is None:
+            return qid
+        options = question_data.get("options") or []
+        for idx, opt in enumerate(options):
             opt_id = opt.get("_id") or opt.get("id") or str(uuid.uuid4())
             opt_row = {
                 "option_id": opt_id,
                 "question_id": qid,
-                "option_text": opt.get("text") or opt.get("option_text") or opt.get("groupName"),
+                "option_text": opt.get("text") or opt.get("option_text"),
                 "option_image_url": opt.get("image") or opt.get("option_image_url"),
                 "display_order": idx + 1,
             }
@@ -146,38 +121,106 @@ def insert_question(conn, questions_table, list_options_table, question_data, di
             except SQLAlchemyError as e:
                 print(f"    Error inserting option {opt_id}: {e}")
 
-    # Handle matching type (leftSide and rightSide)
-    if question_type == "matching":
-        left_side = question_data.get("leftSide") or []
-        right_side = question_data.get("rightSide") or []
+    elif question_type == "group":
+        # Group questions - use items_group + item_pools tables
+        if items_group_table is None or item_pools_table is None:
+            print(f"    [WARN] items_group or item_pools table not available for group question")
+            return qid
+        options = question_data.get("options") or []
+        for idx, group in enumerate(options):
+            group_id = group.get("_id") or str(uuid.uuid4())
+            group_name = group.get("groupName") or f"Group {idx + 1}"
 
-        for idx, item in enumerate(left_side):
-            item_id = item.get("_id") or str(uuid.uuid4())
-            item_row = {
-                "option_id": item_id,
-                "question_id": qid,
-                "option_text": f"left:{item.get('text', '')}",
-                "option_image_url": item.get("image"),
+            # Insert group
+            group_row = {
+                "group_id": group_id,
+                "group_name": group_name,
                 "display_order": idx + 1,
             }
             try:
-                upsert_row(conn, list_options_table, "option_id", item_id, item_row)
+                upsert_row(conn, items_group_table, "group_id", group_id, group_row)
             except SQLAlchemyError as e:
-                print(f"    Error inserting left item {item_id}: {e}")
+                print(f"    Error inserting group {group_id}: {e}")
 
-        for idx, item in enumerate(right_side):
-            item_id = item.get("_id") or str(uuid.uuid4())
-            item_row = {
-                "option_id": item_id,
+            # Insert subOptions into item_pools
+            sub_options = group.get("subOptions") or []
+            for sub_idx, sub_opt in enumerate(sub_options):
+                pool_id = sub_opt.get("_id") or str(uuid.uuid4())
+                pool_row = {
+                    "pool_id": pool_id,
+                    "question_id": qid,
+                    "item_text": sub_opt.get("text"),
+                    "display_order": sub_idx + 1,
+                    "group_id": group_id,
+                }
+                try:
+                    upsert_row(conn, item_pools_table, "pool_id", pool_id, pool_row)
+                except SQLAlchemyError as e:
+                    print(f"    Error inserting pool item {pool_id}: {e}")
+
+    elif question_type == "matching":
+        # Matching questions - use items_group for sides + item_pools for items
+        if items_group_table is None or item_pools_table is None:
+            print(f"    [WARN] items_group or item_pools table not available for matching question")
+            return qid
+        left_side = question_data.get("leftSide") or []
+        right_side = question_data.get("rightSide") or []
+        left_title = question_data.get("leftSideTitle") or "Left"
+        right_title = question_data.get("rightSideTitle") or "Right"
+
+        # Create group for left side
+        left_group_id = str(uuid.uuid4())
+        left_group_row = {
+            "group_id": left_group_id,
+            "group_name": left_title,
+            "display_order": 1,
+        }
+        try:
+            upsert_row(conn, items_group_table, "group_id", left_group_id, left_group_row)
+        except SQLAlchemyError as e:
+            print(f"    Error inserting left group {left_group_id}: {e}")
+
+        # Insert left side items
+        for idx, item in enumerate(left_side):
+            pool_id = item.get("_id") or str(uuid.uuid4())
+            pool_row = {
+                "pool_id": pool_id,
                 "question_id": qid,
-                "option_text": f"right:{item.get('text', '')}",
-                "option_image_url": item.get("image"),
-                "display_order": 100 + idx + 1,  # Offset for right side
+                "item_text": item.get("text"),
+                "display_order": idx + 1,
+                "group_id": left_group_id,
             }
             try:
-                upsert_row(conn, list_options_table, "option_id", item_id, item_row)
+                upsert_row(conn, item_pools_table, "pool_id", pool_id, pool_row)
             except SQLAlchemyError as e:
-                print(f"    Error inserting right item {item_id}: {e}")
+                print(f"    Error inserting left item {pool_id}: {e}")
+
+        # Create group for right side
+        right_group_id = str(uuid.uuid4())
+        right_group_row = {
+            "group_id": right_group_id,
+            "group_name": right_title,
+            "display_order": 2,
+        }
+        try:
+            upsert_row(conn, items_group_table, "group_id", right_group_id, right_group_row)
+        except SQLAlchemyError as e:
+            print(f"    Error inserting right group {right_group_id}: {e}")
+
+        # Insert right side items
+        for idx, item in enumerate(right_side):
+            pool_id = item.get("_id") or str(uuid.uuid4())
+            pool_row = {
+                "pool_id": pool_id,
+                "question_id": qid,
+                "item_text": item.get("text"),
+                "display_order": idx + 1,
+                "group_id": right_group_id,
+            }
+            try:
+                upsert_row(conn, item_pools_table, "pool_id", pool_id, pool_row)
+            except SQLAlchemyError as e:
+                print(f"    Error inserting right item {pool_id}: {e}")
 
     return qid
 
@@ -205,6 +248,8 @@ def main():
     # Table references
     questions_table = ensure_table(meta, "questions")
     list_options_table = ensure_table(meta, "list_options")
+    items_group_table = ensure_table(meta, "items_group")
+    item_pools_table = ensure_table(meta, "item_pools")
     tests_table = ensure_table(meta, "tests")
     missions_test_table = ensure_table(meta, "missions_test")
 
@@ -277,6 +322,7 @@ def main():
                 print("  Primary Question:")
                 primary_qid = insert_question(
                     conn, questions_table, list_options_table,
+                    items_group_table, item_pools_table,
                     primary_q, display_order=(idx * 2) + 1
                 )
                 if primary_qid:
@@ -289,6 +335,7 @@ def main():
                 print("  Secondary Question:")
                 secondary_qid = insert_question(
                     conn, questions_table, list_options_table,
+                    items_group_table, item_pools_table,
                     secondary_q, display_order=(idx * 2) + 2
                 )
                 if secondary_qid:
