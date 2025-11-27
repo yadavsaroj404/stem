@@ -514,10 +514,10 @@ class AssessmentService:
             test_session = TestSession(
                 session_id=session_id,
                 user_id=submission_data.userId,
-                test_id=submission_data.testId,
-                name=submission_data.name,
+                test_id=None,
+                name=submission_data.userId,  # Using userId as name
                 status="SUBMITTED",
-                submitted_at=datetime.now()
+                submitted_at=submission_data.submittedAt
             )
             db.add(test_session)
             db.flush()
@@ -525,19 +525,16 @@ class AssessmentService:
             # Process each response
             for response_input in submission_data.responses:
                 answer_json = {
-                    "selectedOptionId": response_input.selectedOptionId,
-                    "selectedItems": response_input.selectedItems,
-                    "responseTimeMs": response_input.responseTimeMs
+                    "selectedOption": response_input.selectedOption
                 }
 
                 # Check correctness
                 is_correct = None
-                if response_input.selectedOptionId or response_input.selectedItems:
-                    selected_items_json = json.dumps(response_input.selectedItems) if response_input.selectedItems else None
+                if response_input.selectedOption:
                     is_correct = 1 if scoring_service.check_answer(
                         response_input.questionId,
-                        response_input.selectedOptionId,
-                        selected_items_json
+                        response_input.selectedOption,
+                        None
                     ) else 0
 
                 student_answer = StudentAnswer(

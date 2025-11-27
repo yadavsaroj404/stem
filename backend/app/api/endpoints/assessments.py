@@ -4,6 +4,7 @@ This consolidated endpoint optimizes database operations and provides a consiste
 """
 
 from typing import Optional, List
+from datetime import datetime
 from fastapi import APIRouter, HTTPException, status, Query
 from pydantic import BaseModel
 
@@ -16,12 +17,17 @@ logger = get_logger(__name__)
 
 # --- Request/Response Models ---
 
-class AnswerInput(BaseModel):
-    """Input model for submitting an answer"""
+class ResponseInput(BaseModel):
+    """Input model for a single response"""
     questionId: str
-    selectedOptionId: Optional[str] = None
-    selectedItems: Optional[List[str]] = None
-    responseTimeMs: Optional[int] = None
+    selectedOption: str
+
+
+class BulkResponseSubmit(BaseModel):
+    """Input model for submitting all responses at once"""
+    userId: str
+    submittedAt: datetime
+    responses: List[ResponseInput]
 
 
 class SessionCreate(BaseModel):
@@ -29,23 +35,6 @@ class SessionCreate(BaseModel):
     userId: str
     testId: str
     name: str
-
-
-class AnswerSubmit(BaseModel):
-    """Input model for submitting an answer during a session"""
-    sessionId: str
-    questionId: str
-    selectedOptionId: Optional[str] = None
-    selectedItems: Optional[List[str]] = None
-    responseTimeMs: Optional[int] = None
-
-
-class BulkResponseSubmit(BaseModel):
-    """Input model for submitting all responses at once"""
-    userId: str
-    testId: Optional[str] = None
-    name: str
-    responses: List[AnswerInput]
 
 
 # --- Assessment Endpoints ---
@@ -205,52 +194,6 @@ def create_session(session_data: SessionCreate):
         raise HTTPException(
             status_code=500,
             detail="An error occurred while creating session. Please try again later."
-        )
-
-
-@router.post("/assessments/answer")
-def submit_answer(answer_data: AnswerSubmit):
-    """
-    Submit an answer for a question.
-
-    Works for both mission questions and general test questions.
-    Answers can be updated by submitting again for the same question.
-    """
-    try:
-        answer = {}
-        if answer_data.selectedOptionId:
-            answer["selectedOptionId"] = answer_data.selectedOptionId
-        if answer_data.selectedItems:
-            answer["selectedItems"] = answer_data.selectedItems
-        if answer_data.responseTimeMs:
-            answer["responseTimeMs"] = answer_data.responseTimeMs
-
-        result = assessment_service.submit_answer(
-            session_id=answer_data.sessionId,
-            question_id=answer_data.questionId,
-            answer=answer
-        )
-
-        if result.get("status") == "error":
-            raise HTTPException(status_code=400, detail=result.get("message"))
-
-        return result
-
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(
-            "Failed to submit answer",
-            extra={
-                'error': str(e),
-                'error_type': type(e).__name__,
-                'session_id': answer_data.sessionId
-            },
-            exc_info=True
-        )
-        raise HTTPException(
-            status_code=500,
-            detail="An error occurred while submitting answer. Please try again later."
         )
 
 
