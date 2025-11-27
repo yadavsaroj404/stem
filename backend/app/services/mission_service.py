@@ -76,6 +76,9 @@ class MissionService:
             for idx, mission in enumerate(missions):
                 mission_data = {
                     "_id": str(mission.id),
+                    "name": mission.name,
+                    "imageURL": mission.image_url if mission.image_url else None,
+                    "videoURL": mission.video_url if mission.video_url else None,
                     "displayOrder": idx + 1,
                     "primaryQuestion": self._format_question(mission.primary_question) if mission.primary_question else None,
                     "secondaryQuestion": self._format_question(mission.secondary_question) if mission.secondary_question else None,
@@ -210,6 +213,9 @@ class MissionService:
             return {
                 "_id": str(mission.id),
                 "testId": str(mission.test_id),
+                "name": mission.name,
+                "imageURL": mission.image_url if mission.image_url else None,
+                "videoURL": mission.video_url if mission.video_url else None,
                 "primaryQuestion": self._format_question(mission.primary_question) if mission.primary_question else None,
                 "secondaryQuestion": self._format_question(mission.secondary_question) if mission.secondary_question else None,
             }

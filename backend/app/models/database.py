@@ -151,6 +151,9 @@ class MissionsTest(Base):
 
     id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
     test_id = Column(UUID(as_uuid=False), ForeignKey("tests.test_id"), nullable=False)
+    name = Column(String(100), nullable=True)
+    image_url = Column(String(255), nullable=True)
+    video_url = Column(String(255), nullable=True)
     primary_question_id = Column(UUID(as_uuid=False), ForeignKey("questions.question_id"), nullable=True)
     secondary_question_id = Column(UUID(as_uuid=False), ForeignKey("questions.question_id"), nullable=True)
 
