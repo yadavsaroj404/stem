@@ -6,7 +6,6 @@ import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import counterFrame from "@/images/objects/timer-frame.gif";
 import Timer from "@/components/Timer";
 import UserProfile from "@/components/UserProfile";
-import missionsData from "./missions-questions.json";
 import {
   AnyQuestion,
   GroupQuestion,
@@ -15,8 +14,8 @@ import {
   RankQuestion,
   TextQuestion,
   TextImageQuestion,
+  Mission,
 } from "@/interfaces/tests";
-import FillQuestion from "@/components/questions/FillQuestion";
 import {
   MatchingQuestionComponent,
   GroupQuestionComponent,
@@ -26,15 +25,18 @@ import {
   MultiSelectQuestionComponent,
 } from "@/app/test/page"; // Reusing components from test page
 import CompletedModal from "@/components/Modals/completed";
+import { fetchQuestions } from "@/helpers/data-fetch";
 
-interface Mission {
-  name: string;
-  image: string;
-  video: string;
-  primaryQuestion: AnyQuestion;
-  secondaryQuestion: AnyQuestion;
-}
-
+const TEMP_ASSETS = [
+  { image: "", video: "/s3/mission1.mp4" },
+  { image: "", video: "/s3/mission2.mp4" },
+  { image: "/s3/mission1.png", video: "" },
+  { image: "/s3/mission4.png", video: "" },
+  { image: "/s3/mission5.png", video: "" },
+  { image: "", video: "/s3/mission6.mp4" },
+  { image: "", video: "/s3/mission1.mp4" },
+  { image: "/s3/mission8.png", video: "" },
+];
 export default function MissionsTestPage() {
   const [missions, setMissions] = useState<Mission[]>([]);
   const [currMissionIndex, setCurrMissionIndex] = useState(0);
@@ -47,8 +49,15 @@ export default function MissionsTestPage() {
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
-    setMissions(missionsData as Mission[]);
-    setLoading(false);
+    fetchQuestions().then((d) => {
+      if (!d || !d.missions) {
+        setMissions([]);
+        alert("Error loading missions data");
+        return;
+      }
+      setMissions(d.missions.missions);
+      setLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -57,10 +66,7 @@ export default function MissionsTestPage() {
     return () => clearTimeout(timer);
   }, [isAnimating]);
 
-  const currentMission = useMemo(
-    () => missions[currMissionIndex],
-    [missions, currMissionIndex]
-  );
+  const currentMission = missions[currMissionIndex];
 
   const handleResponse = (
     questionStep: "primary" | "secondary",
@@ -70,8 +76,8 @@ export default function MissionsTestPage() {
     if (questionStep === "primary") setIsAnimating(true);
     setResponses((prev) => ({
       ...prev,
-      [currentMission.name]: {
-        ...prev[currentMission.name],
+      [currentMission._id]: {
+        ...prev[currentMission._id],
         [questionStep]: responseValue,
       },
     }));
@@ -82,7 +88,7 @@ export default function MissionsTestPage() {
 
     if (direction === "next") {
       // Check for response before moving to next mission
-      if (!responses[currentMission.name]?.secondary) {
+      if (!responses[currentMission._id]?.secondary) {
         alert("Please answer the second question before proceeding.");
         return;
       }
@@ -114,7 +120,7 @@ export default function MissionsTestPage() {
     if (!question) return null;
 
     const responseForCurrentQuestion =
-      responses[currentMission.name]?.[step] || "";
+      responses[currentMission._id]?.[step] || "";
 
     switch (question.type) {
       case "text":
@@ -156,10 +162,7 @@ export default function MissionsTestPage() {
             key={question._id}
             question={question as GroupQuestion}
             onSelect={(selectedIds) => {
-              const responseString = Object.entries(selectedIds)
-                .map(([groupId, subOptionId]) => `${groupId}-${subOptionId}`)
-                .join(";");
-              handleResponse(step, responseString);
+              handleResponse(step, selectedIds);
             }}
             matchedOptions={responseForCurrentQuestion}
           />
@@ -182,13 +185,6 @@ export default function MissionsTestPage() {
             selectedOptions={responseForCurrentQuestion}
           />
         );
-      case "fill":
-        return (
-          <FillQuestion
-            onSave={(val) => handleResponse(step, val)}
-            savedValue={responseForCurrentQuestion}
-          />
-        );
       default:
         return <div>Question type not supported.</div>;
     }
@@ -206,7 +202,7 @@ export default function MissionsTestPage() {
     );
   }
 
-  const isPrimaryAnswered = !!responses[currentMission.name]?.primary;
+  const isPrimaryAnswered = !!responses[currentMission._id]?.primary;
 
   const missionSectionClass = () => `
     transition-all duration-300 ease-in-out
@@ -219,7 +215,7 @@ export default function MissionsTestPage() {
 
   return (
     <main className="flex flex-col">
-      {isCompleted && (
+      {true && (
         <CompletedModal onClose={() => setIsTimerPaused(false)} />
       )}
       {/* Header Section */}
@@ -288,7 +284,7 @@ export default function MissionsTestPage() {
 
               {/* Secondary Question - Appears after primary is answered */}
               {isPrimaryAnswered && (
-                <div className={missionSectionClass()}>
+                <div className={isPrimaryAnswered ? missionSectionClass() : ""}>
                   <h1 className="text-2xl lg:text-3xl font-bold mb-3 text-balance">
                     {currentMission.secondaryQuestion.question}
                   </h1>
@@ -359,7 +355,35 @@ export default function MissionsTestPage() {
             className="relative self-start"
             style={{ maxWidth: "709px", maxHeight: "600px" }}
           >
-            {currentMission.video ? (
+            {TEMP_ASSETS[currMissionIndex].video ? (
+              <video
+                key={TEMP_ASSETS[currMissionIndex].video}
+                src={TEMP_ASSETS[currMissionIndex].video}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="border"
+                style={{
+                  borderRadius: "24px",
+                }}
+              />
+            ) : TEMP_ASSETS[currMissionIndex].image ? (
+              <Image
+                key={TEMP_ASSETS[currMissionIndex].image}
+                src={TEMP_ASSETS[currMissionIndex].image}
+                alt={TEMP_ASSETS[currMissionIndex].image}
+                width={709}
+                height={441}
+                className="object-contain border"
+                style={{
+                  height: "441px",
+                  borderRadius: "24px",
+                  borderWidth: "1px",
+                }}
+              />
+            ) : null}
+            {/* {currentMission.video ? (
               <video
                 key={currentMission.video}
                 src={currentMission.video}
@@ -369,8 +393,6 @@ export default function MissionsTestPage() {
                 playsInline
                 className="border"
                 style={{
-                  // width: "709px",
-                  // height: "441px",
                   borderRadius: "24px",
                 }}
               />
@@ -383,13 +405,12 @@ export default function MissionsTestPage() {
                 height={441}
                 className="object-contain border"
                 style={{
-                  // width: "709px",
                   height: "441px",
                   borderRadius: "24px",
                   borderWidth: "1px",
                 }}
               />
-            ) : null}
+            ) : null} */}
           </div>
         </div>
       </section>

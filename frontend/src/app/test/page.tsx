@@ -3,11 +3,13 @@
 import { useState, useRef, useEffect, ReactElement, useMemo } from "react";
 import Image from "next/image";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
-import { fetchQuestions } from "@/helpers/data-fetch";
+import { fetchQuestions, submitResponses } from "@/helpers/data-fetch";
 import {
   AnyQuestion,
   GroupOption as GroupOptionParams,
+  GroupQuestion,
   MatchingQuestion,
+  MultiSelectQuestion,
   RankQuestion,
   Response,
   TextImageOption as TextImageOptionParams,
@@ -141,19 +143,28 @@ export function GroupQuestionComponent({
   matchedOptions,
   blockStyles,
 }: {
-  question: any;
-  onSelect: (selectedIds: Record<string, string>) => void;
+  question: GroupQuestion;
+  onSelect: (selectedIds: string) => void;
   matchedOptions: string;
   blockStyles?: React.CSSProperties;
 }) {
   const [selected, setSelected] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    if (Object.keys(selected).length === question.itemGroups.length) {
+      const selectedIDsString = Object.entries(selected)
+        .map(([groupId, subOptionId]) => `${groupId}->${subOptionId}`)
+        .join(";");
+      onSelect(selectedIDsString);
+    }
+  }, [selected]);
+
+  useEffect(() => {
     logger.debug("GroupQuestionComponent mounted or matchedOptions changed.");
     if (matchedOptions) {
       const newSelected: Record<string, string> = {};
       matchedOptions.split(";").forEach((pair) => {
-        const [groupId, subOptionId] = pair.split("-");
+        const [groupId, subOptionId] = pair.split("->");
         newSelected[groupId] = subOptionId;
       });
       setSelected(newSelected);
@@ -167,18 +178,11 @@ export function GroupQuestionComponent({
     const newSelected = { ...selected, [groupId]: subOptionId };
     setSelected(newSelected);
     logger.debug("Group option selected", { groupId, subOptionId });
-    // Notify parent of the updated selections only if all groups have a selection
-    if (Object.keys(newSelected).length === question.options.length) {
-      onSelect(newSelected);
-      logger.info("All groups answered in GroupQuestionComponent.", {
-        newSelected,
-      });
-    }
   };
 
   return (
     <div className="w-full flex gap-2.5">
-      {question.options.map((group: GroupOptionParams) => (
+      {question.itemGroups.map((group: GroupOptionParams) => (
         <div
           key={group._id}
           style={blockStyles}
@@ -188,7 +192,7 @@ export function GroupQuestionComponent({
             {group.groupName}
           </h3>
           <div className="space-y-4">
-            {group.subOptions.map((subOption) => (
+            {group.items.map((subOption) => (
               <div
                 key={subOption._id}
                 className="flex items-start cursor-pointer"
@@ -221,10 +225,24 @@ export function MatchingQuestionComponent({
   onSelect: (selectedOptionId: string) => void;
   matchedOptions: string;
 }) {
+  // check if both sides are present
+  if (question.itemGroups.length < 2) return null;
+  const leftSide = question.itemGroups[0];
+  const rightSide = question.itemGroups[1];
+
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [matches, setMatches] = useState<{ leftId: string; rightId: string }[]>(
     []
   );
+
+  useEffect(() => {
+    if (matches.length === leftSide.items.length) {
+      const finalSelection = matches
+        .map((m) => `${m.leftId}->${m.rightId}`)
+        .join(";");
+      onSelect(finalSelection);
+    }
+  }, [matches]);
   const [positions, setPositions] = useState<
     Record<string, { top: number; left: number; width: number; height: number }>
   >({});
@@ -245,11 +263,6 @@ export function MatchingQuestionComponent({
     "rgba(255, 159, 28, 0.15)",
   ];
   const BORDER_COLORS = ["#FFDD00", "#D400FF", "#FF453A", "#00D166", "#FF9F1C"];
-
-  // Create the visual order for the right side using useMemo
-  const rightSideDisplayOrder = useMemo(() => {
-    return [...question.rightSide];
-  }, [question.rightSide]);
 
   // Add mouse move listener when a left item is selected
   useEffect(() => {
@@ -282,7 +295,7 @@ export function MatchingQuestionComponent({
         .split(";")
         .filter(Boolean)
         .map((pair) => {
-          const [leftId, rightId] = pair.split("-");
+          const [leftId, rightId] = pair.split("->");
           return { leftId, rightId };
         });
       setMatches(parsedMatches);
@@ -361,14 +374,8 @@ export function MatchingQuestionComponent({
       setMatches(updatedMatches);
       logger.info("New match created.", { leftId: selectedLeft, rightId: id });
 
-      if (updatedMatches.length === question.leftSide.length) {
-        const finalSelection = updatedMatches
-          .map((m) => `${m.leftId}-${m.rightId}`)
-          .join(";");
-        onSelect(finalSelection);
-        logger.info("All items matched in MatchingQuestionComponent.", {
-          finalSelection,
-        });
+      if (updatedMatches.length === leftSide.items.length) {
+        logger.info("All items matched in MatchingQuestionComponent.");
       }
       setSelectedLeft(null);
     }
@@ -382,13 +389,11 @@ export function MatchingQuestionComponent({
   const getColorForMatch = (side: "left" | "right", id: string) => {
     let index = -1;
     if (side === "left") {
-      index = question.leftSide.findIndex((item) => item._id === id);
+      index = leftSide.items.findIndex((item) => item._id === id);
     } else {
       const match = getMatchForRight(id);
       if (match) {
-        index = question.leftSide.findIndex(
-          (item) => item._id === match.leftId
-        );
+        index = leftSide.items.findIndex((item) => item._id === match.leftId);
       }
     }
     if (index === -1) return null;
@@ -404,7 +409,7 @@ export function MatchingQuestionComponent({
         {matches.map((match) => {
           const leftPos = positions[match.leftId];
           const rightPos = positions[match.rightId];
-          const leftIndex = question.leftSide.findIndex(
+          const leftIndex = leftSide.items.findIndex(
             (item) => item._id === match.leftId
           );
           if (!leftPos || !rightPos || leftIndex === -1) return null;
@@ -466,7 +471,7 @@ export function MatchingQuestionComponent({
       <div className="flex justify-between gap-8">
         {/* Left Column */}
         <div className="w-[45%] space-y-3">
-          {question.leftSide.map((item) => {
+          {leftSide.items.map((item) => {
             const match = getMatchForLeft(item._id);
             const color =
               match || selectedLeft === item._id
@@ -506,7 +511,7 @@ export function MatchingQuestionComponent({
 
         {/* Right Column */}
         <div className="w-[45%] space-y-3">
-          {rightSideDisplayOrder.map((item) => {
+          {rightSide.items.map((item) => {
             const match = getMatchForRight(item._id);
             const color = match ? getColorForMatch("right", item._id) : null;
             return (
@@ -550,7 +555,7 @@ export function MultiSelectQuestionComponent({
   onSelect,
   selectedOptions,
 }: {
-  question: any;
+  question: MultiSelectQuestion;
   onSelect: (selectedIds: string) => void;
   selectedOptions: string;
 }) {
@@ -564,16 +569,19 @@ export function MultiSelectQuestionComponent({
     }
   }, [selectedOptions]);
 
+  // const SELECTION_LIMIT = question.limit;
+  const SELECTION_LIMIT = question.options.length;
+
   const handleSelect = (optionId: string) => {
     let newSelected: string[];
     if (selected.includes(optionId)) {
       newSelected = selected.filter((id) => id !== optionId);
     } else {
-      if (selected.length < question.limit) {
+      if (selected.length < SELECTION_LIMIT) {
         newSelected = [...selected, optionId];
       } else {
         // Optional: alert user or provide other feedback
-        alert(`You can only select up to ${question.limit} options.`);
+        alert(`You can only select up to ${SELECTION_LIMIT} options.`);
         return;
       }
     }
@@ -622,18 +630,15 @@ export default function TestPage() {
       logger.info("Fetching questions...");
       try {
         const data = await fetchQuestions();
-        if (data?.questions) {
-          setQuestions(data.questions);
-          logger.info(
-            `Successfully fetched ${data.questions.length} questions.`
-          );
-        } else {
-          setQuestions([]);
-          logger.warn("No questions found or data is malformed.", { data });
+        if (!data || !data.general) {
+          logger.warn("No questions found or data is malformed.");
+          throw new Error("No data returned from fetchQuestions");
         }
+        setQuestions(data.general.questions);
         setLoading(false);
       } catch (error) {
         logger.error("Failed to fetch questions", error as Error);
+        alert("Failed to fetch questions. Please try again.");
         setLoading(false);
       }
     };
@@ -673,32 +678,27 @@ export default function TestPage() {
   };
 
   const submitAnswer = async () => {
-    logger.info("Submitting test...");
-    const testData = {
-      userId: "64a7b1f4e4b0c5b6f8d9e8c1",
-      createdAt: new Date().toISOString(),
-      name: "Default Test Name",
-      responses: responses,
-    };
-
     setLoading(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/submit`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(testData),
-        }
+      // Use unified assessment endpoint
+      const result = await submitResponses(
+        "64a7b1f4e4b0c5b6f8d9e8c1", // userId
+        "Default Test Name", // name
+        responses.map((r) => ({
+          questionId: r.questionId,
+          selectedOptionId: r.selectedOptionId,
+        }))
       );
-      logger.info("Test submission response received.", {
-        status: response.status,
-      });
-      // if (!response.ok) {
-      //   throw new Error("Failed to submit test");
-      // }
+
+      if (result && result.status === "success") {
+        // Store session ID and score for results page if needed
+        if (result.sessionId) {
+          localStorage.setItem("lastSessionId", result.sessionId);
+        }
+        if (result.score) {
+          localStorage.setItem("lastScore", JSON.stringify(result.score));
+        }
+      }
       router.push("/test/complete");
       logger.info("Redirecting to test complete page.");
     } catch (error) {
@@ -857,10 +857,7 @@ export default function TestPage() {
           <GroupQuestionComponent
             key={currIndex}
             question={currentQuestion}
-            onSelect={(selectedSubOptionIds) => {
-              const selectedOptionId = Object.entries(selectedSubOptionIds)
-                .map(([groupId, subOptionId]) => `${groupId}-${subOptionId}`)
-                .join(";");
+            onSelect={(selectedOptionId) => {
               updateResponse({
                 questionId: currentQuestion._id,
                 selectedOptionId,

@@ -15,7 +15,7 @@ export default function CompletedModal({ onClose }: PauseModalProps) {
   }, []);
 
   const handleIamHere = () => {
-    router.push("/preview");
+    router.push("/test/complete");
     // onClose();
   };
   const handleTakeABreak = () => {
@@ -44,14 +44,22 @@ export default function CompletedModal({ onClose }: PauseModalProps) {
         </div>
         <h2 className="mt-5 text-2xl md:text-3xl w-fit mx-auto text-[#FFFF00] pb-1 font-bold capitalize text-center">
           Mission Completed!
+          {/* You cleared all 45 questions AND all 8 future-tech missions — that’s
+          the full experience completed. */}
         </h2>
         <p className="text-sm sm:text-base font-normal w-full md:w-10/12 mx-auto text-center mt-2 mb-6">
-          You have successfully completed all Missions and now you are going to
-          level up by starting next test.
+          {/* You have successfully completed all Missions and now you are going to
+          level up by starting next test. */}
+          You cleared all 45 questions AND all 8 future-tech missions — that’s
+          the full experience completed.
+          Future Fact: Your personalized report is built for a world where
+          careers, cities, and technology evolve every single year — and you’ll
+          be ready for all of it.
         </p>
 
         <p className="text-base sm:text-lg md:text-xl text-center font-semibold mt-6 mb-2 sm:mb-4">
-          So, Are you ready?
+          {/* So, Are you ready? */}
+          Ready to see your future insights?
         </p>
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center mt-10 gap-3 sm:gap-0 sm:px-12">
           <button
@@ -64,7 +72,7 @@ export default function CompletedModal({ onClose }: PauseModalProps) {
             className="px-8 py-3 text-base border border-[#D400FF]/50 bg-gradient-to-r from-[#39008C] to-[#6400F8] rounded-full font-semibold transition duration-200 flex items-center justify-center space-x-2 cursor-pointer w-full sm:w-auto"
             onClick={handleIamHere}
           >
-            <span>Let's go</span>
+            <span>View my report</span>
           </button>
         </div>
       </div>

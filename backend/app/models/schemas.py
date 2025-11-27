@@ -98,3 +98,37 @@ class SubmissionWithResponses(BaseModel):
     submittedAt: str
     responses: List[CandidateResponseOutput]
     score: Optional[SubmissionScore] = None
+
+
+# --- Unified Assessment Models ---
+
+class AnswerInput(BaseModel):
+    """Unified input model for submitting an answer"""
+    questionId: str
+    selectedOptionId: Optional[str] = None
+    selectedItems: Optional[List[str]] = None
+    responseTimeMs: Optional[int] = None
+
+
+class SessionCreate(BaseModel):
+    """Input model for creating a test session"""
+    userId: str
+    testId: str
+    name: str
+
+
+class AnswerSubmit(BaseModel):
+    """Input model for submitting an answer during a session"""
+    sessionId: str
+    questionId: str
+    selectedOptionId: Optional[str] = None
+    selectedItems: Optional[List[str]] = None
+    responseTimeMs: Optional[int] = None
+
+
+class BulkResponseSubmit(BaseModel):
+    """Input model for submitting all responses at once"""
+    userId: str
+    testId: Optional[str] = None
+    name: str
+    responses: List[AnswerInput]

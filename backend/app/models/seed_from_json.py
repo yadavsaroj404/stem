@@ -1,12 +1,17 @@
-#!/usr/bin/env python3
 """
 Seed DB from JSON files:
 - clusters.json  -> clusters table
-- test-questions.json -> tests + questions + list_options tables
+- test-questions.json -> tests + questions + list_options + items_group + item_pools + general_test tables
+
+Handles all question types:
+- text: simple MCQ with options
+- rank: ordered options (uses list_options)
+- group: grouped options with subOptions (uses items_group + item_pools)
+- matching: left/right side matching (uses items_group + item_pools)
 
 Usage:
 export DATABASE_URL="postgresql://postgres:Vishesh%402004@localhost:5432/postgres"
-python seed_from_json.py --clusters path/to/clusters.json --questions path/to/test-questions.json
+python -m app.models.seed_from_json --clusters app/data/clusters.json --questions app/data/test-questions.json
 """
 
 import argparse
@@ -49,8 +54,8 @@ def main():
     ap.add_argument("--questions", required=True, help="Path to test-questions.json")
     args = ap.parse_args()
 
-    DATABASE_URL = os.environ.get("DATABASE_URL")
-    # DATABASE_URL = "postgresql://postgres:root@localhost:5432/stem_db"
+    # DATABASE_URL = os.environ.get("DATABASE_URL")
+    DATABASE_URL = "postgresql://postgres:root@localhost:5432/stem_db"
     if not DATABASE_URL:
         print("Please export DATABASE_URL first.")
         sys.exit(1)
@@ -67,6 +72,8 @@ def main():
     clusters_table = ensure_table(meta, "clusters")
     questions_table = ensure_table(meta, "questions")
     list_options_table = ensure_table(meta, "list_options")
+    items_group_table = ensure_table(meta, "items_group")
+    item_pools_table = ensure_table(meta, "item_pools")
     tests_table = ensure_table(meta, "tests")
     general_test_table = ensure_table(meta, "general_test")
 
@@ -102,7 +109,8 @@ def main():
                 except SQLAlchemyError as e:
                     print("Error inserting test", test_id, e)
 
-        print("[INFO] Skipping general_test and missions_test inserts (require question linking)")
+        # Store test_id for later use in general_test population
+        test_id_for_linking = questions_data.get("_id") if isinstance(questions_data, dict) else None
 
         # Insert clusters
         if clusters_table is not None:
@@ -157,25 +165,164 @@ def main():
                     print("Error inserting question", qid, e)
                     continue
 
-                # options (if any)
-                options = q.get("options") or []
-                for idx, opt in enumerate(options):
-                    opt_id = opt.get("_id") or opt.get("id") or str(uuid.uuid4())
-                    opt_row = {
-                        "option_id": opt_id,
-                        "question_id": qid,
-                        "option_text": opt.get("text") or opt.get("option_text") or None,
-                        "option_image_url": opt.get("image"),
-                        "display_order": idx + 1,
-                    }
-                    if list_options_table is not None:
+                # Handle options based on question type
+                question_type = q.get("type") or q.get("question_type") or "text"
+
+                if question_type in ("text", "rank"):
+                    # Standard options - use list_options table
+                    options = q.get("options") or []
+                    for idx, opt in enumerate(options):
+                        opt_id = opt.get("_id") or opt.get("id") or str(uuid.uuid4())
+                        opt_row = {
+                            "option_id": opt_id,
+                            "question_id": qid,
+                            "option_text": opt.get("text") or opt.get("option_text") or None,
+                            "option_image_url": opt.get("image"),
+                            "display_order": idx + 1,
+                        }
+                        if list_options_table is not None:
+                            try:
+                                if upsert_row(conn, list_options_table, "option_id", opt_id, opt_row):
+                                    opt_inserted += 1
+                            except SQLAlchemyError as e:
+                                print("Error inserting option", opt_id, e)
+
+                elif question_type == "group":
+                    # Group questions - use items_group + item_pools tables
+                    options = q.get("options") or []
+                    for idx, group in enumerate(options):
+                        group_id = group.get("_id") or str(uuid.uuid4())
+                        group_name = group.get("groupName") or f"Group {idx + 1}"
+
+                        # Insert group
+                        if items_group_table is not None:
+                            group_row = {
+                                "group_id": group_id,
+                                "group_name": group_name,
+                                "display_order": idx + 1,
+                            }
+                            try:
+                                if upsert_row(conn, items_group_table, "group_id", group_id, group_row):
+                                    opt_inserted += 1
+                            except SQLAlchemyError as e:
+                                print("Error inserting group", group_id, e)
+
+                        # Insert subOptions into item_pools
+                        sub_options = group.get("subOptions") or []
+                        for sub_idx, sub_opt in enumerate(sub_options):
+                            pool_id = sub_opt.get("_id") or str(uuid.uuid4())
+                            if item_pools_table is not None:
+                                pool_row = {
+                                    "pool_id": pool_id,
+                                    "question_id": qid,
+                                    "item_text": sub_opt.get("text"),
+                                    "display_order": sub_idx + 1,
+                                    "group_id": group_id,
+                                }
+                                try:
+                                    if upsert_row(conn, item_pools_table, "pool_id", pool_id, pool_row):
+                                        opt_inserted += 1
+                                except SQLAlchemyError as e:
+                                    print("Error inserting pool item", pool_id, e)
+
+                elif question_type == "matching":
+                    # Matching questions - use items_group for sides + item_pools for items
+                    left_side = q.get("leftSide") or []
+                    right_side = q.get("rightSide") or []
+                    left_title = q.get("leftSideTitle") or "Left"
+                    right_title = q.get("rightSideTitle") or "Right"
+
+                    # Create group for left side
+                    left_group_id = str(uuid.uuid4())
+                    if items_group_table is not None:
+                        left_group_row = {
+                            "group_id": left_group_id,
+                            "group_name": left_title,
+                            "display_order": 1,
+                        }
                         try:
-                            if upsert_row(conn, list_options_table, "option_id", opt_id, opt_row):
+                            if upsert_row(conn, items_group_table, "group_id", left_group_id, left_group_row):
                                 opt_inserted += 1
                         except SQLAlchemyError as e:
-                            print("Error inserting option", opt_id, e)
+                            print("Error inserting left group", left_group_id, e)
 
-            print(f"Questions inserted: {q_inserted}, Options inserted: {opt_inserted}")
+                    # Insert left side items
+                    for idx, item in enumerate(left_side):
+                        pool_id = item.get("_id") or str(uuid.uuid4())
+                        if item_pools_table is not None:
+                            pool_row = {
+                                "pool_id": pool_id,
+                                "question_id": qid,
+                                "item_text": item.get("text"),
+                                "display_order": idx + 1,
+                                "group_id": left_group_id,
+                            }
+                            try:
+                                if upsert_row(conn, item_pools_table, "pool_id", pool_id, pool_row):
+                                    opt_inserted += 1
+                            except SQLAlchemyError as e:
+                                print("Error inserting left item", pool_id, e)
+
+                    # Create group for right side
+                    right_group_id = str(uuid.uuid4())
+                    if items_group_table is not None:
+                        right_group_row = {
+                            "group_id": right_group_id,
+                            "group_name": right_title,
+                            "display_order": 2,
+                        }
+                        try:
+                            if upsert_row(conn, items_group_table, "group_id", right_group_id, right_group_row):
+                                opt_inserted += 1
+                        except SQLAlchemyError as e:
+                            print("Error inserting right group", right_group_id, e)
+
+                    # Insert right side items
+                    for idx, item in enumerate(right_side):
+                        pool_id = item.get("_id") or str(uuid.uuid4())
+                        if item_pools_table is not None:
+                            pool_row = {
+                                "pool_id": pool_id,
+                                "question_id": qid,
+                                "item_text": item.get("text"),
+                                "display_order": idx + 1,
+                                "group_id": right_group_id,
+                            }
+                            try:
+                                if upsert_row(conn, item_pools_table, "pool_id", pool_id, pool_row):
+                                    opt_inserted += 1
+                            except SQLAlchemyError as e:
+                                print("Error inserting right item", pool_id, e)
+
+            print(f"Questions inserted: {q_inserted}, Options/Items inserted: {opt_inserted}")
+
+            # Populate general_test table - link all questions to the test
+            if general_test_table is not None and test_id_for_linking:
+                print(f"Linking questions to general_test...")
+                gt_inserted = 0
+                for q in qlist:
+                    qid = q.get("_id") or q.get("id")
+                    if not qid:
+                        continue
+                    gt_row = {
+                        "id": str(uuid.uuid4()),
+                        "test_id": test_id_for_linking,
+                        "question_id": qid,
+                    }
+                    try:
+                        # Check if this question is already linked to this test
+                        s = select(general_test_table.c.id).where(
+                            (general_test_table.c.test_id == test_id_for_linking) &
+                            (general_test_table.c.question_id == qid)
+                        )
+                        r = conn.execute(s).first()
+                        if not r:
+                            ins = insert(general_test_table).values(**gt_row)
+                            conn.execute(ins)
+                            gt_inserted += 1
+                    except SQLAlchemyError as e:
+                        print("Error linking question to general_test", qid, e)
+                print(f"General test links inserted: {gt_inserted}")
         else:
             print("[INFO] questions table not present; skipping question inserts.")
 

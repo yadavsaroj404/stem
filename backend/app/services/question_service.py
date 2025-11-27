@@ -30,7 +30,6 @@ logger = get_logger(__name__)
 
 
 class QuestionService:
-
     def __init__(self):
         logger.info("Initializing QuestionService with database support")
 

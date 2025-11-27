@@ -1,46 +1,77 @@
-export interface TestQuestions {
-  _id: string;
+import { UUID } from "crypto";
+
+export interface GeneralTest {
+  _id: UUID;
   name: string;
   version: string;
+  type: "general";
   questions: AnyQuestion[];
+}
+
+export interface MissionsTest {
+  _id: UUID;
+  name: string;
+  version: string;
+  type: "missions";
+  missions: Mission[];
+}
+
+export type TestQuestions = GeneralTest | MissionsTest;
+
+export interface Mission {
+  // name: string;
+  // image: string;
+  // video: string;
+  _id: UUID,
+  displayOrder: UUID,
+  primaryQuestion: AnyQuestion;
+  secondaryQuestion: AnyQuestion;
 }
 
 export type OptionType = "text" | "text-image" | "matching" | "group";
 
 // --- Base Option Structures ---
 export interface TextOption {
-  _id: string;
-  text: string;
-}
-
-export interface TextImageOption {
-  _id: string;
-  text: string;
-  image: string;
-}
-
-export interface MatchingItem {
-  _id: string;
+  _id: UUID;
+  displayOrder: number;
   text: string;
   image?: string;
 }
 
-export interface SubOption {
-  _id: string;
+export interface TextImageOption {
+  _id: UUID;
   text: string;
+  image: string;
+  displayOrder: number;
+}
+
+export interface MatchingItem {
+  _id: UUID;
+  text: string;
+  displayOrder: number;
+  image?: string;
+}
+
+export interface SubOption {
+  _id: UUID;
+  text: string;
+  image?: string;
+  displayOrder: number;
 }
 
 export interface GroupOption {
-  _id: string;
+  _id: UUID;
   groupName: string;
-  subOptions: SubOption[];
+  displayOrder: number;
+  items: SubOption[];
 }
 
 // --- Discriminated Union for Questions ---
 interface BaseQuestion {
-  _id: string;
+  _id: UUID;
   image: string;
   question: string;
+  displayOrder: number;
   description?: string;
   optionInstruction?: string;
 }
@@ -61,15 +92,12 @@ export interface TextImageQuestion extends BaseQuestion {
 
 export interface MatchingQuestion extends BaseQuestion {
   type: "matching";
-  leftSideTitle?: string;
-  rightSideTitle?: string;
-  leftSide: MatchingItem[];
-  rightSide: MatchingItem[];
+  itemGroups: GroupOption[];
 }
 
 export interface GroupQuestion extends BaseQuestion {
   type: "group";
-  options: GroupOption[];
+  itemGroups: GroupOption[];
 }
 
 export interface MultiSelectQuestion extends BaseQuestion {
@@ -79,17 +107,12 @@ export interface MultiSelectQuestion extends BaseQuestion {
   optionInstruction?: string;
 }
 
-export interface FillQuestion extends BaseQuestion {
-  type: "fill";
-}
-
 export type AnyQuestion =
   | TextQuestion
   | TextImageQuestion
   | MatchingQuestion
   | GroupQuestion
   | RankQuestion
-  | FillQuestion
   | MultiSelectQuestion;
 
 // --- Response Structures ---
