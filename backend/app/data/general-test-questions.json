@@ -632,6 +632,37 @@
       "displayOrder": 16
     },
     {
+      "_id": "35292b7d80a741108ae93f48ec6424ab",
+      "image": "/s3/q2.png",
+      "clusterId": "4b01afba8864424086abc744dcf43f38",
+      "question": "Your class average rose sharply after a new teaching method was introduced. Before concluding it works, you decide to check the details below.",
+      "optionInstruction": "Rank the following verification steps from most important (1) to least (4):",
+      "type": "rank",
+      "options": [
+        {
+          "text": "Examine the sample size and previous scores.",
+          "_id": "626a954d54a74b98a2fed9ff63b20fd3",
+          "displayOrder": 1
+        },
+        {
+          "text": "Publish the results immediately.",
+          "_id": "369b33096a6644a5aeca75e7a3afd895",
+          "displayOrder": 2
+        },
+        {
+          "text": "Control for other variables (teacher, topic, difficulty).",
+          "_id": "322ba01fc7354a63b4f7bcb3e8da7430",
+          "displayOrder": 3
+        },
+        {
+          "text": "Check if improvement is consistent across all groups.",
+          "_id": "8b7fd224bd7c49a4bc47e55e2291230e",
+          "displayOrder": 4
+        }
+      ],
+      "displayOrder": 17
+    },
+    {
       "_id": "c3514bed70154f6787b577dda5c6b5cf",
       "image": "/s3/q1.png",
       "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
@@ -660,7 +691,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 17
+      "displayOrder": 18
     },
     {
       "_id": "4b24401c81c34a0daf96b48d0b3d0844",
@@ -737,7 +768,38 @@
           "displayOrder": 3
         }
       ],
-      "displayOrder": 18
+      "displayOrder": 19
+    },
+    {
+      "_id": "62de3145ab8448bfbaae9cf55fff07e9",
+      "image": "/s3/q2.png",
+      "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
+      "question": "You are given a circle, triangle, and square to turn into a product logo.",
+      "description": "Which design shows the best balance and function? (Visual choice.)",
+      "type": "text",
+      "options": [
+        {
+          "image": "/s3/q20-opt1.png",
+          "_id": "dae61acbb86144668b2d5f5a5aa07dd8",
+          "displayOrder": 1
+        },
+        {
+          "image": "/s3/q20-opt2.png",
+          "_id": "e4b3d36c42a647928111034d3a0f0aeb",
+          "displayOrder": 2
+        },
+        {
+          "image": "/s3/q20-opt3.png",
+          "_id": "c88d2d575dac494187db1642ecaf5b98",
+          "displayOrder": 3
+        },
+        {
+          "image": "/s3/q20-opt4.png",
+          "_id": "1ab874bb33324669852a6f126debe637",
+          "displayOrder": 4
+        }
+      ],
+      "displayOrder": 20
     },
     {
       "_id": "62de3145ab8448bfbaae9cf55fff07e9",
@@ -767,7 +829,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 19
+      "displayOrder": 21
     },
     {
       "_id": "4111269518334661851ddd5e3b6faae8",
@@ -798,7 +860,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 20
+      "displayOrder": 22
     },
     {
       "_id": "f08184204f3944e889926516af4f0393",
@@ -829,7 +891,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 21
+      "displayOrder": 23
     },
     {
       "_id": "cca4577c6fa04cec9c5e4f315056f0a0",
@@ -860,7 +922,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 22
+      "displayOrder": 24
     },
     {
       "_id": "5994fb09a7b14eb7973bdaa18d2e1ac5",
@@ -937,7 +999,7 @@
           "displayOrder": 3
         }
       ],
-      "displayOrder": 23
+      "displayOrder": 25
     },
     {
       "_id": "a91ab1b92ba84b90a4d62c26ecfecbc2",
@@ -968,7 +1030,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 24
+      "displayOrder": 26
     },
     {
       "_id": "8e5ad8ea9fcc4b6ab71aa577afd107f1",
@@ -1000,7 +1062,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 25
+      "displayOrder": 27
     },
     {
       "_id": "35292b7d80a741108ae93f48ec6424ab",
@@ -1032,7 +1094,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 26
+      "displayOrder": 28
     },
     {
       "_id": "d23b849d29034fd9b30b9c0bb485c16f",
@@ -1110,7 +1172,7 @@
           "displayOrder": 3
         }
       ],
-      "displayOrder": 27
+      "displayOrder": 29
     },
     {
       "_id": "7d1e080febdc492bbf6f109b7b849acc",
@@ -1166,7 +1228,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 28
+      "displayOrder": 30
     },
     {
       "_id": "c32cee48f523417391abac1508ce33a5",
@@ -1197,7 +1259,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 29
+      "displayOrder": 31
     },
     {
       "_id": "f52ca7d821fc4c228779f6efe1b3b5d2",
@@ -1228,7 +1290,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 30
+      "displayOrder": 32
     },
     {
       "_id": "5e2a7c2b5fb84f299e97de3498a9a6f2",
@@ -1283,7 +1345,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 31
+      "displayOrder": 33
     },
     {
       "_id": "8de66209df5e475ab46a6fdd3c0776f9",
@@ -1314,7 +1376,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 32
+      "displayOrder": 34
     },
     {
       "_id": "571848d83d05447289c06bdf10cd5ef2",
@@ -1322,7 +1384,7 @@
       "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "Your school is planning Well-being Week.",
       "optionInstruction": "Select TWO actions that would have the greatest impact on students\u2019 mental health:",
-      "type": "text",
+      "type": "multi-select",
       "options": [
         {
           "text": "Yoga session",
@@ -1340,12 +1402,12 @@
           "displayOrder": 3
         },
         {
-          "text": "Peer-support groups",
+          "text": "Counsellor available at lunch",
           "_id": "c2fa04ff3a5e44f494c251312f8694af",
           "displayOrder": 4
         }
       ],
-      "displayOrder": 33
+      "displayOrder": 35
     },
     {
       "_id": "81c081e31fa94af1b01d7c0fcdd00501",
@@ -1400,7 +1462,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 34
+      "displayOrder": 36
     },
     {
       "_id": "1bc8cbd0c51a4b6284cebdec48996c3c",
@@ -1431,7 +1493,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 35
+      "displayOrder": 37
     },
     {
       "_id": "14569efcb24f4a37bc9b10c993e5aa94",
@@ -1462,7 +1524,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 36
+      "displayOrder": 38
     },
     {
       "_id": "50fd05c568cf4ce6832c7aee99596820",
@@ -1539,7 +1601,7 @@
           "displayOrder": 3
         }
       ],
-      "displayOrder": 37
+      "displayOrder": 39
     },
     {
       "_id": "c91625d3d89449d091d0cb71ac19b258",
@@ -1584,7 +1646,7 @@
           "displayOrder": 3
         }
       ],
-      "displayOrder": 38
+      "displayOrder": 40
     },
     {
       "_id": "fc0bfe6a71b344bc8a85b3bf7743a996",
@@ -1616,13 +1678,13 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 39
+      "displayOrder": 41
     },
     {
       "_id": "39699359aa8549dabdd95bfc294146ba",
       "image": "/s3/q2.png",
       "clusterId": "35631ac2b9f340519242dbe29c34c3c3",
-      "question": " The school plans to install AI cameras for attendance, but students raise privacy concerns.",
+      "question": "The school plans to install AI cameras for attendance, but students raise privacy concerns.",
       "optionInstruction": "Rank these statements from most accurate (1) to least (4):",
       "type": "rank",
       "options": [
@@ -1647,7 +1709,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 40
+      "displayOrder": 42
     },
     {
       "_id": "3d3883a71ab04452b230754b6613066c",
@@ -1702,7 +1764,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 41
+      "displayOrder": 43
     },
     {
       "_id": "a958dca81663422f8cc157e0d7bfadf0",
@@ -1733,7 +1795,7 @@
           "displayOrder": 4
         }
       ],
-      "displayOrder": 42
+      "displayOrder": 44
     },
     {
       "_id": "4795f988c5a44de490f274676c5e1f6b",
@@ -1762,114 +1824,6 @@
           "text": "Nothing is wrong",
           "_id": "99e08bf89b6f44229c6df5281b51a7b2",
           "displayOrder": 4
-        }
-      ],
-      "displayOrder": 43
-    },
-    {
-      "_id": "76f25d0ab7414b028481b220e0492e09",
-      "image": "/s3/q1.png",
-      "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "f7055288ef9a4c779142d8e2935020ac",
-      "question": "A classmate says, \u201cAI only memorises things; it can\u2019t be creative.\u201d What is the best response?",
-      "type": "text",
-      "options": [
-        {
-          "text": "True",
-          "_id": "efa6f7d0bf13432ca47fbc65f8c6f921",
-          "displayOrder": 1
-        },
-        {
-          "text": "Creativity includes combining ideas\u2014AI can simulate that.",
-          "_id": "85b683a36c724c18abeba587770cf3b8",
-          "displayOrder": 2
-        },
-        {
-          "text": "AI creativity is fake.",
-          "_id": "27c11f4fd195410b8a17693cf8f2bade",
-          "displayOrder": 3
-        },
-        {
-          "text": "It\u2019s dangerous to discuss AI.",
-          "_id": "92a06de0fac745318275e910893162b0",
-          "displayOrder": 4
-        }
-      ],
-      "displayOrder": 44
-    },
-    {
-      "_id": "ab1a5937ba37424c815ba272a64775ec",
-      "image": "/s3/q2.png",
-      "clusterId": "fc0c680be5874bc2a206ac626c2aeec1",
-      "question": "Your science club found that plants grow faster under blue light than red.",
-      "optionInstruction": "Pick one phrase from each block to form the best explanation.",
-      "type": "group",
-      "options": [
-        {
-          "_id": "fde87bb423784c488fc9ae39ff41a346",
-          "groupName": "Block 1 - Concept",
-          "subOptions": [
-            {
-              "text": "Blue light",
-              "_id": "75dbc8551fc34fb4953cef701df098bb",
-              "displayOrder": 1
-            },
-            {
-              "text": "Red light",
-              "_id": "02c74da680394d0abf42a5a31936777e",
-              "displayOrder": 2
-            },
-            {
-              "text": "Bright colours",
-              "_id": "84907aeb54ed4b7b953fccae2e5781d4",
-              "displayOrder": 3
-            }
-          ],
-          "displayOrder": 1
-        },
-        {
-          "_id": "90e668a4608741a1bfd984dd9108a548",
-          "groupName": "Block 2 - Relation",
-          "subOptions": [
-            {
-              "text": "helps",
-              "_id": "afe9f7b8cd0145dc8a5d0e4a4c1d8516",
-              "displayOrder": 1
-            },
-            {
-              "text": "slows",
-              "_id": "d3a8b84aeaf34186bd92237c5c2795a1",
-              "displayOrder": 2
-            },
-            {
-              "text": "distract",
-              "_id": "7141e72bf81146a581f3207f1fdf090a",
-              "displayOrder": 3
-            }
-          ],
-          "displayOrder": 2
-        },
-        {
-          "_id": "2c09037d09bc44ada8530dd09a0f8a71",
-          "groupName": "Block 3 - Result",
-          "subOptions": [
-            {
-              "text": "plants make food faster",
-              "_id": "3e91e5d7bccb4c51a2020e27642fd3a1",
-              "displayOrder": 1
-            },
-            {
-              "text": "leaf development",
-              "_id": "ceb8e09cf170445290cf50fde12171f4",
-              "displayOrder": 2
-            },
-            {
-              "text": "plant growth",
-              "_id": "158cdab308264c72ac775b1ef6ef6815",
-              "displayOrder": 3
-            }
-          ],
-          "displayOrder": 3
         }
       ],
       "displayOrder": 45

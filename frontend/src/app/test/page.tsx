@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, ReactElement, useMemo } from "react";
+import { useState, useRef, useEffect, ReactElement } from "react";
 import Image from "next/image";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import { fetchQuestions, submitResponses } from "@/helpers/data-fetch";
