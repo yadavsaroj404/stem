@@ -19,9 +19,9 @@ export interface MissionsTest {
 export type TestQuestions = GeneralTest | MissionsTest;
 
 export interface Mission {
-  // name: string;
-  // image: string;
-  // video: string;
+  name: string;
+  imageURL: string | null;
+  videoURL: string | null;
   _id: UUID,
   displayOrder: UUID,
   primaryQuestion: AnyQuestion;

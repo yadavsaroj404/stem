@@ -27,16 +27,6 @@ import {
 import CompletedModal from "@/components/Modals/completed";
 import { fetchQuestions } from "@/helpers/data-fetch";
 
-const TEMP_ASSETS = [
-  { image: "", video: "/s3/mission1.mp4" },
-  { image: "", video: "/s3/mission2.mp4" },
-  { image: "/s3/mission1.png", video: "" },
-  { image: "/s3/mission4.png", video: "" },
-  { image: "/s3/mission5.png", video: "" },
-  { image: "", video: "/s3/mission6.mp4" },
-  { image: "", video: "/s3/mission1.mp4" },
-  { image: "/s3/mission8.png", video: "" },
-];
 export default function MissionsTestPage() {
   const [missions, setMissions] = useState<Mission[]>([]);
   const [currMissionIndex, setCurrMissionIndex] = useState(0);
@@ -215,7 +205,7 @@ export default function MissionsTestPage() {
 
   return (
     <main className="flex flex-col">
-      {true && (
+      {isCompleted && (
         <CompletedModal onClose={() => setIsTimerPaused(false)} />
       )}
       {/* Header Section */}
@@ -355,10 +345,10 @@ export default function MissionsTestPage() {
             className="relative self-start"
             style={{ maxWidth: "709px", maxHeight: "600px" }}
           >
-            {TEMP_ASSETS[currMissionIndex].video ? (
+            {currentMission.videoURL ? (
               <video
-                key={TEMP_ASSETS[currMissionIndex].video}
-                src={TEMP_ASSETS[currMissionIndex].video}
+                key={currentMission.videoURL}
+                src={currentMission.videoURL}
                 autoPlay
                 loop
                 muted
@@ -368,38 +358,10 @@ export default function MissionsTestPage() {
                   borderRadius: "24px",
                 }}
               />
-            ) : TEMP_ASSETS[currMissionIndex].image ? (
+            ) : currentMission.imageURL ? (
               <Image
-                key={TEMP_ASSETS[currMissionIndex].image}
-                src={TEMP_ASSETS[currMissionIndex].image}
-                alt={TEMP_ASSETS[currMissionIndex].image}
-                width={709}
-                height={441}
-                className="object-contain border"
-                style={{
-                  height: "441px",
-                  borderRadius: "24px",
-                  borderWidth: "1px",
-                }}
-              />
-            ) : null}
-            {/* {currentMission.video ? (
-              <video
-                key={currentMission.video}
-                src={currentMission.video}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="border"
-                style={{
-                  borderRadius: "24px",
-                }}
-              />
-            ) : currentMission.image ? (
-              <Image
-                key={currentMission.image}
-                src={currentMission.image}
+                key={currentMission.imageURL}
+                src={currentMission.imageURL}
                 alt={currentMission.name}
                 width={709}
                 height={441}
@@ -410,7 +372,7 @@ export default function MissionsTestPage() {
                   borderWidth: "1px",
                 }}
               />
-            ) : null} */}
+            ) : null}
           </div>
         </div>
       </section>
