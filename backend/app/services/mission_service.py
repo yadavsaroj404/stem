@@ -145,6 +145,7 @@ class MissionService:
                 items_by_group[group_id]["items"].append({
                     "_id": str(item.pool_id),
                     "text": item.item_text,
+                    "image": item.image_url,
                     "displayOrder": item.display_order
                 })
             formatted_q["itemGroups"] = list(items_by_group.values())

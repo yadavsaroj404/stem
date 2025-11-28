@@ -106,6 +106,7 @@ class ItemPool(Base):
     pool_id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
     question_id = Column(UUID(as_uuid=False), ForeignKey("questions.question_id"), nullable=True)
     item_text = Column(String(250), nullable=True)
+    image_url = Column(String(255), nullable=True)
     display_order = Column(Integer, nullable=True)
     group_id = Column(UUID(as_uuid=False), ForeignKey("items_group.group_id"), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -239,6 +240,20 @@ class CandidateScore(Base):
     cluster = relationship("Cluster")
 
 
+class CorrectAnswer(Base):
+    """Correct answers for questions - replaces answers.json"""
+    __tablename__ = "correct_answers"
+
+    id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
+    question_id = Column(UUID(as_uuid=False), ForeignKey("questions.question_id"), nullable=False, unique=True)
+    correct_answer = Column(Text, nullable=False)  # Single option ID or semicolon-separated pairs
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+    # Relationships
+    question = relationship("Question", backref="correct_answer")
+
+
 # --- Indexes and Constraints for performance ---
 Index("ix_questions_cluster", Question.cluster_id)
 Index("ix_item_pools_question", ItemPool.question_id)
@@ -251,6 +266,7 @@ Index("ix_student_answers_question", StudentAnswer.question_id)
 Index("ix_student_answers_unique", StudentAnswer.session_id, StudentAnswer.question_id, unique=True)
 Index("ix_candidate_scores_session", CandidateScore.session_id)
 Index("ix_candidate_scores_cluster", CandidateScore.cluster_id)
+Index("ix_correct_answers_question", CorrectAnswer.question_id, unique=True)
 
 
 # --- Database utilities ---

@@ -24,6 +24,7 @@ import PartialCompletionModal from "@/components/Modals/PartialCompletion";
 import UserProfile from "@/components/UserProfile";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
 import logger from "@/helpers/logger";
+import CompletedModal from "@/components/Modals/completed";
 
 export function RankQuestionComponent({
   question,
@@ -617,12 +618,15 @@ export default function TestPage() {
   const [questions, setQuestions] = useState<AnyQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [responses, setResponses] = useState<Response[]>([]);
+  const [funFact, setFunFact] = useState("");
   const [shownModal, setShownModal] = useState<
-    "PAUSE" | "STILL_THERE" | "PARTIAL_COMPLETION" | "NONE"
+    "PAUSE" | "STILL_THERE" | "PARTIAL_COMPLETION" | "COMPLETED" | "NONE"
   >("NONE");
   const shownCompletionsRef = useRef<number[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
+  const clusterIdMap = useRef(new Map<string, number>());
+  const nextClusterNumber = useRef(1);
 
   // Fetch questions from the backend
   useEffect(() => {
@@ -645,30 +649,62 @@ export default function TestPage() {
     fetchData();
   }, []);
 
-  // show 25%,50%,75% done modal and remove after 3 seconds
+  // show modal after completing each cluster
   useEffect(() => {
-    const completion = Math.floor((responses.length / questions.length) * 100);
-    if (
-      [25, 50, 75].includes(completion) &&
-      !shownCompletionsRef.current.includes(completion)
-    ) {
-      shownCompletionsRef.current = [
-        ...shownCompletionsRef.current,
-        completion,
-      ];
-      logger.info(`Partial completion modal shown for ${completion}%`);
-      const showTimer = setTimeout(() => {
-        setShownModal("PARTIAL_COMPLETION");
-      }, 500);
-      const hideTimer = setTimeout(() => {
-        setShownModal("NONE");
-      }, 2500);
-      return () => {
-        clearTimeout(showTimer);
-        clearTimeout(hideTimer);
-      };
+    const funfacts = [
+      "1. Clean start — you’re warming up like a pro. Future Fact: AI “memory boosters” may turn any topic — math, Spanish, even physics — into personalised mini-games you can play on your phone.",
+      "2. Nice pace — keep sliding through. Future Fact: Your future playlist might adapt to your mood and energy levels — boosting focus when you study and calming you when you’re stressed.",
+      "3. Momentum unlocked. Future Fact: You may be able to run full science, art, or engineering experiments in VR from your bedroom — no materials, no mess, no “clean your room!”",
+      "4. You’re in the zone. Future Fact: Phones, laptops, and even sneakers may use self-repair materials that heal scratches and damage on their own overnight.",
+      "5. Halfway done — clean work. Future Fact: In future homes, your mirror could track your sleep, hydration, and mood, and literally tell you what your body needs today.",
+      "6. Still going strong — focus mode is ON. Future Fact: Cities may soon have smart sidewalks that glow at night, charge your devices as you walk, and change colour based on air quality.",
+      "7. Final stretch — love this discipline. Future Fact: Future workplaces might use AR glasses so you can collaborate with teammates who appear next to you, even if they’re on another continent.",
+      "8. Two more to go — stay locked in. Future Fact: Public transport could soon be run by autonomous electric pods that you can summon like an Uber, shared with people going your way.",
+      "9. Last lap. Future Fact: Space tech may soon allow astronauts to grow fresh fruits and veggies on Mars — including actual Martian strawberries.",
+    ];
+
+    if (responses.length > 0 && questions.length > 0) {
+      const lastResponse = responses[responses.length - 1];
+      const lastQuestion = questions.find(
+        (q) => q._id === lastResponse.questionId
+      );
+      const currentQuestionIndex = questions.findIndex(
+        (q) => q._id === lastResponse.questionId
+      );
+
+      if (lastQuestion && lastQuestion.clusterId) {
+        if (!clusterIdMap.current.has(lastQuestion.clusterId)) {
+          clusterIdMap.current.set(
+            lastQuestion.clusterId,
+            nextClusterNumber.current
+          );
+          nextClusterNumber.current++;
+        }
+        const clusterNumber = clusterIdMap.current.get(lastQuestion.clusterId)!;
+
+        const nextQuestion = questions[currentQuestionIndex + 1];
+        // Check if the cluster changes or if it's the last question of the test
+        if (!nextQuestion || nextQuestion.clusterId !== lastQuestion.clusterId) {
+          const funFactForCluster =
+            funfacts[(clusterNumber - 1) % funfacts.length];
+          setFunFact(funFactForCluster);
+          logger.info(
+            `Cluster ${lastQuestion.clusterId} completed. Showing fun fact.`
+          );
+          const showTimer = setTimeout(() => {
+            setShownModal("PARTIAL_COMPLETION");
+          }, 500);
+          const hideTimer = setTimeout(() => {
+            setShownModal("NONE");
+          }, 5000);
+          return () => {
+            clearTimeout(showTimer);
+            clearTimeout(hideTimer);
+          };
+        }
+      }
     }
-  }, [responses, questions.length]);
+  }, [responses, questions]);
 
   const getSelectedOption = (questionId: string): string => {
     return (
@@ -677,45 +713,24 @@ export default function TestPage() {
     );
   };
 
-  const submitAnswer = async () => {
-    setLoading(true);
-    try {
-      // Use unified assessment endpoint
-      const result = await submitResponses(
-        "64a7b1f4e4b0c5b6f8d9e8c1", // userId
-        "Default Test Name", // name
-        responses.map((r) => ({
-          questionId: r.questionId,
-          selectedOptionId: r.selectedOptionId,
-        }))
-      );
-
-      if (result && result.status === "success") {
-        // Store session ID and score for results page if needed
-        if (result.sessionId) {
-          localStorage.setItem("lastSessionId", result.sessionId);
-        }
-        if (result.score) {
-          localStorage.setItem("lastScore", JSON.stringify(result.score));
-        }
-      }
-      router.push("/test/complete");
-      logger.info("Redirecting to test complete page.");
-    } catch (error) {
-      logger.error("Failed to submit test.", error as Error);
-      alert("Failed to submit test. Please try again.");
-      setLoading(false);
-    }
-  };
-
   const handleQuestionChange = (newIndex: number) => {
     if (isAnimating) return;
+    console.log("Responses-> ", responses);
     logger.debug(`Changing question to index: ${newIndex}`);
     setIsAnimating(true);
     setTimeout(() => {
       if (newIndex === questions.length) {
         logger.info("Last question answered, submitting test.");
-        submitAnswer();
+        const formatedResponses = responses.map((resp) => ({
+          questionId: resp.questionId,
+          selectedOption: resp.selectedOptionId,
+        }));
+
+        localStorage.setItem(
+          "responses",
+          JSON.stringify({ general: formatedResponses, missions: [] })
+        );
+        setShownModal("COMPLETED");
       } else {
         setCurrIndex(newIndex);
         setIsAnimating(false);
@@ -922,6 +937,18 @@ export default function TestPage() {
       {shownModal === "PARTIAL_COMPLETION" && (
         <PartialCompletionModal
           completion={Math.floor((responses.length / questions.length) * 100)}
+          funfact={funFact}
+        />
+      )}
+      {shownModal === "COMPLETED" && (
+        <CompletedModal
+          title="Mission Completed!"
+          subTitle="Huge win — you powered through every checkpoint like a legend. Future Fact: The world’s coolest future careers will blend technology in ways we haven’t even imagined yet — from AI explorers to quantum problem-solvers."
+          desc="Ready to try 8 mini-missions that show how these future technologies actually work?"
+          cancelBtnText="Take a Break"
+          okBtnText="Start Missions"
+          onClose={() => setIsTimerPaused(false)}
+          onOk={() => router.push("/missions")}
         />
       )}
       <section className="px-4 md:px-6 lg:px-14 flex flex-col lg:flex-row justify-between items-center my-6 gap-y-6 lg:gap-y-0">
@@ -1051,6 +1078,7 @@ export function TextOption({
       <span className="text-base font-medium mr-2 ">
         ({String.fromCharCode(65 + index)})
       </span>
+
       <span className="text-base font-medium">{option.text}</span>
     </div>
   );

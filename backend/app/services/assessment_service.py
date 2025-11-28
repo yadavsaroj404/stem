@@ -29,7 +29,6 @@ from app.services.scoring_service import scoring_service
 
 logger = get_logger(__name__)
 
-
 class AssessmentService:
     """Unified service for handling all assessment types"""
 
@@ -386,100 +385,6 @@ class AssessmentService:
             db.rollback()
             logger.error(
                 "Failed to create session",
-                extra={'error': str(e), 'error_type': type(e).__name__},
-                exc_info=True
-            )
-            raise
-        finally:
-            db.close()
-
-    def submit_answer(
-        self,
-        session_id: str,
-        question_id: str,
-        answer: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """
-        Submit an answer for a question.
-
-        Args:
-            session_id: Session ID
-            question_id: Question ID
-            answer: Answer data
-
-        Returns:
-            Submission result
-        """
-        db: Session = SessionLocal()
-        try:
-            # Verify session exists
-            session = db.query(TestSession).filter(
-                TestSession.session_id == session_id
-            ).first()
-
-            if not session:
-                return {"status": "error", "message": "Session not found"}
-
-            if session.status != "IN_PROGRESS":
-                return {"status": "error", "message": "Session is not in progress"}
-
-            # Check if answer already exists
-            existing = db.query(StudentAnswer).filter(
-                StudentAnswer.session_id == session_id,
-                StudentAnswer.question_id == question_id
-            ).first()
-
-            # Check correctness
-            is_correct = None
-            selected_option_id = answer.get("selectedOptionId")
-            selected_items = answer.get("selectedItems")
-
-            if selected_option_id or selected_items:
-                selected_items_json = json.dumps(selected_items) if selected_items else None
-                is_correct = 1 if scoring_service.check_answer(
-                    question_id,
-                    selected_option_id,
-                    selected_items_json
-                ) else 0
-
-            if existing:
-                # Update existing answer
-                existing.student_answer = json.dumps(answer)
-                existing.is_correct = is_correct
-                existing.answered_at = datetime.now()
-            else:
-                # Create new answer
-                student_answer = StudentAnswer(
-                    session_id=session_id,
-                    question_id=question_id,
-                    student_answer=json.dumps(answer),
-                    is_correct=is_correct
-                )
-                db.add(student_answer)
-
-            db.commit()
-
-            logger.info(
-                "Answer submitted",
-                extra={
-                    'session_id': session_id,
-                    'question_id': question_id,
-                    'is_correct': is_correct
-                }
-            )
-
-            return {
-                "status": "success",
-                "message": "Answer submitted successfully",
-                "sessionId": session_id,
-                "questionId": question_id,
-                "isCorrect": is_correct
-            }
-
-        except Exception as e:
-            db.rollback()
-            logger.error(
-                "Failed to submit answer",
                 extra={'error': str(e), 'error_type': type(e).__name__},
                 exc_info=True
             )

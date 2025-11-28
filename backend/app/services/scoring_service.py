@@ -80,42 +80,11 @@ class ScoringService:
         else:
             correct_answer = self.correct_answers[normalized_qid]
 
-        # For multi-selection questions (rank, group, matching)
-        if selected_items:
-            try:
-                selected_list = json.loads(selected_items) if isinstance(selected_items, str) else selected_items
-
-                if not selected_list:
-                    return False
-
-                # Build the answer string in the same format as answers.json
-                # Format: "item1;item2;item3" or "group1-item1;group2-item2"
-                selected_str = ";".join(selected_list)
-
-                # Normalize both for comparison (remove hyphens from UUIDs if needed)
-                selected_normalized = selected_str.replace("-", "")
-                correct_normalized = correct_answer.replace("-", "")
-
-                # Check if order matters by looking at the correct answer format
-                # If correct answer contains pairs (groupId-itemId), order matters
-                if "-" in correct_answer and ";" in correct_answer:
-                    # Group/Matching/Rank: Order matters - direct comparison
-                    return selected_normalized == correct_normalized
-                else:
-                    # Multi-select: Order might not matter - compare as sets
-                    selected_set = set(selected_normalized.split(";"))
-                    correct_set = set(correct_normalized.split(";"))
-                    return selected_set == correct_set
-
-            except Exception as e:
-                logger.error(f"Error comparing answer for question {question_id}: {e}")
-                return False
-
         # For single-selection MCQ questions
         if selected_option_id:
             # Normalize for comparison
-            selected_normalized = selected_option_id.replace("-", "")
-            correct_normalized = correct_answer.replace("-", "")
+            selected_normalized = selected_option_id.replace("->", "")
+            correct_normalized = correct_answer.replace("->", "")
             return selected_normalized == correct_normalized
 
         return False

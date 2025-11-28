@@ -74,6 +74,7 @@ interface BaseQuestion {
   displayOrder: number;
   description?: string;
   optionInstruction?: string;
+  clusterId: UUID;
 }
 
 export interface TextQuestion extends BaseQuestion {

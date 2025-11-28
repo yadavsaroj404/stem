@@ -25,7 +25,40 @@ import {
   MultiSelectQuestionComponent,
 } from "@/app/test/page"; // Reusing components from test page
 import CompletedModal from "@/components/Modals/completed";
-import { fetchQuestions } from "@/helpers/data-fetch";
+import { fetchQuestions, submitAnswer } from "@/helpers/data-fetch";
+import { UUID } from "crypto";
+import { useRouter } from "next/navigation";
+
+// const submitAnswer = async () => {
+//   setLoading(true);
+//   try {
+//     // Use unified assessment endpoint
+//     const result = await submitResponses(
+//       "64a7b1f4e4b0c5b6f8d9e8c1", // userId
+//       "Default Test Name", // name
+//       responses.map((r) => ({
+//         questionId: r.questionId,
+//         selectedOptionId: r.selectedOptionId,
+//       }))
+//     );
+
+//     if (result && result.status === "success") {
+//       // Store session ID and score for results page if needed
+//       if (result.sessionId) {
+//         localStorage.setItem("lastSessionId", result.sessionId);
+//       }
+//       if (result.score) {
+//         localStorage.setItem("lastScore", JSON.stringify(result.score));
+//       }
+//     }
+//     router.push("/test/complete");
+//     logger.info("Redirecting to test complete page.");
+//   } catch (error) {
+//     logger.error("Failed to submit test.", error as Error);
+//     alert("Failed to submit test. Please try again.");
+//     setLoading(false);
+//   }
+// };
 
 export default function MissionsTestPage() {
   const [missions, setMissions] = useState<Mission[]>([]);
@@ -37,6 +70,7 @@ export default function MissionsTestPage() {
   const [isTimerPaused, setIsTimerPaused] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetchQuestions().then((d) => {
@@ -75,7 +109,7 @@ export default function MissionsTestPage() {
 
   const handleNavigation = (direction: "next" | "prev") => {
     if (isAnimating) return;
-
+    console.log(responses);
     if (direction === "next") {
       // Check for response before moving to next mission
       if (!responses[currentMission._id]?.secondary) {
@@ -203,10 +237,61 @@ export default function MissionsTestPage() {
     }
   `;
 
+  const handleQuestionSubmissions = async () => {
+    setLoading(true);
+    const missionsResponses: Array<{
+      questionId: string;
+      selectedOption: string;
+    }> = [];
+    for (const missionId in responses) {
+      const missionIdx = missions.findIndex(
+        (mission) => mission._id === missionId
+      );
+      if (missionIdx === -1) continue;
+      missionsResponses.push({
+        questionId: missions[missionIdx].primaryQuestion._id,
+        selectedOption: responses[missionId].primary || "",
+      });
+      missionsResponses.push({
+        questionId: missions[missionIdx].secondaryQuestion._id,
+        selectedOption: responses[missionId].secondary || "",
+      });
+    }
+    const extractedResponses: {
+      general: Array<{ questionId: string; selectedOption: string }>;
+      missions: Array<{ questionId: string; selectedOption: string }>;
+    } = JSON.parse(
+      localStorage.getItem("responses") || '{"general": [], "missions": []}'
+    );
+    
+    extractedResponses.missions = missionsResponses;
+    localStorage.setItem("responses", JSON.stringify(extractedResponses));    
+
+    const mergedResponses = [...extractedResponses.general, ...extractedResponses.missions];
+    try {
+      await submitAnswer(mergedResponses);
+    } catch (error) {
+      console.log("Error submitting answers:");
+    } finally {
+      router.push("/test/complete");
+      setLoading(false);
+    }
+  };
   return (
     <main className="flex flex-col">
       {isCompleted && (
-        <CompletedModal onClose={() => setIsTimerPaused(false)} />
+        <CompletedModal
+          title="Mission Completed!"
+          subTitle="You cleared all 45 questions AND all 8 future-tech missions — that’s
+          the full experience completed. Future Fact: Your personalized report
+          is built for a world where careers, cities, and technology evolve
+          every single year — and you’ll be ready for all of it."
+          desc="Ready to see your future insights?"
+          cancelBtnText="Take a Break"
+          okBtnText="View my report"
+          onClose={() => setIsTimerPaused(false)}
+          onOk={handleQuestionSubmissions}
+        />
       )}
       {/* Header Section */}
       <section className="px-4 md:px-6 lg:px-14 flex flex-col lg:flex-row justify-between items-center my-6 gap-y-6 lg:gap-y-0 mx-auto w-full">

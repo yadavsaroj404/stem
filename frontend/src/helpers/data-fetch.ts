@@ -4,6 +4,7 @@ import {
   MissionsTest,
   TestQuestions,
 } from "@/interfaces/tests";
+import { UUID } from "crypto";
 
 // Unified API base path
 const API_BASE = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
@@ -177,23 +178,20 @@ export const createSession = async (
 
 // Submit an individual answer
 export const submitAnswer = async (
-  sessionId: string,
-  questionId: string,
-  selectedOptionId?: string,
-  selectedItems?: string[]
+  responses: Array<{ questionId: string; selectedOption: string }>
 ) => {
   try {
-    const response = await fetch(`${API_BASE}/assessments/answer`, {
+    const payload = {
+      userId: "64a7b1f4e4b0c5b6f8d9e8c1",
+      submittedAt: new Date().toISOString(),
+      responses: responses,
+    };
+    const response = await fetch(`${API_BASE}/assessments/responses`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        sessionId,
-        questionId,
-        selectedOptionId,
-        selectedItems,
-      }),
+      body: JSON.stringify(payload),
     });
     if (!response.ok) {
       throw new Error("Failed to submit answer");

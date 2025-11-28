@@ -6,8 +6,10 @@ import clap from "@/images/activities/clap.gif";
 
 export default function PartialCompletionModal({
   completion,
+  funfact,
 }: {
   completion: number;
+  funfact: string;
 }) {
   useEffect(() => {
     document.body.classList.add("overflow-hidden");
@@ -25,10 +27,7 @@ export default function PartialCompletionModal({
           unoptimized
           className="w-20 absolute -top-1 lg:-top-0 left-1/2 transform -translate-1/2"
         />
-        <span className="text-sm lg:text-base text-center">
-          "Awesome! You’re already {completion}% done. Every answer brings you
-          closer to your perfect Career match."
-        </span>
+        <span className="text-sm lg:text-base text-center">{funfact}</span>
       </div>
     </div>
   );
