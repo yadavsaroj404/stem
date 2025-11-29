@@ -35,7 +35,9 @@ export function RankQuestionComponent({
   arrangement: string;
   onArrangement: (arrangement: string) => void;
 }) {
-  const [orderedOptions, setOrderedOptions] = useState(question.options);
+  const [orderedOptions, setOrderedOptions] = useState(
+    [...question.options].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+  );
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -55,7 +57,9 @@ export function RankQuestionComponent({
         logger.debug("RankQuestionComponent: Arrangement restored from props.");
       }
     } else {
-      setOrderedOptions(question.options);
+      setOrderedOptions(
+        [...question.options].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+      );
     }
   }, [arrangement, question.options]);
 

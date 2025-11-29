@@ -42,27 +42,30 @@
       "optionInstruction": "Arrange these steps in the correct order:",
       "type": "rank",
       "options": [
+
         {
-          "text": "clarify the question",
-          "_id": "ca1f767889654661805cbf4e3e375741",
+          "text": "Merge datasets",
+          "_id": "0d32449b7285488fab1f4d35fd7f661e",
           "displayOrder": 1
         },
         {
-          "text": "collect data",
-          "_id": "9bd072d6cf5148ff9b81f1e2e440a83d",
+          "text": "Clarify the question",
+          "_id": "ca1f767889654661805cbf4e3e375741",
           "displayOrder": 2
         },
         {
-          "text": "merge datasets",
-          "_id": "0d32449b7285488fab1f4d35fd7f661e",
+          "text": "Make graphs of results",
+          "_id": "6089f0ddbd3b410d82e3482df5b75119",
           "displayOrder": 3
         },
         {
-          "text": "make graphs of results",
-          "_id": "6089f0ddbd3b410d82e3482df5b75119",
+          "text": "Collect data",
+          "_id": "9bd072d6cf5148ff9b81f1e2e440a83d",
           "displayOrder": 4
         }
+       
       ],
+      
       "displayOrder": 2
     },
     {
@@ -74,25 +77,26 @@
       "type": "rank",
       "options": [
         {
+          "text": "Textbook References",
+          "_id": "5d442e0ac0814f158e6e8074986e1e8d",
+          "displayOrder": 1
+        },
+        {
           "text": "AI Simulations",
           "_id": "883e6e186d5b4bb69e8ce3e52db5a6d0",
-          "displayOrder": 1
+          "displayOrder": 2
         },
         {
           "text": "Lab Experiments",
           "_id": "27401d6c71354e6b8648bb80b7d22c0f",
-          "displayOrder": 2
+          "displayOrder": 3
         },
         {
           "text": "Peer Discussions",
           "_id": "de2b6678f1d046c4ae6dbfe372540429",
-          "displayOrder": 3
-        },
-        {
-          "text": "Textbook References",
-          "_id": "5d442e0ac0814f158e6e8074986e1e8d",
           "displayOrder": 4
         }
+        
       ],
       "displayOrder": 3
     },
@@ -105,12 +109,12 @@
       "type": "text",
       "options": [
         {
-          "text": "Choose cheaper",
+          "text": "Choose the low-cost option",
           "_id": "ee2db71514d646c09642def009e6348c",
           "displayOrder": 1
         },
         {
-          "text": "Choose faster",
+          "text": "Choose the quick-build plan",
           "_id": "0aa660b038cf4ccf83ccc63bc7b9cb38",
           "displayOrder": 2
         },
@@ -136,12 +140,13 @@
       "type": "rank",
       "options": [
         {
-          "text": "Re-organise and present what you learned ",
-          "_id": "d9d185615fa24b1bab5aba47354d0f09",
-          "displayOrder": 1
+          "text": "Stop competing",
+          "_id": "788032b5f3384fd78c60c6191450f852",
+          "displayOrder": 4
         },
+        
         {
-          "text": "Submit old work",
+          "text": "Submit earlier work without updates",
           "_id": "bbbd54dbc78146c484f94f91793149b8",
           "displayOrder": 2
         },
@@ -150,11 +155,13 @@
           "_id": "dfccd819a60d4e72a5251064b8abe2a0",
           "displayOrder": 3
         },
+
         {
-          "text": "Stop competing",
-          "_id": "788032b5f3384fd78c60c6191450f852",
+          "text": "Re-organise and present what you learned ",
+          "_id": "d9d185615fa24b1bab5aba47354d0f09",
           "displayOrder": 4
         }
+        
       ],
       "displayOrder": 5
     },
@@ -162,7 +169,7 @@
       "_id": "215cc323aaa446eebae19bc64c7cea76",
       "image": "/s3/q2.png",
       "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
-      "question": "Build-a-Sentence - Ethical Compliance",
+      "question": "Build-a-Sentence - Responsible Choices",
       "description": "Choose one phrase from each block (Action + Principle + Result) to form the sentence that best represents correct scientific behaviour. ",
       "optionInstruction": "Choose one phrase from each block",
       "type": "group",
@@ -244,21 +251,26 @@
       "optionInstruction": "Rank these responses from most effective (1) to least (4):",
       "type": "rank",
       "options": [
+
         {
-          "text": "Let's pause--each gets two minutes to pitch, then we'll merge or vote.",
-          "_id": "4770315ec1234360821b0ad26b748c43",
+          "text": "Ask the teacher to step in, listen to both sides, and make the final call.",
+          "_id": "418838d7813442639984fdb91beb2c8d",
           "displayOrder": 1
         },
-        {
+
+         {
           "text": "We're short on time--just follow my call.",
           "_id": "4571f5a1a2cb426a8c53b4e3a9d73786",
           "displayOrder": 2
         },
+        
         {
-          "text": "Ask the teacher to decide.",
-          "_id": "418838d7813442639984fdb91beb2c8d",
+          "text": "Let's pause--each gets two minutes to pitch, then we'll merge or vote.",
+          "_id": "4770315ec1234360821b0ad26b748c43",
           "displayOrder": 3
         },
+        
+        
         {
           "text": " Stay silent and hope they settle it. ",
           "_id": "32bded19883f4cc0bcb246bc60447d7b",
@@ -302,17 +314,17 @@
           "groupName": "Block 2 - Connector",
           "subOptions": [
             {
-              "text": "includes",
+              "text": "replace",
               "_id": "702c04c76655421eb9f5e8e52654afd0",
               "displayOrder": 1
             },
             {
-              "text": "depend on",
+              "text": "include",
               "_id": "5388b27555fe403c80038ad197733545",
               "displayOrder": 2
             },
             {
-              "text": "replace",
+              "text": "depend on",
               "_id": "733246cded424a67af8cf54d383e29a4",
               "displayOrder": 3
             }
@@ -324,7 +336,7 @@
           "groupName": "Block 3 - Idea",
           "subOptions": [
             {
-              "text": "combining existing ideas in new ways",
+              "text": "imagination completely",
               "_id": "3c13708b66984b6ba9e9b4b3edf6284d",
               "displayOrder": 1
             },
@@ -334,7 +346,7 @@
               "displayOrder": 2
             },
             {
-              "text": "imagination completely",
+              "text": "combining existing ideas in new ways",
               "_id": "8ad41fd1b53840e7b19a8fe8afe08b64",
               "displayOrder": 3
             }
@@ -372,17 +384,17 @@
       ],
       "rightSide": [
         {
-          "text": "Builds relevant and engaging content",
+          "text": "Reduces originality and credibility ",
           "_id": "bd18ebf7f49e4859aa5c5c06ec57dc00",
           "displayOrder": 1
         },
         {
-          "text": "Creates confusion and low engagement",
+          "text": "Builds relevant and engaging content",
           "_id": "a0c3b958f9794074bf9aac7a62b51519",
           "displayOrder": 2
         },
         {
-          "text": "Reduces originality and credibility",
+          "text": "Creates confusion and low engagement ",
           "_id": "e0266fa9720b4160a1f1e81f56f8f786",
           "displayOrder": 3
         }
@@ -408,7 +420,7 @@
           "displayOrder": 2
         },
         {
-          "text": "AI means robots.",
+          "text": "AI is just about robots, doing tasks in ways we often imagine from movies.”",
           "_id": "71ff5b12356645e78ea9ed2f6abc7c1c",
           "displayOrder": 3
         },
@@ -429,26 +441,28 @@
       "optionInstruction": "Rank these production features from most to least effective: ",
       "type": "rank",
       "options": [
-        {
-          "text": "Clear persuasive message with call-to-action",
-          "_id": "ac287f90759443d7af5d90409c0a87c1",
-          "displayOrder": 1
-        },
-        {
-          "text": "Random loud music",
-          "_id": "d98096443c2d494894d9d6d43073891b",
-          "displayOrder": 2
-        },
+
         {
           "text": "Listing statistics only",
           "_id": "11e0ffbb967e4e9e8b78201ae0775ba3",
-          "displayOrder": 3
+          "displayOrder": 1
+        },
+        {
+          "text": "Clear persuasive message with call-to-action",
+          "_id": "ac287f90759443d7af5d90409c0a87c1",
+          "displayOrder": 2
         },
         {
           "text": "Unrelated montage clips",
           "_id": "b137814ad35c48c8bf0a135ad81dd5cb",
+          "displayOrder": 3
+        },
+        {
+          "text": "Random loud music",
+          "_id": "d98096443c2d494894d9d6d43073891b",
           "displayOrder": 4
         }
+       
       ],
       "displayOrder": 11
     },
@@ -460,26 +474,29 @@
       "optionInstruction": "Rank these statements from most accurate (1) to least (4): ",
       "type": "rank",
       "options": [
-        {
-          "text": "Rising CO2 may be linked to temperature, but correlation does not prove causation",
-          "_id": "4dc5762ec7754556afeaea732dcbc987",
+
+         {
+          "text": "CO2 causes temperature rise",
+          "_id": "39c380a2e687421480d90ed33b5463e7",
           "displayOrder": 1
         },
         {
-          "text": "CO2 causes temperature rise",
-          "_id": "39c380a2e687421480d90ed33b5463e7",
+          "text": "Rising CO2 may be linked to temperature, but correlation does not prove causation",
+          "_id": "4dc5762ec7754556afeaea732dcbc987",
           "displayOrder": 2
         },
         {
-          "text": "Temperature rise causes CO2",
-          "_id": "5c9b715d39c942748c7dc43c78ac16bf",
+          "text": "CO₂ levels and temperature changes are completely unrelated and show no meaningful link.",
+          "_id": "6e0d6201711b409fa429381a9c299542",
           "displayOrder": 3
         },
+       
         {
-          "text": "They are unrelated",
-          "_id": "6e0d6201711b409fa429381a9c299542",
+          "text": "Temperature rise causes CO2",
+          "_id": "5c9b715d39c942748c7dc43c78ac16bf",
           "displayOrder": 4
         }
+       
       ],
       "displayOrder": 12
     },
@@ -496,12 +513,12 @@
           "displayOrder": 1
         },
         {
-          "text": "Reduce sports time",
+          "text": " Review how sports time affects study habits",
           "_id": "9f019f2118d84a04991e8c12f0cb952e",
           "displayOrder": 2
         },
         {
-          "text": "Check causes such as sleep, stress, and workload",
+          "text": "Check factors like sleep and workload",
           "_id": "92ffdb320d034285ae4ff4585c22d71d",
           "displayOrder": 3
         },
@@ -552,26 +569,30 @@
       "description": "Which statement best explains this?",
       "type": "text",
       "options": [
-        {
-          "text": "Lower unemployment always causes inflation",
-          "_id": "d1fe06d6735a48a0ac3b7b939c9b23ad",
-          "displayOrder": 1
-        },
+
         {
           "text": "There may be a trade-off, but further analysis is needed",
           "_id": "d08fc55fe13c4a749a8776344e2eadfe",
-          "displayOrder": 2
+          "displayOrder": 1
         },
         {
-          "text": "They are unrelated",
-          "_id": "0c735e2bdb31463c8b0af7f91e7d0680",
-          "displayOrder": 3
+          "text": "Lower unemployment always causes inflation",
+          "_id": "d1fe06d6735a48a0ac3b7b939c9b23ad",
+          "displayOrder": 2
         },
+
         {
           "text": "Inflation always creates jobs",
           "_id": "e05f37b54a194622854a2619a224016b",
+          "displayOrder": 3
+        },
+        
+        {
+          "text": "They are unrelated",
+          "_id": "0c735e2bdb31463c8b0af7f91e7d0680",
           "displayOrder": 4
         }
+       
       ],
       "displayOrder": 15
     },
@@ -608,26 +629,31 @@
         }
       ],
       "rightSide": [
-        {
-          "text": " Causal relationship",
-          "_id": "5cb0d5c24bd8420f8f8e584fda3ce481",
+
+         {
+          "text": "Invalid conclusion",
+          "_id": "178772adde1642cca9601bf031560a03",
           "displayOrder": 1
         },
+
+         {
+          "text": "Confounding variable",
+          "_id": "4c06d07f6cab484d9bcb176a3f9ffdc0",
+          "displayOrder": 2
+        },
+
         {
           "text": "Reverse causation",
           "_id": "3f2f4b4df1c040f698eab332bbc3ce41",
-          "displayOrder": 2
-        },
-        {
-          "text": "Confounding variable",
-          "_id": "4c06d07f6cab484d9bcb176a3f9ffdc0",
           "displayOrder": 3
         },
         {
-          "text": "Invalid conclusion",
-          "_id": "178772adde1642cca9601bf031560a03",
+          "text": " Causal relationship",
+          "_id": "5cb0d5c24bd8420f8f8e584fda3ce481",
           "displayOrder": 4
         }
+       
+       
       ],
       "displayOrder": 16
     },
@@ -644,21 +670,24 @@
           "_id": "5b0f2d805d90461ea32ca0e551ff6776",
           "displayOrder": 1
         },
-        {
-          "text": "Publish the results immediately.",
-          "_id": "d7999ba809fc40108f9e7507f77e1269",
-          "displayOrder": 2
-        },
+
         {
           "text": "Control for other variables (teacher, topic, difficulty).",
           "_id": "166d7a39a9104569b21914ed5903fcbb",
-          "displayOrder": 3
+          "displayOrder": 2
         },
+
         {
           "text": "Check if improvement is consistent across all groups.",
           "_id": "1b0d4e8325e6456ab1a3f2e08c4cee49",
+          "displayOrder": 3
+        },
+        {
+          "text": "Publish the results immediately.",
+          "_id": "d7999ba809fc40108f9e7507f77e1269",
           "displayOrder": 4
         }
+      
       ],
       "displayOrder": 17
     },
@@ -676,20 +705,21 @@
           "displayOrder": 1
         },
         {
-          "text": "Blame the materials",
-          "_id": "72dcbe75688d4bd79a83bda419e53431",
+          "text": "Submit a backup idea",
+          "_id": "0b633c86ee9241379a2570e54facaf3a",
           "displayOrder": 2
+        },
+        {
+          "text": "Blame the materials, point fingers, and focus on what went wrong instead of solutions",
+          "_id": "72dcbe75688d4bd79a83bda419e53431",
+          "displayOrder": 3
         },
         {
           "text": "Re-organise quickly, show your process, and explain what you learned",
           "_id": "017315e299e34ac295aed02303d29da6",
-          "displayOrder": 3
-        },
-        {
-          "text": "Submit a backup idea",
-          "_id": "0b633c86ee9241379a2570e54facaf3a",
           "displayOrder": 4
         }
+       
       ],
       "displayOrder": 18
     },
@@ -728,7 +758,7 @@
           "groupName": "Block 2 - Connector",
           "subOptions": [
             {
-              "text": "solves",
+              "text": "copies",
               "_id": "2f5b5fdbf3be45f9bfbbbcde0bfe6201",
               "displayOrder": 1
             },
@@ -738,7 +768,7 @@
               "displayOrder": 2
             },
             {
-              "text": "copies",
+              "text": "solves",
               "_id": "5d88088f6acc4901a0bab42eee051b44",
               "displayOrder": 3
             }
@@ -750,17 +780,17 @@
           "groupName": "Block 3 - Value",
           "subOptions": [
             {
-              "text": "a real problem for students",
+              "text": "existing products",
               "_id": "99991811905842e3965616192e216e3a",
               "displayOrder": 1
             },
             {
-              "text": "its purpose",
+              "text": "a real problem for students",
               "_id": "34bad78005fa4e179f523033a0a2843c",
               "displayOrder": 2
             },
             {
-              "text": "existing products",
+              "text": "its purpose",
               "_id": "807ff4cf97204d5084b6e9929132ab79",
               "displayOrder": 3
             }
@@ -774,30 +804,34 @@
       "_id": "909f2c16ca804072a807a4ae07b5f3c8",
       "image": "/s3/q2.png",
       "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
-      "question": "You are given a circle, triangle, and square to turn into a product logo.",
-      "description": "Which design shows the best balance and function? (Visual choice.)",
+      "question": "You are given a circle, triangle, and square to turn into a product logo. What combination / shape shows the best balance and function? (Visual choice.)",
+      "description": "Which design shows the best balance and function? ",
       "type": "text",
       "options": [
+
+        {
+          "image": "/s3/q20-opt3.png",
+          "_id": "4c11e339284f48f387f0a7fbd3ed1307",
+          "displayOrder": 1
+        },
         {
           "image": "/s3/q20-opt1.png",
           "_id": "1d2ad59b581347ab955b524f9e9379fd",
-          "displayOrder": 1
+          "displayOrder": 2
+        },
+
+         {
+          "image": "/s3/q20-opt4.png",
+          "_id": "405a26c291d345308227f577d007eea8",
+          "displayOrder": 3
         },
         {
           "image": "/s3/q20-opt2.png",
           "_id": "5aa2d0ef88224ca38b248b000ffc2223",
-          "displayOrder": 2
-        },
-        {
-          "image": "/s3/q20-opt3.png",
-          "_id": "4c11e339284f48f387f0a7fbd3ed1307",
-          "displayOrder": 3
-        },
-        {
-          "image": "/s3/q20-opt4.png",
-          "_id": "405a26c291d345308227f577d007eea8",
           "displayOrder": 4
         }
+      
+       
       ],
       "displayOrder": 20
     },
@@ -809,22 +843,22 @@
       "type": "rank",
       "options": [
         {
-          "text": "brainstorm ideas",
+          "text": "build prototype",
           "_id": "fe87b03bfbcc4d01b071494e7973d878",
           "displayOrder": 1
         },
         {
-          "text": "build prototype",
+          "text": "brainstorm ideas",
           "_id": "156348864c7f4c2fbc9a3d45b757f6ba",
           "displayOrder": 2
         },
         {
-          "text": "collect feedback",
+          "text": "present solution",
           "_id": "dd6093f90b814bd1a7dd0d6d058ddcc3",
           "displayOrder": 3
         },
         {
-          "text": "present solution",
+          "text": "collect feedback",
           "_id": "18353f8b5e854c9a8c5c6996cc96dd70",
           "displayOrder": 4
         }
@@ -845,20 +879,21 @@
           "displayOrder": 1
         },
         {
-          "text": "Ask only one grade for feedback",
-          "_id": "1c48c5effa1d494bbfacde3aa8dbaf06",
-          "displayOrder": 2
-        },
-        {
           "text": "Collect input from students, teachers, and parents",
           "_id": "941cc26f89284d8782eeb68621ddbe38",
-          "displayOrder": 3
+          "displayOrder": 2
         },
         {
           "text": "Launch and fix later",
           "_id": "e8b70ca293a049ea947aade5038479d8",
+          "displayOrder": 3
+        },
+        {
+          "text": "Ask only one grade for feedback",
+          "_id": "1c48c5effa1d494bbfacde3aa8dbaf06",
           "displayOrder": 4
         }
+        
       ],
       "displayOrder": 22
     },
@@ -876,19 +911,19 @@
           "displayOrder": 1
         },
         {
+          "text": "Drop one subject",
+          "_id": "191c57ad229140f586370a5635e5f582",
+          "displayOrder": 4
+        },
+        {
           "text": "Make graphs",
           "_id": "af05c0a91ec844a3a220a73e1f027e54",
           "displayOrder": 2
         },
         {
-          "text": "Clarify your research question and key variables",
+          "text": "Clarify the question and variables ",
           "_id": "5b6499fa816541099d65522549bea773",
           "displayOrder": 3
-        },
-        {
-          "text": "Drop one subject",
-          "_id": "191c57ad229140f586370a5635e5f582",
-          "displayOrder": 4
         }
       ],
       "displayOrder": 23
@@ -901,19 +936,20 @@
       "optionInstruction": "Choose the option that feels most true to you",
       "type": "text",
       "options": [
+
         {
-          "text": "Meet only at your local time",
-          "_id": "8591b61185564253aa2f43a52fdf0156",
+          "text": "Rotate meeting times and check schedules",
+          "_id": "15d692bc8d1c452cb3d97902ff90bf42",
           "displayOrder": 1
         },
-        {
-          "text": "Skip meetings",
+         {
+          "text": "Skip the meetings and let others manage on their own ",
           "_id": "45f354b8d8c745768bc9078e9553d3cb",
           "displayOrder": 2
         },
         {
-          "text": "Rotate meeting times and check schedules",
-          "_id": "15d692bc8d1c452cb3d97902ff90bf42",
+          "text": "Meet only at your local time",
+          "_id": "8591b61185564253aa2f43a52fdf0156",
           "displayOrder": 3
         },
         {
@@ -921,6 +957,7 @@
           "_id": "35ecd941fe8c4c4789988420ecc631d7",
           "displayOrder": 4
         }
+        
       ],
       "displayOrder": 24
     },
@@ -1010,7 +1047,7 @@
       "type": "text",
       "options": [
         {
-          "text": "Use the fanciest interface",
+          "text": "Choose a fancy interface while considering how it shapes user experience",
           "_id": "ff808245d3da492583ebaa79cbc21508",
           "displayOrder": 1
         },
@@ -1074,25 +1111,26 @@
       "type": "rank",
       "options": [
         {
-          "text": "Gather full data and align with long-term vision",
-          "_id": "89b38ed5c6984b0ebb882acfeccd6785",
-          "displayOrder": 1
-        },
-        {
-          "text": "Choose the safest option without consultation",
-          "_id": "9385a9dddd33456bb9a948a8a7280b90",
-          "displayOrder": 2
-        },
-        {
           "text": "Let the team vote randomly",
           "_id": "a0385bf1dda0423a8f081819f9a75a1e",
-          "displayOrder": 3
+          "displayOrder": 1
         },
         {
           "text": "Pick faster results for short-term visibility",
           "_id": "6d545a8f348b4e469c9e8917065a15c7",
+          "displayOrder": 2
+        },
+        {
+          "text": "Choose the safest option without consultation",
+          "_id": "9385a9dddd33456bb9a948a8a7280b90",
+          "displayOrder": 3
+        },
+        {
+          "text": "Gather full data and align with long-term vision",
+          "_id": "89b38ed5c6984b0ebb882acfeccd6785",
           "displayOrder": 4
         }
+       
       ],
       "displayOrder": 28
     },
@@ -1132,17 +1170,17 @@
           "groupName": "Block 2 - Method",
           "subOptions": [
             {
-              "text": "before guiding a joint discussion",
+              "text": "to reduce tension",
               "_id": "92e613182b584f9dae28002ccb314d2f",
               "displayOrder": 1
             },
             {
-              "text": "to ensure fairness",
+              "text": "before guiding a joint discussion ",
               "_id": "27bd34f197404004aba2a3ca56ba29eb",
               "displayOrder": 2
             },
             {
-              "text": "to reduce tension",
+              "text": "to ensure fairness",
               "_id": "fbe14664d9f84db6a504940f22a9fcff",
               "displayOrder": 3
             }
@@ -1154,17 +1192,17 @@
           "groupName": "Block 3 - Outcome",
           "subOptions": [
             {
-              "text": "to save time",
+              "text": "and end the argument",
               "_id": "80004edbee9c485d89c7de0343c0ccce",
               "displayOrder": 1
             },
             {
-              "text": "but lose trust as a leader",
+              "text": "to save time",
               "_id": "a880076b122445509609fe2d09008538",
               "displayOrder": 2
             },
             {
-              "text": "and end the argument",
+              "text": "but lose trust as a leader",
               "_id": "3c2327fe11024592aa51bae04bc598f0",
               "displayOrder": 3
             }
@@ -1208,22 +1246,22 @@
       ],
       "rightSide": [
         {
-          "text": "Win-win compromise and fair access",
+          "text": "Leaves the problem unresolved",
           "_id": "10af129b88b64901850d05bbfee9aa22",
           "displayOrder": 1
         },
         {
-          "text": "Creates resentment or bias",
+          "text": "Passes responsibility upward",
           "_id": "685b0b23560549b98803d7d8de1c3f48",
           "displayOrder": 2
         },
         {
-          "text": "Leaves the problem unresolved",
+          "text": "Win–win compromise and fair access ",
           "_id": "86c6296e96b946bd9338d8e0be9e6c8c",
           "displayOrder": 3
         },
         {
-          "text": "Passes responsibility upward",
+          "text": "Creates resentment or bias ",
           "_id": "6c053adb48f9446f98bec1c11c66cf2e",
           "displayOrder": 4
         }
@@ -1239,22 +1277,22 @@
       "type": "rank",
       "options": [
         {
-          "text": "listen to both sides",
+          "text": "identify shared goals",
           "_id": "59b7dd44a2f64421948acc80a2f11f1e",
           "displayOrder": 1
         },
         {
-          "text": "identify shared goals",
+          "text": " listen to both sides",
           "_id": "73b02f8d488d49d48360fd06a119598a",
           "displayOrder": 2
         },
         {
-          "text": "draft solutions together",
+          "text": "finalize with consensus.",
           "_id": "bebafc990dd7438a99097dbfe39b8ced",
           "displayOrder": 3
         },
         {
-          "text": " finalize with consensus. ",
+          "text": " draft solutions together .",
           "_id": "58249f02745c4174a4359e659e5a5e46",
           "displayOrder": 4
         }
@@ -1285,7 +1323,7 @@
           "displayOrder": 3
         },
         {
-          "text": "Let the vendor decide ",
+          "text": "Let the vendor decide how the system should work",
           "_id": "14e8605c25084334b1e1de689a804f75",
           "displayOrder": 4
         }
@@ -1325,22 +1363,22 @@
       ],
       "rightSide": [
         {
-          "text": "Correct and medically responsible",
+          "text": "Partial - not curative for infection",
           "_id": "98b46a532db44e49a37d0d32047c2bee",
           "displayOrder": 1
         },
         {
-          "text": "Incorrect - promotes misuse",
+          "text": "Irrelevant – not age-based ",
           "_id": "897638925424492f807c880a65b7f8e3",
           "displayOrder": 2
         },
         {
-          "text": "Irrelevant - not age-based",
+          "text": "Incorrect – promotes misuse",
           "_id": "52df1676f5c64f4085cf3dd9a2f55eac",
           "displayOrder": 3
         },
         {
-          "text": " Partial - not curative for infection",
+          "text": " Correct and medically responsible",
           "_id": "e68450e796604fddac4fd46d469ce0ad",
           "displayOrder": 4
         }
@@ -1355,9 +1393,9 @@
       "optionInstruction": "Rank the following actions from most supportive (1) to least (4):",
       "type": "rank",
       "options": [
-        {
-          "text": "Share notes and plan a short catch-up",
-          "_id": "ba2aa3ce5d254118bcb10626215e1f99",
+          {
+          "text": "Say you are too busy",
+          "_id": "61e2d076a9044567b744c0408a9c4b99",
           "displayOrder": 1
         },
         {
@@ -1366,15 +1404,16 @@
           "displayOrder": 2
         },
         {
-          "text": "Say you are too busy",
-          "_id": "61e2d076a9044567b744c0408a9c4b99",
+          "text": "Do their work for them",
+          "_id": "83e3babc59b346568b90a5f0e3d7f9ff",
           "displayOrder": 3
         },
         {
-          "text": "Do their work for them",
-          "_id": "83e3babc59b346568b90a5f0e3d7f9ff",
+          "text": "Share notes and plan a short catch-up",
+          "_id": "ba2aa3ce5d254118bcb10626215e1f99",
           "displayOrder": 4
         }
+       
       ],
       "displayOrder": 34
     },
@@ -1383,26 +1422,26 @@
       "image": "/s3/q1.png",
       "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "Your school is planning Well-being Week.",
-      "optionInstruction": "Select TWO actions that would have the greatest impact on students' mental health:",
+      "optionInstruction": " Which action would have the greatest impact on students’ mental health?",
       "type": "text",
       "options": [
         {
-          "text": "Yoga session",
+          "text": "Organise fun yoga activities for everyone",
           "_id": "8b8f41381f1a49538a8ee842fcbb9951",
           "displayOrder": 1
         },
         {
-          "text": "Posters about stress",
+          "text": "Put up colourful posters about managing stress",
           "_id": "642936f2cb8740c784b1f2b011a50485",
           "displayOrder": 2
         },
         {
-          "text": "Peer-support groups",
+          "text": "Set up peer groups and counsellor support at school ",
           "_id": "dc627cd107b946cabcfc61a0a65948da",
           "displayOrder": 3
         },
         {
-          "text": "Counsellor available at lunch",
+          "text": "Plan a light picnic day with games and rides",
           "_id": "8e67dcf8caa848d39f3ce600cc63d7f0",
           "displayOrder": 4
         }
@@ -1442,22 +1481,22 @@
       ],
       "rightSide": [
         {
-          "text": "Report immediately",
+          "text": "Encourages rule-breaking",
           "_id": "5434817406a2490a90829f6725a85ad9",
           "displayOrder": 1
         },
         {
-          "text": "Report immediately",
+          "text": "Escalates unnecessarily if not first warned",
           "_id": "22d1d67039f74236a6bb04b6ace4a3f6",
           "displayOrder": 2
         },
         {
-          "text": "Report immediately",
+          "text": "Resolves issue with respect ",
           "_id": "13cdc0ddb0fb466e9f3bf2be9a6e339b",
           "displayOrder": 3
         },
         {
-          "text": "Escalates unnecessarily if not first warned",
+          "text": "Disrupts environment for others",
           "_id": "f44e221c805240ae8160c8a99966c80a",
           "displayOrder": 4
         }
@@ -1473,12 +1512,12 @@
       "type": "text",
       "options": [
         {
-          "text": "Share it for views to raise awareness",
+          "text": "Share it for views ",
           "_id": "73df5d1453aa4dc48afa8682fb8c531c",
           "displayOrder": 1
         },
         {
-          "text": "Report or flag the video and explain why it is false",
+          "text": "Report it and explain it's fake",
           "_id": "fc17cec6fddd4be4972fa643b2f9140e",
           "displayOrder": 2
         },
@@ -1504,25 +1543,28 @@
       "type": "text",
       "options": [
         {
-          "text": "Put up recycling posters",
-          "_id": "8fb5e2c91cae425689bf21d4b9ad5682",
+          "text": "Install solar panels on the roof",
+          "_id": "760a26a84f5646d3b581614e3f8ab8f7",
           "displayOrder": 1
         },
         {
-          "text": "Organise a one-day clean-up",
-          "_id": "1a3b6134f5ce455da1c91dc5c4193273",
+          "text": "Put up recycling posters",
+          "_id": "8fb5e2c91cae425689bf21d4b9ad5682",
           "displayOrder": 2
-        },
-        {
-          "text": "Install solar panels on the roof",
-          "_id": "760a26a84f5646d3b581614e3f8ab8f7",
-          "displayOrder": 3
         },
         {
           "text": "Wait for new government rules",
           "_id": "8cd1502aaabb485596ebc62d4f6f8189",
+          "displayOrder": 3
+        },
+        
+        {
+          "text": "Organise a one-day clean-up",
+          "_id": "1a3b6134f5ce455da1c91dc5c4193273",
           "displayOrder": 4
         }
+       
+        
       ],
       "displayOrder": 38
     },
@@ -1631,17 +1673,17 @@
       ],
       "rightSide": [
         {
-          "text": "Evidence-based verification",
+          "text": "Faulty or dismissive reasoning",
           "_id": "84c51541d96d4e778b15527b97c1b9ed",
           "displayOrder": 1
         },
         {
-          "text": "Irrelevant personal preference",
+          "text": "Evidence-based verification ",
           "_id": "d468df098b654d8e914c6b4acbadd552",
           "displayOrder": 2
         },
         {
-          "text": "Faulty or dismissive reasoning",
+          "text": "Irrelevant personal preference ",
           "_id": "40305c9aa2eb4f7e91a0b586ab70fde9",
           "displayOrder": 3
         }
@@ -1663,12 +1705,12 @@
           "displayOrder": 1
         },
         {
-          "text": "Lower energy use and carbon emissions with cost savings",
+          "text": " Lower energy use and emissions with savings",
           "_id": "06889781e423491dafac513a2a1df2f5",
           "displayOrder": 2
         },
         {
-          "text": "Colder classrooms",
+          "text": "Colder classrooms throughout the day",
           "_id": "7dbb989c0df04bde968f1235ab2f1a61",
           "displayOrder": 3
         },
@@ -1744,22 +1786,22 @@
       ],
       "rightSide": [
         {
-          "text": "False cause (post hoc)",
+          "text": "Correct statistical reasoning",
           "_id": "3d41c85ee7f84754bf1fdf67c83cf49f",
           "displayOrder": 1
         },
         {
-          "text": "Confounding variable",
+          "text": "Irrelevant assumption",
           "_id": "0ca1a4f589c34e6783326bae11e601e4",
           "displayOrder": 2
         },
         {
-          "text": "Correct statistical reasoning",
+          "text": "Confounding variable ",
           "_id": "0d265f0fac94494eb5c7b159c3da54e2",
           "displayOrder": 3
         },
         {
-          "text": "Irrelevant assumption",
+          "text": "False cause (post hoc) ",
           "_id": "03eb249ab7e9475889828dfbfad3adb1",
           "displayOrder": 4
         }

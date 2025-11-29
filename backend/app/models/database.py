@@ -183,7 +183,6 @@ class TestSession(Base):
     # Relationships
     test = relationship("Test")
     student_answers = relationship("StudentAnswer", back_populates="session", cascade="all, delete-orphan")
-    scores = relationship("CandidateScore", back_populates="session", cascade="all, delete-orphan")
 
 
 class StudentAnswer(Base):
@@ -202,30 +201,29 @@ class StudentAnswer(Base):
     question = relationship("Question")
 
 
-# Legacy submission model (kept for backward compatibility)
+# Submission model for storing all responses in one row
 class SubmissionDB(Base):
-    """Legacy user test submissions"""
+    """User test submissions - stores all responses as JSON in single row"""
     __tablename__ = "submissions"
 
-    id = Column(String, primary_key=True, default=gen_uuid)
+    _id = Column(String, primary_key=True, default=gen_uuid)
     user_id = Column(String, nullable=False)
     test_id = Column(UUID(as_uuid=False), ForeignKey("tests.test_id"), nullable=True)
-    created_at = Column(String, nullable=False)
-    name = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     status = Column(String, nullable=False, default="SUBMITTED")
-    responses = Column(Text, nullable=False)  # Store JSON as text
-    submitted_at = Column(DateTime, nullable=False, default=datetime.now)
+    responses = Column(Text, nullable=False)  # Store all responses as JSON
+    submitted_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relationships
     test = relationship("Test")
 
 
 class CandidateScore(Base):
-    """Computed scores for test sessions"""
+    """Computed scores for submissions"""
     __tablename__ = "candidate_scores"
 
     score_id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
-    session_id = Column(UUID(as_uuid=False), ForeignKey("test_sessions.session_id"), nullable=False)
+    submission_id = Column(String, ForeignKey("submissions._id"), nullable=False)
     cluster_id = Column(UUID(as_uuid=False), ForeignKey("clusters.cluster_id"), nullable=True)
     total_questions = Column(Integer, nullable=False, default=0)
     correct_answers = Column(Integer, nullable=False, default=0)
@@ -236,7 +234,7 @@ class CandidateScore(Base):
     computed_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     # Relationships
-    session = relationship("TestSession", back_populates="scores")
+    submission = relationship("SubmissionDB", backref="scores")
     cluster = relationship("Cluster")
 
 
@@ -264,7 +262,7 @@ Index("ix_test_sessions_user", TestSession.user_id)
 Index("ix_student_answers_session", StudentAnswer.session_id)
 Index("ix_student_answers_question", StudentAnswer.question_id)
 Index("ix_student_answers_unique", StudentAnswer.session_id, StudentAnswer.question_id, unique=True)
-Index("ix_candidate_scores_session", CandidateScore.session_id)
+Index("ix_candidate_scores_submission", CandidateScore.submission_id)
 Index("ix_candidate_scores_cluster", CandidateScore.cluster_id)
 Index("ix_correct_answers_question", CorrectAnswer.question_id, unique=True)
 

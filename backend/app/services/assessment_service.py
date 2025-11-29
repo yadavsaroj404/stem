@@ -24,6 +24,7 @@ from app.models.database import (
     ItemPool,
     ItemsGroup,
     Cluster,
+    SubmissionDB,
 )
 from app.services.scoring_service import scoring_service
 
@@ -219,7 +220,8 @@ class AssessmentService:
                 formatted_opt = {
                     "_id": str(opt.option_id),
                     "text": opt.option_text,
-                    "image": opt.option_image_url
+                    "image": opt.option_image_url,
+                    "displayOrder": opt.display_order
                 }
                 formatted_q["options"].append(formatted_opt)
 
@@ -402,7 +404,7 @@ class AssessmentService:
         Returns:
             Submission result with scores
         """
-        session_id = str(uuid.uuid4())
+        submission_id = str(uuid.uuid4())
         db: Session = SessionLocal()
 
         try:
@@ -410,59 +412,52 @@ class AssessmentService:
                 "Starting bulk response submission",
                 extra={
                     'user_id': submission_data.userId,
-                    'session_id': session_id,
+                    'submission_id': submission_id,
                     'response_count': len(submission_data.responses)
                 }
             )
 
-            # Create test session record
-            test_session = TestSession(
-                session_id=session_id,
-                user_id=submission_data.userId,
-                test_id=None,
-                name=submission_data.userId,  # Using userId as name
-                status="SUBMITTED",
-                submitted_at=submission_data.submittedAt
-            )
-            db.add(test_session)
-            db.flush()
-
-            # Process each response
+            # Build responses array with correctness info
+            responses_array = []
             for response_input in submission_data.responses:
-                answer_json = {
-                    "selectedOption": response_input.selectedOption
-                }
-
                 # Check correctness
                 is_correct = None
                 if response_input.selectedOption:
-                    is_correct = 1 if scoring_service.check_answer(
+                    is_correct = scoring_service.check_answer(
                         response_input.questionId,
                         response_input.selectedOption,
                         None
-                    ) else 0
+                    )
 
-                student_answer = StudentAnswer(
-                    session_id=session_id,
-                    question_id=response_input.questionId,
-                    student_answer=json.dumps(answer_json),
-                    is_correct=is_correct
-                )
-                db.add(student_answer)
+                responses_array.append({
+                    "questionId": response_input.questionId,
+                    "selectedOption": response_input.selectedOption,
+                    "isCorrect": is_correct
+                })
 
+            # Create submission record with all responses as JSON
+            submission = SubmissionDB(
+                _id=submission_id,
+                user_id=submission_data.userId,
+                test_id=None,
+                status="SUBMITTED",
+                responses=json.dumps(responses_array),
+                submitted_at=submission_data.submittedAt
+            )
+            db.add(submission)
             db.commit()
 
-            # Compute scores
-            logger.info(f"Computing scores for session {session_id}")
-            scores = scoring_service.compute_scores(db, session_id)
+            # Compute scores from submission responses
+            logger.info(f"Computing scores for submission {submission_id}")
+            scores = scoring_service.compute_scores_from_submission(db, submission_id, responses_array)
 
             # Get top 3 clusters for the report
-            top_clusters = scoring_service.get_top_clusters(db, session_id)
+            top_clusters = scoring_service.get_top_clusters(db, submission_id)
 
             logger.info(
                 "Bulk response submission successful",
                 extra={
-                    'session_id': session_id,
+                    'submission_id': submission_id,
                     'user_id': submission_data.userId,
                     'overall_score': scores.get('overallScore', 0)
                 }
@@ -479,7 +474,7 @@ class AssessmentService:
             logger.error(
                 "Bulk response submission failed",
                 extra={
-                    'session_id': session_id,
+                    'submission_id': submission_id,
                     'user_id': submission_data.userId,
                     'error': str(e),
                     'error_type': type(e).__name__
