@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import clap from "@/images/activities/clap.gif";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function PartialCompletionModal({
   funfact,
@@ -13,20 +13,31 @@ export default function PartialCompletionModal({
   closeBtnText: string;
   onClose: () => void;
 }) {
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const handleCloseBtnClick = () => {
-    onClose();
+    setIsAnimating(false);
+    setTimeout(() => {
+      onClose();
+    }, 300); // Corresponds to the animation duration
   };
 
   // to prevent background scrolling when modal is open
   useEffect(() => {
     document.body.style.overflow = "hidden";
+    const timer = setTimeout(() => setIsAnimating(true), 50); // Delay to ensure transition is applied
     return () => {
+      clearTimeout(timer);
       document.body.style.overflow = "auto";
     };
   }, []);
   return (
     <div className="z-20 fixed grid place-items-center bg-black/40 inset-0 w-screen h-screen p-4">
-      <div className="w-full max-w-4xl text-center border-2 border-[#00A600] rounded-2xl relative bg-[#00A600] pt-2 lg:pt-10 pb-2 lg:pb-6 px-1 lg:px-6 sm:px-12">
+      <div
+        className={`w-full max-w-4xl text-center border-2 border-[#00A600] rounded-2xl relative bg-[#00A600] pt-2 lg:pt-10 pb-2 lg:pb-6 px-1 lg:px-6 sm:px-12 transform transition-all duration-300 ease-out ${
+          isAnimating ? "scale-100 opacity-100" : "scale-90 opacity-0"
+        }`}
+      >
         <Image
           width={150}
           height={150}

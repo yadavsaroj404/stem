@@ -87,55 +87,60 @@ export function RankQuestionComponent({
 
   return (
     <div>
-      {orderedOptions.sort((a, b)=>{
-        return a.displayOrder - b.displayOrder;
-      }).map((option, index) => {
-        const isBeingDragged = draggedIndex === index;
-        return (
-          <div
-            key={option._id}
-            ref={(el: HTMLDivElement | null) => {
-              if (el) {
-                itemRefs.current[index] = el;
-              }
-            }}
-            draggable
-            onDragStart={() => handleDragStart(index)}
-            onDragEnter={() => handleDragEnter(index)}
-            onDragEnd={handleDragEnd}
-            onDragOver={(e) => e.preventDefault()}
-            className={`flex items-center gap-x-4 flex-nowrap mb-4 cursor-grab active:cursor-grabbing transition-all duration-300 ease-in-out ${
-              isBeingDragged ? "opacity-50 scale-105" : "opacity-100 scale-100"
-            }`}
-            style={{
-              transition:
-                "transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-            }}
-          >
-            <div className="w-6.5 h-6.5 relative">
-              <div className="absolute top-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
-              <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
-              <div className="absolute bottom-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
-              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
-            </div>
+      {orderedOptions
+        .sort((a, b) => a.displayOrder - b.displayOrder)
+        .map((option, index) => {
+          const isBeingDragged = draggedIndex === index;
+          return (
             <div
-              className={`flex grow-1 items-center px-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color`}
+              key={option._id}
+              ref={(el: HTMLDivElement | null) => {
+                if (el) {
+                  itemRefs.current[index] = el;
+                }
+              }}
+              draggable
+              onDragStart={() => handleDragStart(index)}
+              onDragEnter={() => handleDragEnter(index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => e.preventDefault()}
+              className={`flex items-center gap-x-4 flex-nowrap mb-4 cursor-grab active:cursor-grabbing transition-all duration-300 ease-in-out ${
+                isBeingDragged
+                  ? "opacity-50 scale-105"
+                  : "opacity-100 scale-100"
+              }`}
+              style={{
+                transition:
+                  "transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+              }}
             >
-              <span className="text-base font-medium mr-2 ">
-                (
-                {question.type === "rank"
-                  ? question.options.findIndex((o) => o._id === option._id) + 1
-                  : String.fromCharCode(
-                      65 +
-                        question.options.findIndex((o) => o._id === option._id)
-                    )}
-                )
-              </span>
-              <span className="text-base font-medium">{option.text}</span>
+              <div className="w-6.5 h-6.5 relative">
+                <div className="absolute top-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+                <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+                <div className="absolute bottom-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+              </div>
+              <div
+                className={`flex grow-1 items-center px-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color`}
+              >
+                <span className="text-base font-medium mr-2 ">
+                  (
+                  {question.type === "rank"
+                    ? question.options.findIndex((o) => o._id === option._id) +
+                      1
+                    : String.fromCharCode(
+                        65 +
+                          question.options.findIndex(
+                            (o) => o._id === option._id
+                          )
+                      )}
+                  )
+                </span>
+                <span className="text-base font-medium">{option.text}</span>
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 }
@@ -185,36 +190,43 @@ export function GroupQuestionComponent({
 
   return (
     <div className="w-full flex gap-2.5">
-      {question.itemGroups.map((group: GroupOptionParams) => (
-        <div
-          key={group._id}
-          style={blockStyles}
-          className="w-full max-w-60 p-4 rounded-lg border border-primary-brand-color bg-[#1B0244] bg-opacity-50"
-        >
-          <h3 className="font-semibold mb-4 text-base pb-2 border-b-2 border-[#D400FF]/30">
-            {group.groupName}
-          </h3>
-          <div className="space-y-4">
-            {group.items.map((subOption) => (
-              <div
-                key={subOption._id}
-                className="flex items-start cursor-pointer"
-                onClick={() => handleSelect(group._id, subOption._id)}
-              >
-                {selected[group._id] === subOption._id ? (
-                  <IoMdRadioButtonOn size={20} className="mr-2 flex-shrink-0" />
-                ) : (
-                  <IoMdRadioButtonOff
-                    size={20}
-                    className="mr-2 flex-shrink-0"
-                  />
-                )}
-                <span className="text-sm font-semibold">{subOption.text}</span>
-              </div>
-            ))}
+      {question.itemGroups
+        .sort((a, b) => a.displayOrder - b.displayOrder)
+        .map((group: GroupOptionParams) => (
+          <div
+            key={group._id}
+            style={blockStyles}
+            className="w-full max-w-60 p-4 rounded-lg border border-primary-brand-color bg-[#1B0244] bg-opacity-50"
+          >
+            <h3 className="font-semibold mb-4 text-base pb-2 border-b-2 border-[#D400FF]/30">
+              {group.groupName}
+            </h3>
+            <div className="space-y-4">
+              {group.items.map((subOption) => (
+                <div
+                  key={subOption._id}
+                  className="flex items-start cursor-pointer"
+                  onClick={() => handleSelect(group._id, subOption._id)}
+                >
+                  {selected[group._id] === subOption._id ? (
+                    <IoMdRadioButtonOn
+                      size={20}
+                      className="mr-2 flex-shrink-0"
+                    />
+                  ) : (
+                    <IoMdRadioButtonOff
+                      size={20}
+                      className="mr-2 flex-shrink-0"
+                    />
+                  )}
+                  <span className="text-sm font-semibold">
+                    {subOption.text}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }
@@ -230,6 +242,11 @@ export function MatchingQuestionComponent({
 }) {
   // check if both sides are present
   if (question.itemGroups.length < 2) return null;
+  question.itemGroups.sort((a, b) => {
+    a.items.sort((a, b) => a.displayOrder - b.displayOrder);
+    b.items.sort((a, b) => a.displayOrder - b.displayOrder);
+    return a.displayOrder - b.displayOrder;
+  });
   const leftSide = question.itemGroups[0];
   const rightSide = question.itemGroups[1];
 
@@ -474,42 +491,44 @@ export function MatchingQuestionComponent({
       <div className="flex justify-between gap-8">
         {/* Left Column */}
         <div className="w-[45%] space-y-3">
-          {leftSide.items.map((item) => {
-            const match = getMatchForLeft(item._id);
-            const color =
-              match || selectedLeft === item._id
-                ? getColorForMatch("left", item._id)
-                : null;
-            return (
-              <div
-                key={item._id}
-                ref={(el) => {
-                  itemRefs.current[item._id] = el;
-                }}
-                onClick={() => handleSelect("left", item._id)}
-                className={`p-3.5 w-fit rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
-                  !color
-                    ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
-                    : "backdrop-blur-md"
-                }`}
-                style={{
-                  backgroundColor: color?.bg || "",
-                  borderColor: color?.border || "",
-                }}
-              >
-                <span>{item.text}</span>
-                {item.image && (
-                  <Image
-                    src={item.image}
-                    alt={item.text || "option"}
-                    width={40}
-                    height={40}
-                    className="rounded-md ml-2"
-                  />
-                )}
-              </div>
-            );
-          })}
+          {leftSide.items
+            .sort((a, b) => a.displayOrder - b.displayOrder)
+            .map((item) => {
+              const match = getMatchForLeft(item._id);
+              const color =
+                match || selectedLeft === item._id
+                  ? getColorForMatch("left", item._id)
+                  : null;
+              return (
+                <div
+                  key={item._id}
+                  ref={(el) => {
+                    itemRefs.current[item._id] = el;
+                  }}
+                  onClick={() => handleSelect("left", item._id)}
+                  className={`p-3.5 w-fit rounded-lg border transition-all cursor-pointer flex items-center bg-opacity-50 ${
+                    !color
+                      ? "border-primary-brand-color bg-[#1B0244] hover:bg-primary-dark"
+                      : "backdrop-blur-md"
+                  }`}
+                  style={{
+                    backgroundColor: color?.bg || "",
+                    borderColor: color?.border || "",
+                  }}
+                >
+                  <span>{item.text}</span>
+                  {item.image && (
+                    <Image
+                      src={item.image}
+                      alt={item.text || "option"}
+                      width={40}
+                      height={40}
+                      className="rounded-md ml-2"
+                    />
+                  )}
+                </div>
+              );
+            })}
         </div>
 
         {/* Right Column */}
@@ -594,22 +613,24 @@ export function MultiSelectQuestionComponent({
 
   return (
     <div className="flex gap-2 flex-wrap">
-      {question.options.map((option: TextOptionParams, index: number) => (
-        <div
-          key={option._id}
-          className={`flex items-center px-4 mb-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color transition duration-150 cursor-pointer ${
-            selected.includes(option._id)
-              ? "bg-primary-brand-color shadow-[inset_0_5px_8px_rgba(255,255,255,0.4)]"
-              : "hover:bg-primary-dark hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)]"
-          }`}
-          onClick={() => handleSelect(option._id)}
-        >
-          <span className="text-base font-medium mr-2 ">
-            ({String.fromCharCode(65 + index)})
-          </span>
-          <span className="text-base font-medium">{option.text}</span>
-        </div>
-      ))}
+      {question.options
+        .sort((a, b) => a.displayOrder - b.displayOrder)
+        .map((option: TextOptionParams, index: number) => (
+          <div
+            key={option._id}
+            className={`flex items-center px-4 mb-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color transition duration-150 cursor-pointer ${
+              selected.includes(option._id)
+                ? "bg-primary-brand-color shadow-[inset_0_5px_8px_rgba(255,255,255,0.4)]"
+                : "hover:bg-primary-dark hover:shadow-[inset_0_2px_8px_rgba(255,255,255,0.4)]"
+            }`}
+            onClick={() => handleSelect(option._id)}
+          >
+            <span className="text-base font-medium mr-2 ">
+              ({String.fromCharCode(65 + index)})
+            </span>
+            <span className="text-base font-medium">{option.text}</span>
+          </div>
+        ))}
     </div>
   );
 }
@@ -622,7 +643,7 @@ const FUNFACTS = [
   "Halfway done — clean work. Future Fact: In future homes, your mirror could track your sleep, hydration, and mood, and literally tell you what your body needs today.",
   "Still going strong — focus mode is ON. Future Fact: Cities may soon have smart sidewalks that glow at night, charge your devices as you walk, and change colour based on air quality.",
   "Final stretch — love this discipline. Future Fact: Future workplaces might use AR glasses so you can collaborate with teammates who appear next to you, even if they’re on another continent.",
-  "Two more to go — stay locked in. Future Fact: Public transport could soon be run by autonomous electric pods that you can summon like an Uber, shared with people going your way.",
+  "Eight more to go — stay locked in. Future Fact: Public transport could soon be run by autonomous electric pods that you can summon like an Uber, shared with people going your way.",
   "Last lap. Future Fact: Space tech may soon allow astronauts to grow fresh fruits and veggies on Mars — including actual Martian strawberries.",
 ];
 export default function TestPage() {
@@ -663,8 +684,8 @@ export default function TestPage() {
   }, []);
 
   // show modal after completing each cluster
-  const handlePopUpShow = (questionIndex: number) => {
-    if (shownModal !== "NONE") return;
+  const showPopUp = (): boolean => {
+    if (shownModal !== "NONE") return false;
     if (responses.length > 0 && questions.length > 0) {
       const lastResponse = responses[responses.length - 1];
       const lastQuestion = questions.find(
@@ -693,18 +714,12 @@ export default function TestPage() {
           const funFactForCluster =
             FUNFACTS[(clusterNumber - 1) % FUNFACTS.length];
           setFunFact(funFactForCluster);
-          logger.info(
-            `Cluster ${lastQuestion.clusterId} completed. Showing fun fact.`
-          );
-          const showTimer = setTimeout(() => {
-            setShownModal("PARTIAL_COMPLETION");
-          }, 500);
-          return () => {
-            clearTimeout(showTimer);
-          };
+          setShownModal("PARTIAL_COMPLETION");
+          return true;
         }
       }
     }
+    return false;
   };
 
   const getSelectedOption = (questionId: string): string => {
@@ -751,7 +766,9 @@ export default function TestPage() {
       alert("Please select an option before proceeding.");
       return;
     }
-    handleQuestionChange(currIndex + 1);
+    if (!showPopUp()) {
+      handleQuestionChange(currIndex + 1);
+    }
   };
 
   const goToPreviousQuestion = () => {
@@ -934,7 +951,10 @@ export default function TestPage() {
       {shownModal === "PARTIAL_COMPLETION" && (
         <PartialCompletionModal
           closeBtnText="Continue"
-          onClose={() => setShownModal("NONE")}
+          onClose={() => {
+            setShownModal("NONE");
+            handleQuestionChange(currIndex + 1);
+          }}
           funfact={funFact}
         />
       )}
