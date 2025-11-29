@@ -54,8 +54,7 @@ def main():
     ap.add_argument("--questions", required=True, help="Path to test-questions.json")
     args = ap.parse_args()
 
-    # DATABASE_URL = os.environ.get("DATABASE_URL")
-    DATABASE_URL = "postgresql://postgres:root@localhost:5432/stem_db"
+    DATABASE_URL = os.environ.get("DATABASE_URL")
     if not DATABASE_URL:
         print("Please export DATABASE_URL first.")
         sys.exit(1)

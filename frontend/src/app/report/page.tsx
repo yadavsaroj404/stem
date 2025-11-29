@@ -1,17 +1,35 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import bulb from "@/images/objects/bulb.gif";
 import { FaArrowRightLong } from "react-icons/fa6";
 import clzGirl from "@/images/people/clzGirl.png";
 import UserProfile from "@/components/UserProfile";
+import ReportDownloadBtn from "@/components/ReportDownloadBtn";
+import { useRouter } from "next/navigation";
+import { ReportData } from "@/interfaces/report";
 
 export default function ReportPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [reportData, setReportData] = useState<ReportData | null>(null);
   const [animationDirection, setAnimationDirection] = useState<
     "left" | "right"
   >("right");
+
+  useEffect(() => {
+    const reportData = localStorage.getItem("reportData");
+    if (reportData) {
+      const parsedData: ReportData = JSON.parse(reportData);
+      setReportData(parsedData);
+      setLoading(false);
+    } else {
+      alert("No report data found. Please complete the test first.");
+      router.push("/");
+    }
+  }, []);
 
   const handleTabChange = (index: number) => {
     // if (index === activeTab || isAnimating) return;
@@ -29,157 +47,162 @@ export default function ReportPage() {
     }, 250); // Duration should match the fade-out transition
   };
 
-  const DUMMY_CAREERS: {
-    pathname: string;
-    tag: string;
-    careerImage: string;
-    title: string;
-    subtitle: string;
-    description: string;
-    skills: string[];
-    subjects: Array<{ name: string; image: string }>;
-    careers: Array<{ title: string; careers: string[] }>;
-    tryThis: string;
-  }[] = [
-    {
-      pathname: "Primary",
-      tag: "Your Primary Pathway",
-      careerImage: "/s3/worker.png",
-      title: "Future Builder",
-      subtitle: "The Maker (MBTI: ISTP)",
-      description:
-        "Hands-on creator who loves solving problems and turning ideas into real things. You mix science, math, and creativity to design smarter systems for the world.",
-      skills: [
-        "Numerical Aptitude",
-        "Spatial reasoning",
-        "Problem-solving",
-        "Attention to detail",
-        "Digital literacy",
-      ],
-      subjects: [
-        { name: "Maths", image: "/s3/calculator.png" },
-        { name: "Physics", image: "/s3/atom.png" },
-        { name: "Computer Science", image: "/s3/data-science.png" },
-        { name: "Design Tech", image: "/s3/web-design.png" },
-      ],
-      careers: [
-        {
-          title: "Build Structures",
-          careers: ["Mechanical", "Civil, Aerospace", "Architecture"],
-        },
-        {
-          title: "Create Tech",
-          careers: [
-            "Robotics",
-            "Electrical",
-            "Mechatronics",
-            "Nanotech",
-            "Software",
-          ],
-        },
-        {
-          title: "Shape Health & Planet",
-          careers: [
-            "Biomedical",
-            "Environmental",
-            "Chemical",
-            "Materials",
-            "Industrial",
-          ],
-        },
-      ],
-      tryThis:
-        "Design a mini prototype (robot, bridge, or housing system) using CAD tools or LEGO and showcase it at a fair.",
-    },
-    {
-      pathname: "Secondary",
-      tag: "Your Secondary Pathways",
-      careerImage: "/s3/analyst.png",
-      title: "Future Analyst",
-      subtitle: "The Decoder",
-      description:
-        "Pattern-spotter and puzzle-solver who enjoys working with data, logic, and strategy. You ask, “What’s the smartest way to solve this?”",
-      skills: ["Analytical Reasoning", "Data Fluency", "Decision Making"],
-      subjects: [
-        { name: "Maths", image: "/s3/calculator.png" },
-        { name: "Statistics", image: "/s3/statistics.png" },
-        { name: "Computer Science", image: "/s3/data-science.png" },
-        { name: "Economics", image: "/s3/economics.png" },
-      ],
-      careers: [
-        {
-          title: "Analysts",
-          careers: [
-            "Data Scientist",
-            "AI Data Analyst",
-            "Genomics Data Scientist",
-            "Climate Risk Modeler",
-          ],
-        },
-        {
-          title: "Business Analysts",
-          careers: [
-            "Chartered Accountant",
-            "Financial Analyst",
-            "Investment Banker",
-            "Risk Manager",
-          ],
-        },
-        {
-          title: "Policy Analysts",
-          careers: [
-            "Corporate Strategist",
-            "ESG Consultant",
-            "Market Insights Researcher",
-            "Policy Advisor",
-          ],
-        },
-      ],
-      tryThis:
-        "Build a sports or finance prediction model in Excel or Tableau.",
-    },
-    {
-      pathname: "Tertiary",
-      tag: "Your Tertiary Pathways",
-      careerImage: "/s3/leader.png",
-      title: "Future Leader",
-      subtitle: "The Guide",
-      description:
-        "Organizer and motivator who enjoys leading teams, planning projects, and inspiring people to achieve shared goals.",
-      skills: ["Leadership", "Collaboration", "Communication"],
-      subjects: [
-        { name: "Business Studies", image: "/s3/study.png" },
-        { name: "Economics", image: "/s3/economics.png" },
-        { name: "Psychology", image: "/s3/psychology.png" },
-        { name: "Social", image: "/s3/social.png" },
-      ],
-      careers: [
-        {
-          title: "Business Leaders",
-          careers: ["Startup Founder", "CEO", "Business Development Manager"],
-        },
-        {
-          title: "Corporate Leaders",
-          careers: [
-            "Management Consultant",
-            "Strategy Director",
-            "Investment Banker",
-            "Innovation Officer",
-          ],
-        },
-        {
-          title: "Policy & Governance",
-          careers: [
-            "Civil Service Leader",
-            "Policy Director",
-            "Youth Council Director",
-          ],
-        },
-      ],
-      tryThis:
-        "Run a school initiative or community project — assign roles, track outcomes, and present results.",
-    },
-  ];
+  // const CAREERS: {
+  //   pathname: string;
+  //   tag: string;
+  //   careerImage: string;
+  //   title: string;
+  //   subtitle: string;
+  //   description: string;
+  //   skills: string[];
+  //   subjects: Array<{ name: string; image: string }>;
+  //   careers: Array<{ title: string; careers: string[] }>;
+  //   tryThis: string;
+  // }[] = [
+  //   {
+  //     pathname: "Primary",
+  //     tag: "Your Primary Pathway",
+  //     careerImage: "/s3/worker.png",
+  //     title: "Future Builder",
+  //     subtitle: "The Maker (MBTI: ISTP)",
+  //     description:
+  //       "Hands-on creator who loves solving problems and turning ideas into real things. You mix science, math, and creativity to design smarter systems for the world.",
+  //     skills: [
+  //       "Numerical Aptitude",
+  //       "Spatial reasoning",
+  //       "Problem-solving",
+  //       "Attention to detail",
+  //       "Digital literacy",
+  //     ],
+  //     subjects: [
+  //       { name: "Maths", image: "/s3/calculator.png" },
+  //       { name: "Physics", image: "/s3/atom.png" },
+  //       { name: "Computer Science", image: "/s3/data-science.png" },
+  //       { name: "Design Tech", image: "/s3/web-design.png" },
+  //     ],
+  //     careers: [
+  //       {
+  //         title: "Build Structures",
+  //         careers: ["Mechanical", "Civil, Aerospace", "Architecture"],
+  //       },
+  //       {
+  //         title: "Create Tech",
+  //         careers: [
+  //           "Robotics",
+  //           "Electrical",
+  //           "Mechatronics",
+  //           "Nanotech",
+  //           "Software",
+  //         ],
+  //       },
+  //       {
+  //         title: "Shape Health & Planet",
+  //         careers: [
+  //           "Biomedical",
+  //           "Environmental",
+  //           "Chemical",
+  //           "Materials",
+  //           "Industrial",
+  //         ],
+  //       },
+  //     ],
+  //     tryThis:
+  //       "Design a mini prototype (robot, bridge, or housing system) using CAD tools or LEGO and showcase it at a fair.",
+  //   },
+  //   {
+  //     pathname: "Secondary",
+  //     tag: "Your Secondary Pathways",
+  //     careerImage: "/s3/analyst.png",
+  //     title: "Future Analyst",
+  //     subtitle: "The Decoder",
+  //     description:
+  //       "Pattern-spotter and puzzle-solver who enjoys working with data, logic, and strategy. You ask, “What’s the smartest way to solve this?”",
+  //     skills: ["Analytical Reasoning", "Data Fluency", "Decision Making"],
+  //     subjects: [
+  //       { name: "Maths", image: "/s3/calculator.png" },
+  //       { name: "Statistics", image: "/s3/statistics.png" },
+  //       { name: "Computer Science", image: "/s3/data-science.png" },
+  //       { name: "Economics", image: "/s3/economics.png" },
+  //     ],
+  //     careers: [
+  //       {
+  //         title: "Analysts",
+  //         careers: [
+  //           "Data Scientist",
+  //           "AI Data Analyst",
+  //           "Genomics Data Scientist",
+  //           "Climate Risk Modeler",
+  //         ],
+  //       },
+  //       {
+  //         title: "Business Analysts",
+  //         careers: [
+  //           "Chartered Accountant",
+  //           "Financial Analyst",
+  //           "Investment Banker",
+  //           "Risk Manager",
+  //         ],
+  //       },
+  //       {
+  //         title: "Policy Analysts",
+  //         careers: [
+  //           "Corporate Strategist",
+  //           "ESG Consultant",
+  //           "Market Insights Researcher",
+  //           "Policy Advisor",
+  //         ],
+  //       },
+  //     ],
+  //     tryThis:
+  //       "Build a sports or finance prediction model in Excel or Tableau.",
+  //   },
+  //   {
+  //     pathname: "Tertiary",
+  //     tag: "Your Tertiary Pathways",
+  //     careerImage: "/s3/leader.png",
+  //     title: "Future Leader",
+  //     subtitle: "The Guide",
+  //     description:
+  //       "Organizer and motivator who enjoys leading teams, planning projects, and inspiring people to achieve shared goals.",
+  //     skills: ["Leadership", "Collaboration", "Communication"],
+  //     subjects: [
+  //       { name: "Business Studies", image: "/s3/study.png" },
+  //       { name: "Economics", image: "/s3/economics.png" },
+  //       { name: "Psychology", image: "/s3/psychology.png" },
+  //       { name: "Social", image: "/s3/social.png" },
+  //     ],
+  //     careers: [
+  //       {
+  //         title: "Business Leaders",
+  //         careers: ["Startup Founder", "CEO", "Business Development Manager"],
+  //       },
+  //       {
+  //         title: "Corporate Leaders",
+  //         careers: [
+  //           "Management Consultant",
+  //           "Strategy Director",
+  //           "Investment Banker",
+  //           "Innovation Officer",
+  //         ],
+  //       },
+  //       {
+  //         title: "Policy & Governance",
+  //         careers: [
+  //           "Civil Service Leader",
+  //           "Policy Director",
+  //           "Youth Council Director",
+  //         ],
+  //       },
+  //     ],
+  //     tryThis:
+  //       "Run a school initiative or community project — assign roles, track outcomes, and present results.",
+  //   },
+  // ];
+
+  if(loading || !reportData) {
+    return <div>Loading report...</div>;
+  }
+  const CAREERS = reportData?.pathways || [];
 
   return (
     <main className="px-2 md:px-6 lg:px-14">
@@ -201,7 +224,7 @@ export default function ReportPage() {
             top: "6px",
           }}
         />
-        {Object.values(DUMMY_CAREERS).map(({ pathname: tab }, index) => (
+        {Object.values(CAREERS).map(({ pathname: tab }, index) => (
           <button
             key={index}
             className={`${
@@ -225,28 +248,29 @@ export default function ReportPage() {
             : "opacity-100 transform translate-x-0"
         }`}
       >
+        <ReportDownloadBtn report={reportData} />
         <div className="flex flex-col lg:flex-row justify-center items-center lg:items-end my-8 lg:gap-4 text-center lg:text-left">
           <Image
-            src={DUMMY_CAREERS[activeTab].careerImage}
-            alt={DUMMY_CAREERS[activeTab].title}
+            src={CAREERS[activeTab].careerImage}
+            alt={CAREERS[activeTab].title}
             width={400}
             height={300}
             className="h-48 lg:h-56 w-auto"
           />
           <div className="lg:ml-5 lg:mr-1">
             <div className="text-base font-semibold -mb-2">
-              {DUMMY_CAREERS[activeTab].tag}
+              {CAREERS[activeTab].tag}
             </div>
             {/* add black text shadow */}
             <div className="text-[#CBA9FF] text-5xl lg:text-7xl font-extrabold text-shadow-[0_10px_20px_rgb(0,0,0)] uppercase">
-              {DUMMY_CAREERS[activeTab].title.split(" ")[0]}
+              {CAREERS[activeTab].title.split(" ")[0]}
             </div>
             <div className="text-[#CBA9FF] text-5xl lg:text-7xl font-extrabold text-shadow-[0_10px_20px_rgb(0,0,0)] uppercase">
-              {DUMMY_CAREERS[activeTab].title.split(" ")[1]}
+              {CAREERS[activeTab].title.split(" ")[1]}
             </div>
           </div>
           <div className="text-2xl lg:text-3xl font-semibold mt-4 lg:mt-0">
-            {DUMMY_CAREERS[activeTab].subtitle}
+            {CAREERS[activeTab].subtitle}
           </div>
         </div>
 
@@ -255,7 +279,7 @@ export default function ReportPage() {
             Who You Are
           </h2>
           <p className="text-base text-center my-4 max-w-3xl mx-auto">
-            {DUMMY_CAREERS[activeTab].description}
+            {CAREERS[activeTab].description}
           </p>
         </div>
 
@@ -264,7 +288,7 @@ export default function ReportPage() {
             Skills
           </h2>
           <div className="w-full max-w-2xl mx-auto my-4 flex flex-wrap justify-center gap-x-4 gap-y-6">
-            {DUMMY_CAREERS[activeTab].skills.map((skill, index) => (
+            {CAREERS[activeTab].skills.map((skill, index) => (
               <button
                 key={index}
                 className="rounded-4xl px-4 py-1.5 bg-[#5C00FF] shadow-[inset_0_0px_4px_rgba(255,255,255,0.6)]"
@@ -280,7 +304,7 @@ export default function ReportPage() {
             Subjects to Focus On:
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-2 sm:px-10 mt-5">
-            {DUMMY_CAREERS[activeTab].subjects.map((subject, index) => (
+            {CAREERS[activeTab].subjects.map((subject, index) => (
               <div
                 key={index}
                 className="border border-primary-brand-color text-center rounded-2xl px-4 py-4"
@@ -304,7 +328,7 @@ export default function ReportPage() {
           </h2>
 
           <div className="flex flex-col lg:flex-row justify-center gap-10 px-2 sm:px-10 mt-5">
-            {DUMMY_CAREERS[activeTab].careers.map((career, index) => (
+            {CAREERS[activeTab].careers.map((career, index) => (
               <div
                 key={index}
                 className="w-full lg:w-1/3 border-2 border-primary-brand-color text-center rounded-2xl overflow-hidden"
@@ -340,7 +364,7 @@ export default function ReportPage() {
               className="absolute -top-2 left-1/2 transform -translate-1/2 w-12 h-12 lg:w-16 lg:h-16"
             />
           </button>
-          <p className="mt-4 text-sm">{DUMMY_CAREERS[activeTab].tryThis}</p>
+          <p className="mt-4 text-sm">{CAREERS[activeTab].tryThis}</p>
         </div>
 
         <button className="mx-auto mt-12 mb-7 px-8 py-2 group active:shadow-none hover:shadow-md border-b border-primary-brand-color shadow-primary-brand-color rounded-full bg-gradient-to-r from-primary-dark to-primary-brand-color font-semibold text-sm lg:text-lg transition cursor-pointer duration-200 flex items-center justify-center space-x-2">

@@ -456,6 +456,9 @@ class AssessmentService:
             logger.info(f"Computing scores for session {session_id}")
             scores = scoring_service.compute_scores(db, session_id)
 
+            # Get top 3 clusters for the report
+            top_clusters = scoring_service.get_top_clusters(db, session_id)
+
             logger.info(
                 "Bulk response submission successful",
                 extra={
@@ -466,10 +469,9 @@ class AssessmentService:
             )
 
             return {
-                "status": "success",
-                "sessionId": session_id,
-                "message": "Responses submitted and scored successfully",
-                "score": scores
+                "username": submission_data.userId,
+                "contact": submission_data.userId,
+                "pathways": top_clusters
             }
 
         except Exception as e:

@@ -8,7 +8,7 @@
       "image": "/s3/q1.png",
       "optionInstruction": "Choose the option that feels most true to you",
       "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
-      "question": "A rule in your workshop says, \u201cIf a safety check is missed, the machine cannot be used.\u201d While inspecting the lab, you notice the machine is running. What must be true?",
+      "question": "A rule in your workshop says, 'If a safety check is missed, the machine cannot be used.' While inspecting the lab, you notice the machine is running. What must be true?",
       "type": "text",
       "options": [
         {
@@ -240,17 +240,17 @@
       "_id": "c55345e1c5c646eba4cfc40fcb46af1a",
       "image": "/s3/q2.png",
       "clusterId": "6b2c3f06e755485992c2d8d2ff1eee33",
-      "question": "You are leading a climate-smart-city project. Two teammates, Aisha and Rohan, argue about the presentation design\u2014Aisha wants infographics, Rohan prefers text. The deadline is next week. ",
+      "question": "You are leading a climate-smart-city project. Two teammates, Aisha and Rohan, argue about the presentation design--Aisha wants infographics, Rohan prefers text. The deadline is next week. ",
       "optionInstruction": "Rank these responses from most effective (1) to least (4):",
       "type": "rank",
       "options": [
         {
-          "text": "Let\u2019s pause\u2014each gets two minutes to pitch, then we\u2019ll merge or vote.",
+          "text": "Let's pause--each gets two minutes to pitch, then we'll merge or vote.",
           "_id": "4770315ec1234360821b0ad26b748c43",
           "displayOrder": 1
         },
         {
-          "text": "We\u2019re short on time\u2014just follow my call.",
+          "text": "We're short on time--just follow my call.",
           "_id": "4571f5a1a2cb426a8c53b4e3a9d73786",
           "displayOrder": 2
         },
@@ -365,7 +365,7 @@
           "displayOrder": 2
         },
         {
-          "text": "Copy another school\u2019s trend",
+          "text": "Copy another school's trend",
           "_id": "d5531196a3c94b07b13b94bbc57f1197",
           "displayOrder": 3
         }
@@ -398,7 +398,7 @@
       "type": "text",
       "options": [
         {
-          "text": "AI is a digital helper\u2014it can suggest music or complete your sentences in seconds.",
+          "text": "AI is a digital helper--it can suggest music or complete your sentences in seconds.",
           "_id": "06aec6717fcf460fadbf04c350171301",
           "displayOrder": 1
         },
@@ -456,22 +456,22 @@
       "_id": "da093a1ca7ae480896b38c80cd9958e5",
       "image": "/s3/q2.png",
       "clusterId": "4b01afba8864424086abc744dcf43f38",
-      "question": "You are analysing a graph showing global CO\u2082 emissions and average temperature both rising from 1950 to 2020.",
+      "question": "You are analysing a graph showing global CO2 emissions and average temperature both rising from 1950 to 2020.",
       "optionInstruction": "Rank these statements from most accurate (1) to least (4): ",
       "type": "rank",
       "options": [
         {
-          "text": "Rising CO\u2082 may be linked to temperature, but correlation does not prove causation",
+          "text": "Rising CO2 may be linked to temperature, but correlation does not prove causation",
           "_id": "4dc5762ec7754556afeaea732dcbc987",
           "displayOrder": 1
         },
         {
-          "text": "CO\u2082 causes temperature rise",
+          "text": "CO2 causes temperature rise",
           "_id": "39c380a2e687421480d90ed33b5463e7",
           "displayOrder": 2
         },
         {
-          "text": "Temperature rise causes CO\u2082",
+          "text": "Temperature rise causes CO2",
           "_id": "5c9b715d39c942748c7dc43c78ac16bf",
           "displayOrder": 3
         },
@@ -517,7 +517,7 @@
       "_id": "bfeb9c2eb53e4598929ad27923905868",
       "image": "/s3/q1.png",
       "clusterId": "4b01afba8864424086abc744dcf43f38",
-      "question": "A blog headline claims, \u201cEnergy drinks make students smarter.\u201d",
+      "question": "A blog headline claims, 'Energy drinks make students smarter.'",
       "description": "Which question should you ask first?",
       "type": "text",
       "options": [
@@ -527,7 +527,7 @@
           "displayOrder": 1
         },
         {
-          "text": "Where\u2019s the study?",
+          "text": "Where's the study?",
           "_id": "43e163809e124add8f6e4c1882f5a503",
           "displayOrder": 2
         },
@@ -666,7 +666,7 @@
       "_id": "842b2575df744c969e1c101d09085f02",
       "image": "/s3/q1.png",
       "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
-      "question": "Your school team\u2019s prototype to reduce plastic waste breaks a day before the Innovation Showcase. Everyone feels discouraged. What will you do?",
+      "question": "Your school team's prototype to reduce plastic waste breaks a day before the Innovation Showcase. Everyone feels discouraged. What will you do?",
       "optionInstruction": "What is the best immediate response?",
       "type": "text",
       "options": [
@@ -1036,7 +1036,7 @@
       "_id": "a20d4007d31a4b84b6aeb3b0523f3f22",
       "image": "/s3/q1.png",
       "clusterId": "1e21c155e6134ee8842fe9fc7a26c786",
-      "question": "A rule says, \u201cAll teams must submit references one day before.\u201d Your team submits two hours late.",
+      "question": "A rule says, 'All teams must submit references one day before.' Your team submits two hours late.",
       "description": "What is the most likely outcome?",
       "optionInstruction": "Choose the option that feels most true to you",
       "type": "text",
@@ -1303,7 +1303,7 @@
       "rightSideTitle": "Accuracy Level",
       "leftSide": [
         {
-          "text": "Check if it\u2019s viral before using antibiotics",
+          "text": "Check if it's viral before using antibiotics",
           "_id": "22a41f87a482426d9dcbc72862b59ba8",
           "displayOrder": 1
         },
@@ -1383,7 +1383,7 @@
       "image": "/s3/q1.png",
       "clusterId": "f7055288ef9a4c779142d8e2935020ac",
       "question": "Your school is planning Well-being Week.",
-      "optionInstruction": "Select TWO actions that would have the greatest impact on students\u2019 mental health:",
+      "optionInstruction": "Select TWO actions that would have the greatest impact on students' mental health:",
       "type": "text",
       "options": [
         {
@@ -1499,7 +1499,7 @@
       "_id": "2d695ab96eae44b79ae6312d6520d8e4",
       "image": "/s3/q1.png",
       "clusterId": "fc0c680be5874bc2a206ac626c2aeec1",
-      "question": "Your school\u2019s new sustainability drive offers four choices: ",
+      "question": "Your school's new sustainability drive offers four choices: ",
       "optionInstruction": "Which action creates the most lasting impact?",
       "type": "text",
       "options": [
@@ -1607,11 +1607,11 @@
       "_id": "24da18e8b50f4a2f9b853562a46ddbef",
       "image": "/s3/q2.png",
       "clusterId": "fc0c680be5874bc2a206ac626c2aeec1",
-      "question": "A company advertises its bottles as \u201ceco-friendly.\u201d",
-      "optionInstruction": "A company advertises its bottles as \u201ceco-friendly.\u201d",
+      "question": "A company advertises its bottles as 'eco-friendly.'",
+      "optionInstruction": "A company advertises its bottles as 'eco-friendly.'",
       "type": "matching",
-      "leftSideTitle": "A company advertises its bottles as \u201ceco-friendly.\u201d",
-      "rightSideTitle": "A company advertises its bottles as \u201ceco-friendly.\u201d",
+      "leftSideTitle": "A company advertises its bottles as 'eco-friendly.'",
+      "rightSideTitle": "A company advertises its bottles as 'eco-friendly.'",
       "leftSide": [
         {
           "text": "Can you show proof or certification of sustainability?",
@@ -1715,7 +1715,7 @@
       "_id": "57b74c1367b9498c810609f8aa67d566",
       "image": "/s3/q2.png",
       "clusterId": "35631ac2b9f340519242dbe29c34c3c3",
-      "question": "A blog reports: \u201cCoffee drinkers score higher on exams.\u201d",
+      "question": "A blog reports: 'Coffee drinkers score higher on exams.'",
       "optionInstruction": "Match each explanation to the reasoning it represents.",
       "type": "matching",
       "leftSideTitle": "Explanation",
@@ -1801,7 +1801,7 @@
       "_id": "8fda0492b562454e89a2d3b8955fe432",
       "image": "/s3/q1.png",
       "clusterId": "35631ac2b9f340519242dbe29c34c3c3",
-      "question": "A rule in your school says, \u201cIf a safety inspection is missed, the system must be paused.\u201d\nWhile auditing, you find the system is still running. ",
+      "question": "A rule in your school says, 'If a safety inspection is missed, the system must be paused.'\nWhile auditing, you find the system is still running. ",
       "optionInstruction": "What does this mean?",
       "type": "text",
       "options": [

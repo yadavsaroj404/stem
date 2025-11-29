@@ -5,7 +5,7 @@ Handles answer validation, scoring computation, and cluster-level analysis.
 
 import json
 import os
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 from sqlalchemy.orm import Session
 from app.core.logging import get_logger
 from app.models.database import (
@@ -24,7 +24,9 @@ class ScoringService:
 
     def __init__(self):
         self.correct_answers: Dict[str, str] = {}
+        self.pathways: Dict[str, Dict] = {}
         self._load_correct_answers()
+        self._load_pathways()
 
     def _load_correct_answers(self):
         """Load correct answers from answers.json file"""
@@ -44,6 +46,28 @@ class ScoringService:
         except Exception as e:
             logger.error(
                 "Failed to load correct answers",
+                extra={'error': str(e), 'error_type': type(e).__name__},
+                exc_info=True
+            )
+
+    def _load_pathways(self):
+        """Load pathway details from pathways.json file"""
+        try:
+            pathways_path = os.path.join(
+                os.path.dirname(os.path.dirname(__file__)),
+                "data",
+                "pathways.json"
+            )
+
+            if os.path.exists(pathways_path):
+                with open(pathways_path, 'r') as f:
+                    self.pathways = json.load(f)
+                logger.info(f"Loaded {len(self.pathways)} pathway definitions from pathways.json")
+            else:
+                logger.warning(f"pathways.json not found at {pathways_path}")
+        except Exception as e:
+            logger.error(
+                "Failed to load pathways",
                 extra={'error': str(e), 'error_type': type(e).__name__},
                 exc_info=True
             )
@@ -217,6 +241,58 @@ class ScoringService:
             "unanswered": unanswered,
             "clusterScores": cluster_scores_list
         }
+
+    def get_top_clusters(self, db: Session, session_id: str) -> List[Dict[str, Any]]:
+        """
+        Get top 3 clusters based on correct answers count with full pathway details.
+
+        Args:
+            db: Database session
+            session_id: The session ID
+
+        Returns:
+            List of pathway dictionaries for primary, secondary, and tertiary
+        """
+        # Get cluster scores for this session (excluding overall score where cluster_id is NULL)
+        cluster_scores = db.query(CandidateScore).filter(
+            CandidateScore.session_id == session_id,
+            CandidateScore.cluster_id.isnot(None)
+        ).order_by(CandidateScore.correct_answers.desc()).all()
+
+        pathway_names = ["Primary", "Secondary", "Tertiary"]
+        pathway_tags = ["Your Primary Pathway", "Your Secondary Pathway", "Your Tertiary Pathway"]
+
+        pathways = []
+
+        for i, score in enumerate(cluster_scores[:3]):
+            cluster_id = str(score.cluster_id)
+            pathway_data = self.pathways.get(cluster_id, {})
+
+            pathway = {
+                "pathname": pathway_names[i] if i < len(pathway_names) else f"Pathway {i+1}",
+                "tag": pathway_tags[i] if i < len(pathway_tags) else f"Your Pathway {i+1}",
+                "careerImage": pathway_data.get("careerImage", ""),
+                "title": pathway_data.get("title", ""),
+                "subtitle": pathway_data.get("subtitle", ""),
+                "description": pathway_data.get("description", ""),
+                "skills": pathway_data.get("skills", []),
+                "subjects": pathway_data.get("subjects", []),
+                "careers": pathway_data.get("careers", []),
+                "tryThis": pathway_data.get("tryThis", "")
+            }
+            pathways.append(pathway)
+
+        logger.info(
+            f"Top pathways computed for session {session_id}",
+            extra={
+                "pathway_count": len(pathways),
+                "primary": pathways[0]["title"] if len(pathways) > 0 else None,
+                "secondary": pathways[1]["title"] if len(pathways) > 1 else None,
+                "tertiary": pathways[2]["title"] if len(pathways) > 2 else None
+            }
+        )
+
+        return pathways
 
 
 # Singleton instance

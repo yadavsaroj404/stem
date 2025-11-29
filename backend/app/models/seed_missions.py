@@ -232,8 +232,7 @@ def main():
     ap.add_argument("--test-name", default="Missions Assessment", help="Test name (default: Missions Assessment)")
     args = ap.parse_args()
 
-    # DATABASE_URL = os.environ.get("DATABASE_URL")
-    DATABASE_URL = "postgresql://postgres:root@localhost:5432/stem_db"
+    DATABASE_URL = os.environ.get("DATABASE_URL")
     if not DATABASE_URL:
         print("Please export DATABASE_URL first.")
         sys.exit(1)

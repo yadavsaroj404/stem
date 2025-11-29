@@ -1,0 +1,260 @@
+{
+  "43e139ec-1c7b-42ef-80ad-0afda3223219": {
+    "careerImage": "/s3/worker.png",
+    "title": "Future Builder",
+    "subtitle": "The Maker (MBTI: ISTP)",
+    "description": "Hands-on creator who loves solving problems and turning ideas into real things. You mix science, math, and creativity to design smarter systems for the world.",
+    "skills": [
+      "Numerical Aptitude",
+      "Spatial reasoning",
+      "Problem-solving",
+      "Attention to detail",
+      "Digital literacy"
+    ],
+    "subjects": [
+      { "name": "Maths", "image": "/s3/calculator.png" },
+      { "name": "Physics", "image": "/s3/atom.png" },
+      { "name": "Computer Science", "image": "/s3/data-science.png" },
+      { "name": "Design Tech", "image": "/s3/web-design.png" }
+    ],
+    "careers": [
+      {
+        "title": "Build Structures",
+        "careers": ["Mechanical", "Civil, Aerospace", "Architecture"]
+      },
+      {
+        "title": "Create Tech",
+        "careers": ["Robotics", "Electrical", "Mechatronics", "Nanotech", "Software"]
+      },
+      {
+        "title": "Shape Health & Planet",
+        "careers": ["Biomedical", "Environmental", "Chemical", "Materials", "Industrial"]
+      }
+    ],
+    "tryThis": "Design a mini prototype (robot, bridge, or housing system) using CAD tools or LEGO and showcase it at a fair."
+  },
+  "4b01afba-8864-4240-86ab-c744dcf43f38": {
+    "careerImage": "/s3/analyst.png",
+    "title": "Future Analyst",
+    "subtitle": "The Decoder",
+    "description": "Pattern-spotter and puzzle-solver who enjoys working with data, logic, and strategy. You ask, \"What's the smartest way to solve this?\"",
+    "skills": ["Analytical Reasoning", "Data Fluency", "Decision Making"],
+    "subjects": [
+      { "name": "Maths", "image": "/s3/calculator.png" },
+      { "name": "Statistics", "image": "/s3/statistics.png" },
+      { "name": "Computer Science", "image": "/s3/data-science.png" },
+      { "name": "Economics", "image": "/s3/economics.png" }
+    ],
+    "careers": [
+      {
+        "title": "Analysts",
+        "careers": ["Data Scientist", "AI Data Analyst", "Genomics Data Scientist", "Climate Risk Modeler"]
+      },
+      {
+        "title": "Business Analysts",
+        "careers": ["Chartered Accountant", "Financial Analyst", "Investment Banker", "Risk Manager"]
+      },
+      {
+        "title": "Policy Analysts",
+        "careers": ["Corporate Strategist", "ESG Consultant", "Market Insights Researcher", "Policy Advisor"]
+      }
+    ],
+    "tryThis": "Build a sports or finance prediction model in Excel or Tableau."
+  },
+  "941534b9-78d1-43b9-930a-719de3f2db39": {
+    "careerImage": "/s3/leader.png",
+    "title": "Future Leader",
+    "subtitle": "The Guide",
+    "description": "Organizer and motivator who enjoys leading teams, planning projects, and inspiring people to achieve shared goals.",
+    "skills": ["Leadership", "Collaboration", "Communication"],
+    "subjects": [
+      { "name": "Business Studies", "image": "/s3/study.png" },
+      { "name": "Economics", "image": "/s3/economics.png" },
+      { "name": "Psychology", "image": "/s3/psychology.png" },
+      { "name": "Social", "image": "/s3/social.png" }
+    ],
+    "careers": [
+      {
+        "title": "Business Leaders",
+        "careers": ["Startup Founder", "CEO", "Business Development Manager"]
+      },
+      {
+        "title": "Corporate Leaders",
+        "careers": ["Management Consultant", "Strategy Director", "Investment Banker", "Innovation Officer"]
+      },
+      {
+        "title": "Policy & Governance",
+        "careers": ["Civil Service Leader", "Policy Director", "Youth Council Director"]
+      }
+    ],
+    "tryThis": "Run a school initiative or community project — assign roles, track outcomes, and present results."
+  },
+  "6b2c3f06-e755-4859-92c2-d8d2ff1eee33": {
+    "careerImage": "/s3/communicator.png",
+    "title": "Future Communicator",
+    "subtitle": "The Voice",
+    "description": "Storyteller and connector who loves expressing ideas, persuading others, and creating meaningful content that inspires action.",
+    "skills": ["Communication", "Creativity", "Persuasion", "Writing", "Public Speaking"],
+    "subjects": [
+      { "name": "English", "image": "/s3/english.png" },
+      { "name": "Media Studies", "image": "/s3/media.png" },
+      { "name": "Psychology", "image": "/s3/psychology.png" },
+      { "name": "Languages", "image": "/s3/languages.png" }
+    ],
+    "careers": [
+      {
+        "title": "Media & Content",
+        "careers": ["Journalist", "Content Creator", "Copywriter", "Podcaster"]
+      },
+      {
+        "title": "Marketing & PR",
+        "careers": ["Marketing Manager", "Brand Strategist", "PR Specialist", "Social Media Manager"]
+      },
+      {
+        "title": "Education & Training",
+        "careers": ["Teacher", "Corporate Trainer", "Educational Content Developer"]
+      }
+    ],
+    "tryThis": "Start a blog, podcast, or YouTube channel on a topic you're passionate about."
+  },
+  "e12ee9c2-8715-4ab8-bacd-112bb24f7b2a": {
+    "careerImage": "/s3/creator.png",
+    "title": "Future Creator",
+    "subtitle": "The Artist",
+    "description": "Imaginative visionary who expresses ideas through art, design, and creative media. You see the world differently and bring beauty to everything.",
+    "skills": ["Creativity", "Visual Thinking", "Design", "Innovation", "Artistic Expression"],
+    "subjects": [
+      { "name": "Art & Design", "image": "/s3/art.png" },
+      { "name": "Music", "image": "/s3/music.png" },
+      { "name": "Media Studies", "image": "/s3/media.png" },
+      { "name": "Technology", "image": "/s3/data-science.png" }
+    ],
+    "careers": [
+      {
+        "title": "Visual Arts",
+        "careers": ["Graphic Designer", "UI/UX Designer", "Animator", "Photographer"]
+      },
+      {
+        "title": "Performing Arts",
+        "careers": ["Musician", "Actor", "Director", "Choreographer"]
+      },
+      {
+        "title": "Digital Creative",
+        "careers": ["Game Designer", "VFX Artist", "Digital Artist", "Creative Director"]
+      }
+    ],
+    "tryThis": "Create a portfolio showcasing your best creative work — art, designs, music, or videos."
+  },
+  "1e21c155-e613-4ee8-842f-e9fc7a26c786": {
+    "careerImage": "/s3/explorer.png",
+    "title": "Future Explorer",
+    "subtitle": "The Discoverer",
+    "description": "Curious adventurer who loves learning, researching, and uncovering new knowledge. You ask 'why' and 'how' about everything.",
+    "skills": ["Research", "Critical Thinking", "Curiosity", "Investigation", "Scientific Method"],
+    "subjects": [
+      { "name": "Science", "image": "/s3/atom.png" },
+      { "name": "Geography", "image": "/s3/geography.png" },
+      { "name": "History", "image": "/s3/history.png" },
+      { "name": "Research Methods", "image": "/s3/research.png" }
+    ],
+    "careers": [
+      {
+        "title": "Scientific Research",
+        "careers": ["Research Scientist", "Lab Technician", "Academic Researcher", "R&D Specialist"]
+      },
+      {
+        "title": "Field Exploration",
+        "careers": ["Archaeologist", "Geologist", "Marine Biologist", "Wildlife Researcher"]
+      },
+      {
+        "title": "Innovation & Discovery",
+        "careers": ["Innovation Researcher", "Think Tank Analyst", "Patent Examiner"]
+      }
+    ],
+    "tryThis": "Conduct a mini research project on a topic that fascinates you and present your findings."
+  },
+  "f7055288-ef9a-4c77-9142-d8e2935020ac": {
+    "careerImage": "/s3/healer.png",
+    "title": "Future Healer",
+    "subtitle": "The Caregiver",
+    "description": "Compassionate helper who wants to make people's lives better through health, wellness, and support. You care deeply about others' wellbeing.",
+    "skills": ["Empathy", "Patience", "Communication", "Problem-solving", "Caregiving"],
+    "subjects": [
+      { "name": "Biology", "image": "/s3/biology.png" },
+      { "name": "Chemistry", "image": "/s3/chemistry.png" },
+      { "name": "Psychology", "image": "/s3/psychology.png" },
+      { "name": "Health Sciences", "image": "/s3/health.png" }
+    ],
+    "careers": [
+      {
+        "title": "Medical Professionals",
+        "careers": ["Doctor", "Nurse", "Surgeon", "Dentist"]
+      },
+      {
+        "title": "Mental Health",
+        "careers": ["Psychologist", "Counselor", "Therapist", "Psychiatrist"]
+      },
+      {
+        "title": "Allied Health",
+        "careers": ["Physiotherapist", "Nutritionist", "Pharmacist", "Paramedic"]
+      }
+    ],
+    "tryThis": "Volunteer at a local hospital, care home, or community health initiative."
+  },
+  "fc0c680b-e587-4bc2-a206-ac626c2aeec1": {
+    "careerImage": "/s3/sustainability.png",
+    "title": "Future Sustainability Champion",
+    "subtitle": "The Guardian",
+    "description": "Environmental advocate who wants to protect the planet and create sustainable solutions. You think about future generations.",
+    "skills": ["Environmental Awareness", "Systems Thinking", "Advocacy", "Innovation", "Sustainability"],
+    "subjects": [
+      { "name": "Environmental Science", "image": "/s3/environment.png" },
+      { "name": "Geography", "image": "/s3/geography.png" },
+      { "name": "Biology", "image": "/s3/biology.png" },
+      { "name": "Economics", "image": "/s3/economics.png" }
+    ],
+    "careers": [
+      {
+        "title": "Environmental",
+        "careers": ["Environmental Scientist", "Conservation Officer", "Ecologist", "Climate Analyst"]
+      },
+      {
+        "title": "Sustainable Business",
+        "careers": ["Sustainability Consultant", "ESG Analyst", "Green Energy Specialist"]
+      },
+      {
+        "title": "Policy & Advocacy",
+        "careers": ["Environmental Lawyer", "NGO Director", "Policy Advisor", "Urban Planner"]
+      }
+    ],
+    "tryThis": "Start an eco-initiative at school or in your community — recycling, clean-up, or awareness campaign."
+  },
+  "35631ac2-b9f3-4051-9242-dbe29c34c3c3": {
+    "careerImage": "/s3/enabler.png",
+    "title": "Future Enabler",
+    "subtitle": "The Supporter",
+    "description": "Behind-the-scenes champion who helps others succeed. You enjoy organizing, facilitating, and making systems work smoothly.",
+    "skills": ["Organization", "Support", "Coordination", "Administration", "Service Orientation"],
+    "subjects": [
+      { "name": "Business Studies", "image": "/s3/study.png" },
+      { "name": "IT", "image": "/s3/data-science.png" },
+      { "name": "Office Administration", "image": "/s3/admin.png" },
+      { "name": "Communication", "image": "/s3/communication.png" }
+    ],
+    "careers": [
+      {
+        "title": "Operations",
+        "careers": ["Operations Manager", "Project Coordinator", "Office Manager", "Executive Assistant"]
+      },
+      {
+        "title": "Human Resources",
+        "careers": ["HR Manager", "Recruiter", "Training Coordinator", "Employee Relations"]
+      },
+      {
+        "title": "Support Services",
+        "careers": ["Customer Success Manager", "Technical Support", "Administrative Officer"]
+      }
+    ],
+    "tryThis": "Organize a school event or help coordinate a community project from start to finish."
+  }
+}

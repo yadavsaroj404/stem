@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 import counterFrame from "@/images/objects/timer-frame.gif";
@@ -263,13 +263,17 @@ export default function MissionsTestPage() {
     } = JSON.parse(
       localStorage.getItem("responses") || '{"general": [], "missions": []}'
     );
-    
-    extractedResponses.missions = missionsResponses;
-    localStorage.setItem("responses", JSON.stringify(extractedResponses));    
 
-    const mergedResponses = [...extractedResponses.general, ...extractedResponses.missions];
+    extractedResponses.missions = missionsResponses;
+    localStorage.setItem("responses", JSON.stringify(extractedResponses));
+
+    const mergedResponses = [
+      ...extractedResponses.general,
+      ...extractedResponses.missions,
+    ];
     try {
-      await submitAnswer(mergedResponses);
+      const reportData = await submitAnswer(mergedResponses);
+      localStorage.setItem("reportData", JSON.stringify(reportData));
     } catch (error) {
       console.log("Error submitting answers:");
     } finally {
