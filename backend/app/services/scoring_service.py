@@ -39,7 +39,21 @@ class ScoringService:
 
             if os.path.exists(answers_path):
                 with open(answers_path, 'r') as f:
-                    self.correct_answers = json.load(f)
+                    answers_data = json.load(f)
+
+                # Handle both array format and dict format
+                if isinstance(answers_data, list):
+                    # Convert array format to dict: {questionId: selectedOption}
+                    for item in answers_data:
+                        qid = item.get("questionId", "")
+                        selected = item.get("selectedOption", "")
+                        # Store with both hyphenated and non-hyphenated keys
+                        self.correct_answers[qid] = selected
+                        self.correct_answers[qid.replace("-", "")] = selected
+                else:
+                    # Already in dict format
+                    self.correct_answers = answers_data
+
                 logger.info(f"Loaded {len(self.correct_answers)} correct answers from answers.json")
             else:
                 logger.warning(f"answers.json not found at {answers_path}")
@@ -242,6 +256,13 @@ class ScoringService:
             "clusterScores": cluster_scores_list
         }
 
+    def _normalize_uuid(self, uuid_str: str) -> str:
+        """Convert UUID to hyphenated format if it isn't already"""
+        clean = uuid_str.replace("-", "")
+        if len(clean) == 32:
+            return f"{clean[:8]}-{clean[8:12]}-{clean[12:16]}-{clean[16:20]}-{clean[20:]}"
+        return uuid_str
+
     def get_top_clusters(self, db: Session, session_id: str) -> List[Dict[str, Any]]:
         """
         Get top 3 clusters based on correct answers count with full pathway details.
@@ -266,7 +287,12 @@ class ScoringService:
 
         for i, score in enumerate(cluster_scores[:3]):
             cluster_id = str(score.cluster_id)
+            # Try both hyphenated and non-hyphenated formats for pathway lookup
             pathway_data = self.pathways.get(cluster_id, {})
+            if not pathway_data:
+                # Try normalized (hyphenated) format
+                normalized_id = self._normalize_uuid(cluster_id)
+                pathway_data = self.pathways.get(normalized_id, {})
 
             pathway = {
                 "pathname": pathway_names[i] if i < len(pathway_names) else f"Pathway {i+1}",
