@@ -345,6 +345,9 @@ def main():
             mission_row = {
                 "id": mission_id,
                 "test_id": test_id,
+                "name": mission_name,
+                "image_url": mission.get("image"),
+                "video_url": mission.get("video"),
                 "primary_question_id": primary_qid,
                 "secondary_question_id": secondary_qid,
             }
