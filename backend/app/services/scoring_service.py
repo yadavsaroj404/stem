@@ -39,7 +39,21 @@ class ScoringService:
 
             if os.path.exists(answers_path):
                 with open(answers_path, 'r') as f:
-                    self.correct_answers = json.load(f)
+                    answers_data = json.load(f)
+
+                # Handle both array format and dict format
+                if isinstance(answers_data, list):
+                    # Convert array format to dict: {questionId: selectedOption}
+                    for item in answers_data:
+                        qid = item.get("questionId", "")
+                        selected = item.get("selectedOption", "")
+                        # Store with both hyphenated and non-hyphenated keys
+                        self.correct_answers[qid] = selected
+                        self.correct_answers[qid.replace("-", "")] = selected
+                else:
+                    # Already in dict format
+                    self.correct_answers = answers_data
+
                 logger.info(f"Loaded {len(self.correct_answers)} correct answers from answers.json")
             else:
                 logger.warning(f"answers.json not found at {answers_path}")
@@ -242,20 +256,152 @@ class ScoringService:
             "clusterScores": cluster_scores_list
         }
 
-    def get_top_clusters(self, db: Session, session_id: str) -> List[Dict[str, Any]]:
+    def compute_scores_from_submission(self, db: Session, submission_id: str, responses: List[Dict]) -> Dict:
+        """
+        Compute scores from submission responses array.
+
+        Args:
+            db: Database session
+            submission_id: The submission ID
+            responses: List of response dicts with questionId, selectedOption, isCorrect
+
+        Returns:
+            Dictionary with overall and cluster-level scores
+        """
+        logger.info(f"Computing scores for submission {submission_id}")
+
+        if not responses:
+            logger.warning(f"No responses found for submission {submission_id}")
+            return {
+                "overallScore": 0,
+                "totalQuestions": 0,
+                "correctAnswers": 0,
+                "incorrectAnswers": 0,
+                "unanswered": 0,
+                "clusterScores": []
+            }
+
+        # Get all questions to determine clusters
+        question_ids = [r["questionId"] for r in responses]
+        questions = db.query(Question).filter(Question.question_id.in_(question_ids)).all()
+        question_map = {str(q.question_id): q for q in questions}
+
+        # Track overall stats
+        total_questions = len(responses)
+        correct_count = sum(1 for r in responses if r.get("isCorrect") is True)
+        incorrect_count = sum(1 for r in responses if r.get("isCorrect") is False)
+        unanswered = sum(1 for r in responses if r.get("isCorrect") is None)
+
+        overall_score = (correct_count / total_questions * 100) if total_questions > 0 else 0
+
+        # Compute cluster-level scores
+        cluster_stats: Dict[str, Dict] = {}
+        for response in responses:
+            question = question_map.get(str(response["questionId"]))
+            if not question or not question.cluster_id:
+                continue
+
+            cluster_id = str(question.cluster_id)
+            if cluster_id not in cluster_stats:
+                cluster_stats[cluster_id] = {
+                    "total": 0,
+                    "correct": 0,
+                    "incorrect": 0,
+                    "unanswered": 0
+                }
+
+            cluster_stats[cluster_id]["total"] += 1
+            if response.get("isCorrect") is True:
+                cluster_stats[cluster_id]["correct"] += 1
+            elif response.get("isCorrect") is False:
+                cluster_stats[cluster_id]["incorrect"] += 1
+            else:
+                cluster_stats[cluster_id]["unanswered"] += 1
+
+        # Delete existing scores for this submission
+        db.query(CandidateScore).filter(
+            CandidateScore.submission_id == submission_id
+        ).delete()
+
+        # Save cluster scores to database
+        cluster_scores_list = []
+        for cluster_id, stats in cluster_stats.items():
+            score_percentage = (stats["correct"] / stats["total"] * 100) if stats["total"] > 0 else 0
+
+            cluster_score = CandidateScore(
+                submission_id=submission_id,
+                cluster_id=cluster_id,
+                total_questions=stats["total"],
+                correct_answers=stats["correct"],
+                incorrect_answers=stats["incorrect"],
+                unanswered=stats["unanswered"],
+                score_percentage=int(score_percentage),
+                cluster_score=stats["correct"]
+            )
+            db.add(cluster_score)
+            cluster_scores_list.append({
+                "clusterId": cluster_id,
+                "totalQuestions": stats["total"],
+                "correctAnswers": stats["correct"],
+                "incorrectAnswers": stats["incorrect"],
+                "unanswered": stats["unanswered"],
+                "scorePercentage": score_percentage
+            })
+
+        # Save overall score
+        overall_score_record = CandidateScore(
+            submission_id=submission_id,
+            cluster_id=None,  # NULL for overall score
+            total_questions=total_questions,
+            correct_answers=correct_count,
+            incorrect_answers=incorrect_count,
+            unanswered=unanswered,
+            score_percentage=int(overall_score),
+            cluster_score=correct_count
+        )
+        db.add(overall_score_record)
+
+        db.commit()
+
+        logger.info(
+            f"Scores computed for submission {submission_id}",
+            extra={
+                "overall_score": overall_score,
+                "total_questions": total_questions,
+                "correct_answers": correct_count
+            }
+        )
+
+        return {
+            "overallScore": overall_score,
+            "totalQuestions": total_questions,
+            "correctAnswers": correct_count,
+            "incorrectAnswers": incorrect_count,
+            "unanswered": unanswered,
+            "clusterScores": cluster_scores_list
+        }
+
+    def _normalize_uuid(self, uuid_str: str) -> str:
+        """Convert UUID to hyphenated format if it isn't already"""
+        clean = uuid_str.replace("-", "")
+        if len(clean) == 32:
+            return f"{clean[:8]}-{clean[8:12]}-{clean[12:16]}-{clean[16:20]}-{clean[20:]}"
+        return uuid_str
+
+    def get_top_clusters(self, db: Session, submission_id: str) -> List[Dict[str, Any]]:
         """
         Get top 3 clusters based on correct answers count with full pathway details.
 
         Args:
             db: Database session
-            session_id: The session ID
+            submission_id: The submission ID
 
         Returns:
             List of pathway dictionaries for primary, secondary, and tertiary
         """
-        # Get cluster scores for this session (excluding overall score where cluster_id is NULL)
+        # Get cluster scores for this submission (excluding overall score where cluster_id is NULL)
         cluster_scores = db.query(CandidateScore).filter(
-            CandidateScore.session_id == session_id,
+            CandidateScore.submission_id == submission_id,
             CandidateScore.cluster_id.isnot(None)
         ).order_by(CandidateScore.correct_answers.desc()).all()
 
@@ -266,7 +412,12 @@ class ScoringService:
 
         for i, score in enumerate(cluster_scores[:3]):
             cluster_id = str(score.cluster_id)
+            # Try both hyphenated and non-hyphenated formats for pathway lookup
             pathway_data = self.pathways.get(cluster_id, {})
+            if not pathway_data:
+                # Try normalized (hyphenated) format
+                normalized_id = self._normalize_uuid(cluster_id)
+                pathway_data = self.pathways.get(normalized_id, {})
 
             pathway = {
                 "pathname": pathway_names[i] if i < len(pathway_names) else f"Pathway {i+1}",
@@ -283,7 +434,7 @@ class ScoringService:
             pathways.append(pathway)
 
         logger.info(
-            f"Top pathways computed for session {session_id}",
+            f"Top pathways computed for submission {submission_id}",
             extra={
                 "pathway_count": len(pathways),
                 "primary": pathways[0]["title"] if len(pathways) > 0 else None,

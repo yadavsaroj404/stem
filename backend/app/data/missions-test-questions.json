@@ -6,7 +6,7 @@
     "primaryQuestion": {
       "_id": "9ad1d06df42b434fa10f4654e4c3f566",
       "image": "/s3/q2.png",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Mix Alloy A and B to make a drone wing that’s both strong and light.",
       "optionInstruction": "Choose your mix:",
       "type": "text",
@@ -29,7 +29,7 @@
       "_id": "ccd2f49419ce4ff5be6a96433722cd46",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Your first wing cracks in testing. What do you do?",
       "type": "text",
       "options": [
@@ -55,7 +55,7 @@
     "primaryQuestion": {
       "_id": "6f426de4517047a18951e669416026ab",
       "image": "/s3/q2.png",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Spot the anomaly in the dataset (quick visual scan).",
       "optionInstruction": "Write the odd pattern number:",
       "type": "group",
@@ -118,7 +118,7 @@
       "_id": "6940e2d72bea449f93a9bcb8018945aa",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Your AI model seems biased. Next step?",
       "type": "text",
       "options": [
@@ -144,7 +144,7 @@
     "primaryQuestion": {
       "_id": "be864580fe224e22a6c90bf91b1fa734",
       "image": "/s3/q2.png",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Program your rescue bot to reach the trapped worker using the fewest steps.",
       "optionInstruction": "Choose your sequence",
       "type": "text",
@@ -167,7 +167,7 @@
       "_id": "1d0eea6979b343758804b74a18449cdf",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "The bot stops mid-way. You would…",
       "type": "text",
       "options": [
@@ -193,7 +193,7 @@
     "primaryQuestion": {
       "_id": "4d9b1ddb83424e6ba45b9382fc92d266",
       "image": "/s3/q2.png",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Select which one is/are correct:",
       "optionInstruction": "Select the correct matches:",
       "type": "multi-select",
@@ -230,7 +230,7 @@
       "_id": "0d4cbc6eccab4d0bbac3bdd45fa135be",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "You find a security flaw. Do you…",
       "type": "text",
       "options": [
@@ -256,7 +256,7 @@
     "primaryQuestion": {
       "_id": "c34d4b1fea9c4bf7a01849ec58859fd6",
       "image": "/s3/q2.png",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Choose the angle that reaches orbit with least fuel:",
       "optionInstruction": "Choose your mix:",
       "type": "text",
@@ -279,7 +279,7 @@
       "_id": "4daf3f5db0ab4fb8bd47f71263fc352d",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Offered a riskier route that saves time. You would…",
       "type": "text",
       "options": [
@@ -305,7 +305,7 @@
     "primaryQuestion": {
       "_id": "8f16c18820db4f169850a812245dc59b",
       "image": "/s3/q2.png",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Match similar balls based on their material properties.",
       "optionInstruction": "Match left side with correct right side",
       "type": "matching",
@@ -350,7 +350,7 @@
       "_id": "56a4f12a39c44b37ac63b0e4d8b8adf8",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "The results stay unpredictable. You…",
       "type": "text",
       "options": [
@@ -376,7 +376,7 @@
     "primaryQuestion": {
       "_id": "b9a00ad4f0d048bf90ee3ca4c08d7095",
       "image": "/s3/q2.png",
-      "clusterId": "e12ee9c287154ab8bacd112bb24f7b2a",
+      "clusterId": null,
       "question": "Balance power so the city does not black out.",
       "optionInstruction": " Mark your final percentages:",
       "type": "group",
@@ -465,7 +465,7 @@
       "_id": "a28321eccbb5475b9e82b5e338e35ef5",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "A factory demands extra power. You…",
       "type": "text",
       "options": [
@@ -491,7 +491,7 @@
     "primaryQuestion": {
       "_id": "0f4bbfc1004a42a48344b67b6c218770",
       "image": "/s3/q2.png",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "Pick three members for your innovation team:",
       "optionInstruction": "Choose your mix:",
       "type": "multi-select",
@@ -528,7 +528,7 @@
       "_id": "30c2ab624e9040d5af9050fc819b689a",
       "image": "/s3/q2.png",
       "optionInstruction": "Choose the option that feels most true to you",
-      "clusterId": "43e139ec1c7b42ef80ad0afda3223219",
+      "clusterId": null,
       "question": "The team disagrees. You…",
       "type": "text",
       "options": [

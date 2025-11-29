@@ -178,7 +178,7 @@ def main():
                             "question_id": qid,
                             "option_text": opt.get("text") or opt.get("option_text") or None,
                             "option_image_url": opt.get("image"),
-                            "display_order": idx + 1,
+                            "display_order": opt.get("displayOrder") or opt.get("display_order") or (idx + 1),
                         }
                         if list_options_table is not None:
                             try:
