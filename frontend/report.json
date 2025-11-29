@@ -1,0 +1,138 @@
+{
+  "username": "my-username",
+  "contact": "my-contact-info",
+  "pathways": [
+    {
+      "pathname": "Primary",
+      "tag": "Your Primary Pathway",
+      "careerImage": "/s3/worker.png",
+      "title": "Future Builder",
+      "subtitle": "The Maker (MBTI: ISTP)",
+      "description": "Hands-on creator who loves solving problems and turning ideas into real things. You mix science, math, and creativity to design smarter systems for the world.",
+      "skills": [
+        "Numerical Aptitude",
+        "Spatial reasoning",
+        "Problem-solving",
+        "Attention to detail",
+        "Digital literacy"
+      ],
+      "subjects": [
+        { "name": "Maths", "image": "/s3/calculator.png" },
+        { "name": "Physics", "image": "/s3/atom.png" },
+        { "name": "Computer Science", "image": "/s3/data-science.png" },
+        { "name": "Design Tech", "image": "/s3/web-design.png" }
+      ],
+      "careers": [
+        {
+          "title": "Build Structures",
+          "careers": ["Mechanical", "Civil, Aerospace", "Architecture"]
+        },
+        {
+          "title": "Create Tech",
+          "careers": [
+            "Robotics",
+            "Electrical",
+            "Mechatronics",
+            "Nanotech",
+            "Software"
+          ]
+        },
+        {
+          "title": "Shape Health & Planet",
+          "careers": [
+            "Biomedical",
+            "Environmental",
+            "Chemical",
+            "Materials",
+            "Industrial"
+          ]
+        }
+      ],
+      "tryThis": "Design a mini prototype (robot, bridge, or housing system) using CAD tools or LEGO and showcase it at a fair."
+    },
+    {
+      "pathname": "Secondary",
+      "tag": "Your Secondary Pathways",
+      "careerImage": "/s3/analyst.png",
+      "title": "Future Analyst",
+      "subtitle": "The Decoder",
+      "description": "Pattern-spotter and puzzle-solver who enjoys working with data, logic, and strategy. You ask, “What’s the smartest way to solve this?”",
+      "skills": ["Analytical Reasoning", "Data Fluency", "Decision Making"],
+      "subjects": [
+        { "name": "Maths", "image": "/s3/calculator.png" },
+        { "name": "Statistics", "image": "/s3/statistics.png" },
+        { "name": "Computer Science", "image": "/s3/data-science.png" },
+        { "name": "Economics", "image": "/s3/economics.png" }
+      ],
+      "careers": [
+        {
+          "title": "Analysts",
+          "careers": [
+            "Data Scientist",
+            "AI Data Analyst",
+            "Genomics Data Scientist",
+            "Climate Risk Modeler"
+          ]
+        },
+        {
+          "title": "Business Analysts",
+          "careers": [
+            "Chartered Accountant",
+            "Financial Analyst",
+            "Investment Banker",
+            "Risk Manager"
+          ]
+        },
+        {
+          "title": "Policy Analysts",
+          "careers": [
+            "Corporate Strategist",
+            "ESG Consultant",
+            "Market Insights Researcher",
+            "Policy Advisor"
+          ]
+        }
+      ],
+      "tryThis": "Build a sports or finance prediction model in Excel or Tableau."
+    },
+    {
+      "pathname": "Tertiary",
+      "tag": "Your Tertiary Pathways",
+      "careerImage": "/s3/leader.png",
+      "title": "Future Leader",
+      "subtitle": "The Guide",
+      "description": "Organizer and motivator who enjoys leading teams, planning projects, and inspiring people to achieve shared goals.",
+      "skills": ["Leadership", "Collaboration", "Communication"],
+      "subjects": [
+        { "name": "Business Studies", "image": "/s3/study.png" },
+        { "name": "Economics", "image": "/s3/economics.png" },
+        { "name": "Psychology", "image": "/s3/psychology.png" },
+        { "name": "Social", "image": "/s3/social.png" }
+      ],
+      "careers": [
+        {
+          "title": "Business Leaders",
+          "careers": ["Startup Founder", "CEO", "Business Development Manager"]
+        },
+        {
+          "title": "Corporate Leaders",
+          "careers": [
+            "Management Consultant",
+            "Strategy Director",
+            "Investment Banker",
+            "Innovation Officer"
+          ]
+        },
+        {
+          "title": "Policy & Governance",
+          "careers": [
+            "Civil Service Leader",
+            "Policy Director",
+            "Youth Council Director"
+          ]
+        }
+      ],
+      "tryThis": "Run a school initiative or community project — assign roles, track outcomes, and present results."
+    }
+  ]
+}

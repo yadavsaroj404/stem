@@ -54,7 +54,8 @@ def main():
     ap.add_argument("--questions", required=True, help="Path to test-questions.json")
     args = ap.parse_args()
 
-    DATABASE_URL = os.environ.get("DATABASE_URL")
+    # DATABASE_URL = os.environ.get("DATABASE_URL")
+    DATABASE_URL = "postgresql://postgres:RRWBkRgxocmYDSqN@db.wyfwogtrghawhpmbwpmu.supabase.co:5432/postgres"
     if not DATABASE_URL:
         print("Please export DATABASE_URL first.")
         sys.exit(1)

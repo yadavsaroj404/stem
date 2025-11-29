@@ -1,0 +1,72 @@
+python .\app\models\seed_from_json.py --clusters .\app\data\clusters.json --questions app\data\general-test-questions.json
+
+python .\app\models\seed_missions.py --missions .\app\data\missions-test-questions.json
+
+
+--------to add images to matching question in mission 6----------
+-- 1. Add image_url column to item_pools table
+  ALTER TABLE item_pools
+  ADD COLUMN IF NOT EXISTS image_url VARCHAR(255);
+
+  -- 2. Populate image URLs for Mission 6 matching question (leftSide items)
+  UPDATE item_pools SET image_url = '/s3/ball1.png' WHERE pool_id = '067ccdd9-3830-4da4-846e-45558ebde6b2';
+  UPDATE item_pools SET image_url = '/s3/ball2.png' WHERE pool_id = '7fde3923-03a2-412b-b4f0-cb5a897792cd';
+  UPDATE item_pools SET image_url = '/s3/ball3.jpg' WHERE pool_id = '208bf53f-0f64-4c00-84a8-9f9374538e6e';
+  UPDATE item_pools SET image_url = '/s3/ball4.jpg' WHERE pool_id = 'e3196bc6-f48b-42e7-8d6a-b39741825929';
+
+  -- 3. Populate image URLs for Mission 6 matching question (rightSide items)
+  UPDATE item_pools SET image_url = '/s3/ball5.jpg' WHERE pool_id = 'a115597f-57ad-4517-b1ac-1451a8c6aca5';
+  UPDATE item_pools SET image_url = '/s3/ball6.jpg' WHERE pool_id = 'eb69591f-7bde-4eb7-91d4-0f60338b408c';
+  UPDATE item_pools SET image_url = '/s3/ball7.jpg' WHERE pool_id = '43cc4f33-851d-462f-b892-b5b06f3a9c91';
+  UPDATE item_pools SET image_url = '/s3/ball8.jpg' WHERE pool_id = 'b3760dee-c3c9-41bc-80a3-16685a0d0aca';
+
+
+
+
+  ---------------------All missions repective video and image urls-----------------------
+  -- 1. Add new columns to missions_test table
+  ALTER TABLE missions_test
+  ADD COLUMN IF NOT EXISTS name VARCHAR(100),
+  ADD COLUMN IF NOT EXISTS image_url VARCHAR(255),
+  ADD COLUMN IF NOT EXISTS video_url VARCHAR(255);
+
+  -- 2. Populate the data for all 8 missions
+  -- Mission 1
+  UPDATE missions_test
+  SET name = 'Mission 1', image_url = '', video_url = '/s3/mission1.mp4'
+  WHERE primary_question_id = '9ad1d06d-f42b-434f-a10f-4654e4c3f566';
+
+  -- Mission 2
+  UPDATE missions_test
+  SET name = 'mission 2', image_url = '', video_url = '/s3/mission2.mp4'
+  WHERE primary_question_id = '6f426de4-5170-47a1-8951-e669416026ab';
+
+  -- Mission 3
+  UPDATE missions_test
+  SET name = 'mission 3', image_url = '/s3/mission3.png', video_url = ''
+  WHERE primary_question_id = 'be864580-fe22-4e22-a6c9-0bf91b1fa734';
+
+  -- Mission 4
+  UPDATE missions_test
+  SET name = 'mission 4', image_url = '/s3/mission4.png', video_url = ''
+  WHERE primary_question_id = '4d9b1ddb-8342-4e6b-a45b-9382fc92d266';
+
+  -- Mission 5
+  UPDATE missions_test
+  SET name = 'mission 5', image_url = '/s3/mission5.png', video_url = ''
+  WHERE primary_question_id = 'c34d4b1f-ea9c-4bf7-a018-49ec58859fd6';
+
+  -- Mission 6
+  UPDATE missions_test
+  SET name = 'mission 6', image_url = '', video_url = '/s3/mission6.mp4'
+  WHERE primary_question_id = '8f16c188-20db-4f16-9850-a812245dc59b';
+
+  -- Mission 7
+  UPDATE missions_test
+  SET name = 'mission 7', image_url = '', video_url = '/s3/mission7.mp4'
+  WHERE primary_question_id = 'b9a00ad4-f0d0-48bf-90ee-3ca4c08d7095';
+
+  -- Mission 8
+  UPDATE missions_test
+  SET name = 'mission 8', image_url = '/s3/mission8.png', video_url = ''
+  WHERE primary_question_id = '0f4bbfc1-004a-42a4-8344-b67b6c218770';

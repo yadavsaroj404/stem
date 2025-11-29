@@ -87,7 +87,9 @@ export function RankQuestionComponent({
 
   return (
     <div>
-      {orderedOptions.map((option, index) => {
+      {orderedOptions.sort((a, b)=>{
+        return a.displayOrder - b.displayOrder;
+      }).map((option, index) => {
         const isBeingDragged = draggedIndex === index;
         return (
           <div
@@ -612,6 +614,17 @@ export function MultiSelectQuestionComponent({
   );
 }
 
+const FUNFACTS = [
+  "Clean start — you’re warming up like a pro. Future Fact: AI “memory boosters” may turn any topic — math, Spanish, even physics — into personalised mini-games you can play on your phone.",
+  "Nice pace — keep sliding through. Future Fact: Your future playlist might adapt to your mood and energy levels — boosting focus when you study and calming you when you’re stressed.",
+  "Momentum unlocked. Future Fact: You may be able to run full science, art, or engineering experiments in VR from your bedroom — no materials, no mess, no “clean your room!”",
+  "You’re in the zone. Future Fact: Phones, laptops, and even sneakers may use self-repair materials that heal scratches and damage on their own overnight.",
+  "Halfway done — clean work. Future Fact: In future homes, your mirror could track your sleep, hydration, and mood, and literally tell you what your body needs today.",
+  "Still going strong — focus mode is ON. Future Fact: Cities may soon have smart sidewalks that glow at night, charge your devices as you walk, and change colour based on air quality.",
+  "Final stretch — love this discipline. Future Fact: Future workplaces might use AR glasses so you can collaborate with teammates who appear next to you, even if they’re on another continent.",
+  "Two more to go — stay locked in. Future Fact: Public transport could soon be run by autonomous electric pods that you can summon like an Uber, shared with people going your way.",
+  "Last lap. Future Fact: Space tech may soon allow astronauts to grow fresh fruits and veggies on Mars — including actual Martian strawberries.",
+];
 export default function TestPage() {
   const router = useRouter();
   const [currIndex, setCurrIndex] = useState(0);
@@ -650,19 +663,8 @@ export default function TestPage() {
   }, []);
 
   // show modal after completing each cluster
-  useEffect(() => {
-    const funfacts = [
-      "1. Clean start — you’re warming up like a pro. Future Fact: AI “memory boosters” may turn any topic — math, Spanish, even physics — into personalised mini-games you can play on your phone.",
-      "2. Nice pace — keep sliding through. Future Fact: Your future playlist might adapt to your mood and energy levels — boosting focus when you study and calming you when you’re stressed.",
-      "3. Momentum unlocked. Future Fact: You may be able to run full science, art, or engineering experiments in VR from your bedroom — no materials, no mess, no “clean your room!”",
-      "4. You’re in the zone. Future Fact: Phones, laptops, and even sneakers may use self-repair materials that heal scratches and damage on their own overnight.",
-      "5. Halfway done — clean work. Future Fact: In future homes, your mirror could track your sleep, hydration, and mood, and literally tell you what your body needs today.",
-      "6. Still going strong — focus mode is ON. Future Fact: Cities may soon have smart sidewalks that glow at night, charge your devices as you walk, and change colour based on air quality.",
-      "7. Final stretch — love this discipline. Future Fact: Future workplaces might use AR glasses so you can collaborate with teammates who appear next to you, even if they’re on another continent.",
-      "8. Two more to go — stay locked in. Future Fact: Public transport could soon be run by autonomous electric pods that you can summon like an Uber, shared with people going your way.",
-      "9. Last lap. Future Fact: Space tech may soon allow astronauts to grow fresh fruits and veggies on Mars — including actual Martian strawberries.",
-    ];
-
+  const handlePopUpShow = (questionIndex: number) => {
+    if (shownModal !== "NONE") return;
     if (responses.length > 0 && questions.length > 0) {
       const lastResponse = responses[responses.length - 1];
       const lastQuestion = questions.find(
@@ -684,9 +686,12 @@ export default function TestPage() {
 
         const nextQuestion = questions[currentQuestionIndex + 1];
         // Check if the cluster changes or if it's the last question of the test
-        if (!nextQuestion || nextQuestion.clusterId !== lastQuestion.clusterId) {
+        if (
+          !nextQuestion ||
+          nextQuestion.clusterId !== lastQuestion.clusterId
+        ) {
           const funFactForCluster =
-            funfacts[(clusterNumber - 1) % funfacts.length];
+            FUNFACTS[(clusterNumber - 1) % FUNFACTS.length];
           setFunFact(funFactForCluster);
           logger.info(
             `Cluster ${lastQuestion.clusterId} completed. Showing fun fact.`
@@ -694,17 +699,13 @@ export default function TestPage() {
           const showTimer = setTimeout(() => {
             setShownModal("PARTIAL_COMPLETION");
           }, 500);
-          const hideTimer = setTimeout(() => {
-            setShownModal("NONE");
-          }, 5000);
           return () => {
             clearTimeout(showTimer);
-            clearTimeout(hideTimer);
           };
         }
       }
     }
-  }, [responses, questions]);
+  };
 
   const getSelectedOption = (questionId: string): string => {
     return (
@@ -715,12 +716,9 @@ export default function TestPage() {
 
   const handleQuestionChange = (newIndex: number) => {
     if (isAnimating) return;
-    console.log("Responses-> ", responses);
-    logger.debug(`Changing question to index: ${newIndex}`);
     setIsAnimating(true);
     setTimeout(() => {
       if (newIndex === questions.length) {
-        logger.info("Last question answered, submitting test.");
         const formatedResponses = responses.map((resp) => ({
           questionId: resp.questionId,
           selectedOption: resp.selectedOptionId,
@@ -734,7 +732,6 @@ export default function TestPage() {
       } else {
         setCurrIndex(newIndex);
         setIsAnimating(false);
-        logger.debug(`Question index changed to: ${newIndex}`);
       }
     }, 200); // Corresponds to the duration of the fade-out animation
   };
@@ -936,7 +933,8 @@ export default function TestPage() {
       )}
       {shownModal === "PARTIAL_COMPLETION" && (
         <PartialCompletionModal
-          completion={Math.floor((responses.length / questions.length) * 100)}
+          closeBtnText="Continue"
+          onClose={() => setShownModal("NONE")}
           funfact={funFact}
         />
       )}
