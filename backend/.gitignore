@@ -6,4 +6,3 @@ Include/
 .vscode/
 trash/
 *.env
-logs/

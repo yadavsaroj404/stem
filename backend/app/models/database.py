@@ -75,9 +75,9 @@ class ListOption(Base):
 
     option_id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
     question_id = Column(UUID(as_uuid=False), ForeignKey("questions.question_id"), nullable=False)
-    option_text = Column(String(250), nullable=True)  # Allow NULL for image-only options
+    option_text = Column(String(250), nullable=True)
     option_image_url = Column(String(255), nullable=True)
-    display_order = Column(Integer, nullable=True)
+    display_order = Column(Integer, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 

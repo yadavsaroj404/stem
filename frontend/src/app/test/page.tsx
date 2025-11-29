@@ -24,7 +24,7 @@ import PartialCompletionModal from "@/components/Modals/PartialCompletion";
 import UserProfile from "@/components/UserProfile";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
 import logger from "@/helpers/logger";
-import CompletedModal from "@/components/Modals/completed";
+import DialogModal from "@/components/Modals/completed";
 
 export function RankQuestionComponent({
   question,
@@ -636,15 +636,51 @@ export function MultiSelectQuestionComponent({
 }
 
 const FUNFACTS = [
-  "Clean start — you’re warming up like a pro. Future Fact: AI “memory boosters” may turn any topic — math, Spanish, even physics — into personalised mini-games you can play on your phone.",
-  "Nice pace — keep sliding through. Future Fact: Your future playlist might adapt to your mood and energy levels — boosting focus when you study and calming you when you’re stressed.",
-  "Momentum unlocked. Future Fact: You may be able to run full science, art, or engineering experiments in VR from your bedroom — no materials, no mess, no “clean your room!”",
-  "You’re in the zone. Future Fact: Phones, laptops, and even sneakers may use self-repair materials that heal scratches and damage on their own overnight.",
-  "Halfway done — clean work. Future Fact: In future homes, your mirror could track your sleep, hydration, and mood, and literally tell you what your body needs today.",
-  "Still going strong — focus mode is ON. Future Fact: Cities may soon have smart sidewalks that glow at night, charge your devices as you walk, and change colour based on air quality.",
-  "Final stretch — love this discipline. Future Fact: Future workplaces might use AR glasses so you can collaborate with teammates who appear next to you, even if they’re on another continent.",
-  "Eight more to go — stay locked in. Future Fact: Public transport could soon be run by autonomous electric pods that you can summon like an Uber, shared with people going your way.",
-  "Last lap. Future Fact: Space tech may soon allow astronauts to grow fresh fruits and veggies on Mars — including actual Martian strawberries.",
+  {
+    title: "Clean start!",
+    subTitle: "You’re warming up like a pro.",
+    desc: "Future Fact: AI “memory boosters” may turn any topic — math, Spanish, even physics — into personalised mini-games you can play on your phone.",
+  },
+  {
+    title: "Nice pace!",
+    subTitle: "Keep sliding through.",
+    desc: "Future Fact: Your future playlist might adapt to your mood and energy levels — boosting focus when you study and calming you when you’re stressed.",
+  },
+  {
+    title: "Momentum unlocked!",
+    subTitle: "",
+    desc: "Future Fact: You may be able to run full science, art, or engineering experiments in VR from your bedroom — no materials, no mess, no “clean your room!”",
+  },
+  {
+    title: "You’re in the zone!",
+    subTitle: "",
+    desc: "Future Fact: Phones, laptops, and even sneakers may use self-repair materials that heal scratches and damage on their own overnight.",
+  },
+  {
+    title: "Halfway done!",
+    subTitle: "Clean work",
+    desc: "Future Fact: In future homes, your mirror could track your sleep, hydration, and mood, and literally tell you what your body needs today.",
+  },
+  {
+    title: "Still going strong!",
+    subTitle: "Focus mode is ON",
+    desc: "Future Fact: Cities may soon have smart sidewalks that glow at night, charge your devices as you walk, and change colour based on air quality.",
+  },
+  {
+    title: "Final stretch!",
+    subTitle: "Love this discipline",
+    desc: "Future Fact: Future workplaces might use AR glasses so you can collaborate with teammates who appear next to you, even if they’re on another continent.",
+  },
+  {
+    title: "Eight more to go!",
+    subTitle: "Stay locked in",
+    desc: "Future Fact: Public transport could soon be run by autonomous electric pods that you can summon like an Uber, shared with people going your way.",
+  },
+  {
+    title: "Last lap!",
+    subTitle: "",
+    desc: "Future Fact: Space tech may soon allow astronauts to grow fresh fruits and veggies on Mars — including actual Martian strawberries.",
+  },
 ];
 export default function TestPage() {
   const router = useRouter();
@@ -652,7 +688,7 @@ export default function TestPage() {
   const [questions, setQuestions] = useState<AnyQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [responses, setResponses] = useState<Response[]>([]);
-  const [funFact, setFunFact] = useState("");
+  const [funFactIdx, setFunFactIdx] = useState<number>(0);
   const [shownModal, setShownModal] = useState<
     "PAUSE" | "STILL_THERE" | "PARTIAL_COMPLETION" | "COMPLETED" | "NONE"
   >("NONE");
@@ -711,9 +747,7 @@ export default function TestPage() {
           !nextQuestion ||
           nextQuestion.clusterId !== lastQuestion.clusterId
         ) {
-          const funFactForCluster =
-            FUNFACTS[(clusterNumber - 1) % FUNFACTS.length];
-          setFunFact(funFactForCluster);
+          setFunFactIdx((clusterNumber - 1) % FUNFACTS.length);
           setShownModal("PARTIAL_COMPLETION");
           return true;
         }
@@ -948,18 +982,9 @@ export default function TestPage() {
           }}
         />
       )}
-      {shownModal === "PARTIAL_COMPLETION" && (
-        <PartialCompletionModal
-          closeBtnText="Continue"
-          onClose={() => {
-            setShownModal("NONE");
-            handleQuestionChange(currIndex + 1);
-          }}
-          funfact={funFact}
-        />
-      )}
       {shownModal === "COMPLETED" && (
-        <CompletedModal
+        <DialogModal
+          headerText={`Question ${currIndex + 1} of ${questions.length}`}
           title="Mission Completed!"
           subTitle="Huge win — you powered through every checkpoint like a legend. Future Fact: The world’s coolest future careers will blend technology in ways we haven’t even imagined yet — from AI explorers to quantum problem-solvers."
           desc="Ready to try 8 mini-missions that show how these future technologies actually work?"
@@ -967,6 +992,27 @@ export default function TestPage() {
           okBtnText="Start Missions"
           onClose={() => setIsTimerPaused(false)}
           onOk={() => router.push("/missions")}
+        />
+      )}
+      {/* <PartialCompletionModal
+          closeBtnText="Continue"
+          onClose={() => {
+            setShownModal("NONE");
+            handleQuestionChange(currIndex + 1);
+          }}
+          funfact={funFactIdx}
+        /> */}
+      {shownModal === "PARTIAL_COMPLETION" && (
+        <DialogModal
+          headerText={`Question ${currIndex + 1} of ${questions.length}`}
+          title={FUNFACTS[funFactIdx].title}
+          subTitle={FUNFACTS[funFactIdx].subTitle}
+          desc={FUNFACTS[funFactIdx].desc}
+          okBtnText="Continue"
+          onOk={() => {
+            setShownModal("NONE");
+            handleQuestionChange(currIndex + 1);
+          }}
         />
       )}
       <section className="px-4 md:px-6 lg:px-14 flex flex-col lg:flex-row justify-between items-center my-6 gap-y-6 lg:gap-y-0">

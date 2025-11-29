@@ -5,13 +5,14 @@ interface PauseModalProps {
   onClose?: () => void;
   onOk?: () => void;
   title: string;
+  headerText?: string;
   subTitle: string;
   desc: string;
   okBtnText: string;
-  cancelBtnText: string;
+  cancelBtnText?: string;
 }
 
-export default function CompletedModal({
+export default function DialogModal({
   onClose,
   onOk,
   title,
@@ -19,6 +20,7 @@ export default function CompletedModal({
   okBtnText,
   desc,
   subTitle,
+  headerText,
 }: PauseModalProps) {
   const router = useRouter();
   const [isAnimating, setIsAnimating] = useState(true);
@@ -37,7 +39,7 @@ export default function CompletedModal({
     // Add logic for taking a break if needed
     // router.push("/preview");
     // onClose();
-    if(onClose) onClose();
+    if (onClose) onClose();
   };
 
   const modalClasses = `
@@ -55,9 +57,11 @@ export default function CompletedModal({
   return (
     <div className={modalClasses}>
       <div className={contentClasses}>
-        <div className="text-sm font-semibold pb-1 w-fit border-b-2 border-[#D400FF]">
-          Question 8 of 8
-        </div>
+        {headerText && (
+          <div className="text-sm font-semibold pb-1 w-fit border-b-2 border-[#D400FF]">
+            {headerText}
+          </div>
+        )}
         <h2 className="mt-5 text-2xl md:text-3xl w-fit mx-auto text-[#FFFF00] pb-1 font-bold capitalize text-center">
           {title}
         </h2>
@@ -71,13 +75,19 @@ export default function CompletedModal({
           {/* So, Are you ready? */}
           {desc}
         </p>
-        <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center mt-10 gap-3 sm:gap-0 sm:px-12">
-          <button
-            className="px-8 py-3 text-base border-2 border-gray-400 hover:border-white rounded-full font-semibold transition duration-200 flex items-center justify-center space-x-2 cursor-pointer w-full sm:w-auto"
-            onClick={handleTakeABreak}
-          >
-            <span>{cancelBtnText}</span>
-          </button>
+        <div
+          className={`flex flex-col sm:flex-row ${
+            cancelBtnText ? "justify-between" : "justify-center"
+          } items-center mt-10 gap-3 sm:gap-0 sm:px-12`}
+        >
+          {cancelBtnText && (
+            <button
+              className="px-8 py-3 text-base border-2 border-gray-400 hover:border-white rounded-full font-semibold transition duration-200 flex items-center justify-center space-x-2 cursor-pointer w-full sm:w-auto"
+              onClick={handleTakeABreak}
+            >
+              <span>{cancelBtnText}</span>
+            </button>
+          )}
           <button
             className="px-8 py-3 text-base border border-[#D400FF]/50 bg-gradient-to-r from-[#39008C] to-[#6400F8] rounded-full font-semibold transition duration-200 flex items-center justify-center space-x-2 cursor-pointer w-full sm:w-auto"
             onClick={handleOkClick}

@@ -5,38 +5,39 @@ from pathlib import Path
 from app.core.config import settings
 
 def setup_logging():
-    """Set up the application's logging."""
-    log_dir = Path(settings.LOGS_DIR)
-    log_dir.mkdir(exist_ok=True)
-    log_file = log_dir / "app.log"
+    pass
+    # """Set up the application's logging."""
+    # log_dir = Path(settings.LOGS_DIR)
+    # log_dir.mkdir(exist_ok=True)
+    # log_file = log_dir / "app.log"
 
-    # Create a logger
-    logger = logging.getLogger("app")
-    logger.setLevel(logging.INFO)
+    # # Create a logger
+    # logger = logging.getLogger("app")
+    # logger.setLevel(logging.INFO)
 
-    # Create a rotating file handler
-    # 10 MB per file, keep 5 backup files
-    file_handler = RotatingFileHandler(log_file, maxBytes=10*1024*1024, backupCount=5)
-    file_handler.setLevel(logging.INFO)
+    # # Create a rotating file handler
+    # # 10 MB per file, keep 5 backup files
+    # file_handler = RotatingFileHandler(log_file, maxBytes=10*1024*1024, backupCount=5)
+    # file_handler.setLevel(logging.INFO)
 
-    # Create a console handler
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(logging.INFO)
+    # # Create a console handler
+    # console_handler = logging.StreamHandler(sys.stdout)
+    # console_handler.setLevel(logging.INFO)
 
-    # Create a formatter and set it for both handlers
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"
-    )
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
+    # # Create a formatter and set it for both handlers
+    # formatter = logging.Formatter(
+    #     "%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(funcName)s:%(lineno)d - %(message)s"
+    # )
+    # file_handler.setFormatter(formatter)
+    # console_handler.setFormatter(formatter)
 
-    # Add the handlers to the logger
-    # Get the root logger and add handlers to it
-    root_logger = logging.getLogger()
-    if not root_logger.handlers:
-        root_logger.addHandler(file_handler)
-        root_logger.addHandler(console_handler)
-    root_logger.setLevel(logging.INFO)
+    # # Add the handlers to the logger
+    # # Get the root logger and add handlers to it
+    # root_logger = logging.getLogger()
+    # if not root_logger.handlers:
+    #     root_logger.addHandler(file_handler)
+    #     root_logger.addHandler(console_handler)
+    # root_logger.setLevel(logging.INFO)
 
 
 def get_logger(name: str) -> logging.Logger:

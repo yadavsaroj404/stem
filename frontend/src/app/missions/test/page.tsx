@@ -24,7 +24,7 @@ import {
   TextImageOption,
   MultiSelectQuestionComponent,
 } from "@/app/test/page"; // Reusing components from test page
-import CompletedModal from "@/components/Modals/completed";
+import DialogModal from "@/components/Modals/completed";
 import { fetchQuestions, submitAnswer } from "@/helpers/data-fetch";
 import { UUID } from "crypto";
 import { useRouter } from "next/navigation";
@@ -284,7 +284,7 @@ export default function MissionsTestPage() {
   return (
     <main className="flex flex-col">
       {isCompleted && (
-        <CompletedModal
+        <DialogModal
           title="Mission Completed!"
           subTitle="You cleared all 45 questions AND all 8 future-tech missions — that’s
           the full experience completed. Future Fact: Your personalized report
