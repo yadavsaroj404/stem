@@ -138,7 +138,9 @@ class AssessmentService:
 
     def _get_mission_test_data(self, db: Session, test: Test) -> Dict[str, Any]:
         """Get mission test data with primary/secondary questions"""
-        missions = db.query(MissionsTest).filter(
+        missions = db.query(MissionsTest).join(
+            Question, MissionsTest.primary_question_id == Question.question_id
+        ).filter(
             MissionsTest.test_id == test.test_id
         ).options(
             joinedload(MissionsTest.primary_question).joinedload(Question.options),
@@ -147,7 +149,7 @@ class AssessmentService:
             joinedload(MissionsTest.secondary_question).joinedload(Question.options),
             joinedload(MissionsTest.secondary_question).joinedload(Question.cluster),
             joinedload(MissionsTest.secondary_question).joinedload(Question.item_pools).joinedload(ItemPool.group),
-        ).all()
+        ).order_by(Question.display_order).all()
 
         formatted_missions = []
         for idx, mission in enumerate(missions):
