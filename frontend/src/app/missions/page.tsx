@@ -11,7 +11,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 export default function MissionsPage() {
   const cards = [
     {
-      title: "8 Quick Missions",
+      title: "8 quick missions",
       description: "Interactive challenges",
       image: rocket,
     },
@@ -37,10 +37,10 @@ export default function MissionsPage() {
         <div className="ml-20">
           <h1 className="text-4xl font-bold">Welcome to</h1>
           <h1 className="text-4xl font-bold text-[#FFD016]">
-            Tech Frontier Academy
+            Advanced Future Technologies
           </h1>
           <p className="text-lg mt-2">
-            Where 10 labs tackle tomorrow’s toughest challenges.
+            where 8 labs tackle tomorrow’s toughest challenges.
           </p>
 
           <div className="relative w-fit mt-10 gap-x-8 gap-y-6 grid grid-cols-2 grid-rows-2">

@@ -41,15 +41,13 @@ const HeroHeader = () => {
             {/* Main heading */}
             <div className="order-2 space-y-4">
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                Discover Your Career
+                Discover Your career
                 <br />
-                Pathway in <span className="text-yellow-400">20 Minutes</span>
+                pathway(s) in <span className="text-yellow-400">25 Minutes</span>
               </h1>
 
               <p className="text-lg lg:text-xl text-gray-300 max-w-xl mx-auto lg:mx-0">
-                Get a personalized report with strengths, careers, and a
-                roadmap. In just 20 minutes, discover careers that fit your
-                personality, skills, and interests.
+               Get a personalised report with your strengths, career matches, and a clear roadmap. In just 25 minutes, discover careers that match your personality, skills, and interests.
               </p>
             </div>
 

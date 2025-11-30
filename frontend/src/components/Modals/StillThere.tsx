@@ -32,7 +32,7 @@ export default function StillThereModal({ onClose, takeABreak }: StillThereModal
         <p className="text-base font-normal w-full md:w-10/12 mx-auto text-center mt-2 mb-6 leading-tight">
           You’ve been inactive for 10 minutes.
           <br />
-          We have paused this test for 3 minutes to save your progress.
+          We've paused the test for 3 minutes to save your progress.
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center mt-10 gap-6 sm:gap-0 sm:px-12">

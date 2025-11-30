@@ -403,11 +403,10 @@ export default function ReportPage() {
                 Connect with Us
               </h3>
               <p className="text-base mt-3">
-                Connect With Our Career Professional and Learn more about
-                Career.
+               Connect with our career professionals and learn more about your future pathways.
               </p>
               <button className="mt-8 border rounded-4xl font-semibold capitalize border-gray-50 bg-[#D7CDFF] text-[#6300FF] px-8 py-2 text-shadow-xs text-shadow-[#6300FF]/50">
-                Get Connect
+                Get Connected
               </button>
             </div>
           </div>
@@ -417,8 +416,8 @@ export default function ReportPage() {
       <section className="text-center my-20">
         <h2 className="text-2xl sm:text-3xl font-semibold my-2">Not Sure?</h2>
         <p className="text-base max-w-md mx-auto">
-          No worries! You can hit rewind, explore new paths, and see where your
-          curiosity takes you.
+          No worries! You can rewind, explore new paths, and see where your curiosity takes you.
+
         </p>
         <button className="mt-6 mx-auto px-8 py-2 group active:shadow-none hover:shadow-[0_4px_12px_rgba(99,0,255,0.5),inset_2px_2px_8px_rgba(255,255,255,0.4)] border-b border-primary-brand-color shadow-primary-brand-color rounded-full bg-gradient-to-r from-primary-dark to-primary-brand-color font-semibold text-lg transition-all cursor-pointer duration-200 flex items-center justify-center space-x-2 hover:scale-105">
           <span>Retake Test</span>
