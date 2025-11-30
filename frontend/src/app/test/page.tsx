@@ -662,7 +662,7 @@ const FUNFACTS = [
     desc: "Future Fact: Future workplaces might use AR glasses so you can collaborate with teammates who appear next to you, even if they’re on another continent.",
   },
   {
-    title: "Eight more to go!",
+    title: "Four more to go!",
     subTitle: "Stay locked in",
     desc: "Future Fact: Public transport could soon be run by autonomous electric pods that you can summon like an Uber, shared with people going your way.",
   },
@@ -712,6 +712,10 @@ export default function TestPage() {
   // show modal after completing each cluster
   const showPopUp = (): boolean => {
     if (shownModal !== "NONE") return false;
+
+    // if this question is last question, return false
+    if (currIndex === questions.length - 1) return false;
+
     if (responses.length > 0 && questions.length > 0) {
       const lastResponse = responses[responses.length - 1];
       const lastQuestion = questions.find(
@@ -776,7 +780,6 @@ export default function TestPage() {
   };
 
   const goToNextQuestion = () => {
-    logger.debug("Attempting to go to next question.");
     // go to next question if only the current question is answered
     const currentQuestion = questions[currIndex];
     const currentResponse = responses.find(
@@ -790,6 +793,7 @@ export default function TestPage() {
       alert("Please select at least one option to continue.");
       return;
     }
+
     if (!showPopUp()) {
       handleQuestionChange(currIndex + 1);
     }
@@ -975,7 +979,7 @@ export default function TestPage() {
       {shownModal === "COMPLETED" && (
         <DialogModal
           headerText={`Question ${currIndex + 1} of ${questions.length}`}
-          title="Mission Completed!"
+          title="All Milestones Completed!"
           subTitle="Huge win — you powered through every checkpoint like a legend. Future Fact: The world’s coolest future careers will blend technology in ways we haven’t even imagined yet — from AI explorers to quantum problem-solvers."
           desc="Ready to try 8 mini-missions that show how these future technologies actually work?"
           cancelBtnText="Take a Break"

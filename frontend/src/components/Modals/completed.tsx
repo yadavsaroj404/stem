@@ -1,5 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Confetti from "../Confetti";
 
 interface PauseModalProps {
   onClose?: () => void;
@@ -56,6 +57,7 @@ export default function DialogModal({
 
   return (
     <div className={modalClasses}>
+      <Confetti />
       <div className={contentClasses}>
         {headerText && (
           <div className="text-sm font-semibold pb-1 w-fit border-b-2 border-[#D400FF]">

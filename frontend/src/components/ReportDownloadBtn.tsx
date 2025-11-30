@@ -2,6 +2,7 @@ import { ReportData } from "@/interfaces/report";
 import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 
 import dynamic from "next/dynamic";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const PDFDownloadLink = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFDownloadLink),
@@ -217,8 +218,12 @@ export default function ReportDownloadBtn({
       document={<Report data={report} />}
       fileName={fileName}
     >
-      <button className="text-black cursor-pointer border p-2 rounded-md bg-white hover:bg-gray-100">
+      {/* <button className="text-black cursor-pointer border p-2 rounded-md bg-white hover:bg-gray-100">
         Download Report
+      </button> */}
+      <button className="mx-auto mt-12 mb-7 px-8 py-2 group active:shadow-none hover:shadow-md border-b border-primary-brand-color shadow-primary-brand-color rounded-full bg-gradient-to-r from-primary-dark to-primary-brand-color font-semibold text-sm lg:text-lg transition cursor-pointer duration-200 flex items-center justify-center space-x-2">
+        <span>See full Future Builder report</span>
+        <FaArrowRightLong className="ml-1 group-hover:scale-110 group-hover:ml-2 group-hover:translate-x-1 transition-transform duration-200" />
       </button>
     </PDFDownloadLink>
   );
