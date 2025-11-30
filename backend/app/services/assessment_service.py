@@ -5,6 +5,9 @@ Consolidates functionality from mission_service and question_service for optimiz
 
 import json
 import uuid
+import os
+import json
+import uuid
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
@@ -398,93 +401,84 @@ class AssessmentService:
 
     def submit_bulk_responses(self, submission_data) -> Dict[str, Any]:
         """
-        Submit all responses at once with scoring.
-
-        Args:
-            submission_data: BulkResponseSubmit data
-
-        Returns:
-            Submission result with scores
+        Submit a bulk of responses for a user, calculate scores, and return top pathways.
         """
-        submission_id = str(uuid.uuid4())
         db: Session = SessionLocal()
-
+        submission_id = str(uuid.uuid4())
         try:
-            logger.info(
-                "Starting bulk response submission",
-                extra={
-                    'user_id': submission_data.userId,
-                    'submission_id': submission_id,
-                    'response_count': len(submission_data.responses)
-                }
-            )
-
-            # Build responses array with correctness info
-            responses_array = []
-            for response_input in submission_data.responses:
-                # Check correctness
-                is_correct = None
-                if response_input.selectedOption:
-                    is_correct = scoring_service.check_answer(
-                        response_input.questionId,
-                        response_input.selectedOption,
-                        None
-                    )
-
-                responses_array.append({
-                    "questionId": response_input.questionId,
-                    "selectedOption": response_input.selectedOption,
-                    "isCorrect": is_correct
-                })
-
-            # Create submission record with all responses as JSON
-            submission = SubmissionDB(
+            # 1. Save the submission
+            responses_json = json.dumps([response.dict() for response in submission_data.responses])
+            submission_record = SubmissionDB(
                 _id=submission_id,
                 user_id=submission_data.userId,
-                test_id=None,
-                status="SUBMITTED",
-                responses=json.dumps(responses_array),
-                submitted_at=submission_data.submittedAt
+                responses=responses_json,
+                submitted_at=submission_data.submittedAt,
+                created_at=datetime.now()
             )
-            db.add(submission)
+            db.add(submission_record)
             db.commit()
+            db.refresh(submission_record)
 
-            # Compute scores from submission responses
-            logger.info(f"Computing scores for submission {submission_id}")
-            scores = scoring_service.compute_scores_from_submission(db, submission_id, responses_array)
+            # 2. Calculate scores
+            cluster_scores = scoring_service.calculate_scores_from_responses(db, submission_data.responses)
 
-            # Get top 3 clusters for the report
-            top_clusters = scoring_service.get_top_clusters(db, submission_id)
+            # 3. Get top 3 clusters, ensuring there are always 3
+            top_3_clusters_scores = sorted(cluster_scores.items(), key=lambda item: item[1], reverse=True)
+            top_cluster_ids = [cluster_id for cluster_id, score in top_3_clusters_scores]
 
-            logger.info(
-                "Bulk response submission successful",
-                extra={
-                    'submission_id': submission_id,
-                    'user_id': submission_data.userId,
-                    'overall_score': scores.get('overallScore', 0)
-                }
-            )
+            # If we have fewer than 3 clusters, get more to fill the list
+            if len(top_cluster_ids) < 3:
+                # Get all cluster IDs from the database
+                all_db_clusters = db.query(Cluster.cluster_id).all()
+                all_db_cluster_ids = {str(c[0]) for c in all_db_clusters}
+
+                # Find which cluster IDs we are missing
+                missing_cluster_ids = list(all_db_cluster_ids - set(top_cluster_ids))
+                
+                # Add the missing ones until we have 3
+                needed = 3 - len(top_cluster_ids)
+                top_cluster_ids.extend(missing_cluster_ids[:needed])
+            
+            # Ensure we only have the top 3, even if scores were tied
+            top_cluster_ids = top_cluster_ids[:3]
+
+            # 4. Load pathways data
+            pathways_file_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'pathways.json')
+            with open(pathways_file_path, 'r') as f:
+                all_pathways = json.load(f)
+
+            # 5. Select and format top pathways
+            top_pathways_data = []
+            for cluster_id in top_cluster_ids:
+                if cluster_id in all_pathways:
+                    pathway = all_pathways[cluster_id]
+                    pathway_data = {
+                        "pathname": pathway.get("title", "").lower().replace(" ", "-"),
+                        "tag": "Top Match", # Placeholder, adjust as needed
+                        "careerImage": pathway.get("careerImage"),
+                        "title": pathway.get("title"),
+                        "subtitle": pathway.get("subtitle"),
+                        "description": pathway.get("description"),
+                        "skills": pathway.get("skills", []),
+                        "subjects": pathway.get("subjects", []),
+                        "careers": pathway.get("careers", []),
+                        "tryThis": pathway.get("tryThis")
+                    }
+                    top_pathways_data.append(pathway_data)
 
             return {
-                "username": submission_data.userId,
-                "contact": submission_data.userId,
-                "pathways": top_clusters
+                "submission_id": submission_id,
+                "pathways": top_pathways_data
             }
 
         except Exception as e:
             db.rollback()
             logger.error(
-                "Bulk response submission failed",
-                extra={
-                    'submission_id': submission_id,
-                    'user_id': submission_data.userId,
-                    'error': str(e),
-                    'error_type': type(e).__name__
-                },
+                "Failed to submit bulk responses",
+                extra={'error': str(e), 'error_type': type(e).__name__},
                 exc_info=True
             )
             raise
-
         finally:
             db.close()
 

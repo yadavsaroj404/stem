@@ -12,6 +12,7 @@ from app.models.database import (
     StudentAnswer,
     CandidateScore,
     Question,
+    Answer,
     Cluster,
     TestSession,
 )
@@ -444,6 +445,48 @@ class ScoringService:
         )
 
         return pathways
+
+    def calculate_scores_from_responses(self, db: Session, responses: List[Dict]) -> Dict[str, int]:
+        """
+        Calculate cluster scores directly from a list of responses without a session.
+
+        Args:
+            db: Database session
+            responses: List of response dicts with questionId, answer
+
+        Returns:
+            Dictionary with cluster IDs as keys and scores as values
+        """
+        cluster_stats = {}  # {cluster_id: {"correct": 0, "total": 0}}
+
+        for response in responses:
+            question_id = response.questionId
+            answer_value = response.selectedOption
+
+            question = db.query(Question).filter(Question.question_id == question_id).first()
+
+            if not question or not question.cluster_id:
+                continue
+
+            cluster_id = str(question.cluster_id)
+            if cluster_id not in cluster_stats:
+                cluster_stats[cluster_id] = {"correct": 0, "total": 0}
+
+            cluster_stats[cluster_id]["total"] += 1
+
+            # Simple correctness check (assumes single correct answer)
+            # This might need to be more complex based on question type
+            correct_answer_record = db.query(Answer).filter(Answer.question_id == question_id).first()
+            if correct_answer_record and answer_value == correct_answer_record.correct_answer:
+                cluster_stats[cluster_id]["correct"] += 1
+
+        # Calculate final scores
+        cluster_scores = {}
+        for cluster_id, stats in cluster_stats.items():
+            score = (stats["correct"] / stats["total"] * 100) if stats["total"] > 0 else 0
+            cluster_scores[cluster_id] = int(score)
+
+        return cluster_scores
 
 
 # Singleton instance

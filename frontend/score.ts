@@ -1,4 +1,5 @@
 interface Score {
+  submission_id: string;
   clusters: Array<{
     clusterId: string;
     score: number;

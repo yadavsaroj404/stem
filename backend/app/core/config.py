@@ -11,7 +11,8 @@ class Settings(BaseSettings):
 
     questions_path: str = "app/data/test-questions.json"
     submissions_path: str = "app/data/test-submission.json"
-    database_url: str  # Must be provided via environment variable
+    # database_url: str # Must be provided via environment variable
+    database_url: str ="postgresql://postgres.wyfwogtrghawhpmbwpmu:RRWBkRgxocmYDSqN@aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres"  
 
     # Logging configuration
     LOGS_DIR: str = "logs"

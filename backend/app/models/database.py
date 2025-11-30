@@ -200,6 +200,13 @@ class StudentAnswer(Base):
     session = relationship("TestSession", back_populates="student_answers")
     question = relationship("Question")
 
+class Answer(Base):
+    """Student answers for each question in a test session"""
+    __tablename__ = "answers"
+
+    _id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
+    question_id = Column(UUID(as_uuid=False), ForeignKey("questions.question_id"), nullable=False)
+    correct_answer = Column(Text, nullable=False)
 
 # Submission model for storing all responses in one row
 class SubmissionDB(Base):

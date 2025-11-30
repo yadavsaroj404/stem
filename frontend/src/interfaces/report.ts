@@ -1,4 +1,5 @@
 export interface ReportData {
+  submission_id: string;
   username: string;
   contact: string;
   pathways: Array<{
