@@ -579,6 +579,12 @@ class ScoringService:
             user_pairs = set(user_answer.split(';'))
             correct_pairs = set(correct_answer.split(';'))
             return user_pairs == correct_pairs
+
+        if q_type == 'matching':
+            # Matching uses different separator format
+            user_pairs = set(user_answer.replace('->', '-').split(';'))
+            correct_pairs = set(correct_answer.replace('->', '-').split(';'))
+            return user_pairs == correct_pairs
             
         return False
 
@@ -602,7 +608,7 @@ class ScoringService:
             text_pairs = []
             pairs = answer_str.split(';')
             all_item_ids = [p.split('->')[0] for p in pairs if '->' in p] + [p.split('->')[1] for p in pairs if '->' in p]
-            
+
             items = db.query(ItemPool).filter(ItemPool.pool_id.in_(all_item_ids)).all()
             item_map = {str(item.pool_id): item.item_text for item in items}
 
@@ -613,6 +619,21 @@ class ScoringService:
                     right_text = item_map.get(right_id, "N/A")
                     text_pairs.append(f"{left_text} -> {right_text}")
             return '; '.join(sorted(text_pairs))
+
+        if q_type == 'matching':
+            # Matching questions are image-based, return formatted pair indicators
+            pairs = answer_str.split(';')
+            formatted_pairs = []
+            for i, pair in enumerate(pairs, 1):
+                formatted_pairs.append(f"Match {i}")
+            return '; '.join(formatted_pairs)
+
+        if q_type == 'rank':
+            option_ids = answer_str.split(';')
+            options = db.query(ListOption).filter(ListOption.option_id.in_(option_ids)).all()
+            option_map = {str(opt.option_id): opt.option_text for opt in options}
+            # Preserve order (don't sort like multi-select)
+            return '; '.join([option_map.get(oid, "N/A") for oid in option_ids])
 
         return answer_str
 # Singleton instance
