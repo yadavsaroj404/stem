@@ -113,7 +113,7 @@ export default function MissionsTestPage() {
     if (direction === "next") {
       // Check for response before moving to next mission
       if (!responses[currentMission._id]?.secondary) {
-        alert("Please answer the second question before proceeding.");
+        alert("Please answer the question before continuing.");
         return;
       }
       if (currMissionIndex < missions.length - 1) {
@@ -221,7 +221,7 @@ export default function MissionsTestPage() {
   if (!currentMission) {
     return (
       <div className="text-center mt-10">
-        <p>No mission available.</p>
+        <p>No missions available right now.</p>
       </div>
     );
   }

@@ -28,9 +28,9 @@ export default function TestAnalyzePage() {
           className="mx-auto"
         />
         <h1 className="text-xs lg:text-base font-bold">
-          Analyzing Your Responses and matching you with perfect
+          Analyzing your responses and matching you with your ideal
         </h1>
-        <h1 className="text-sm lg:text-base font-bold">Career Path....</h1>
+        <h1 className="text-sm lg:text-base font-bold">career pathways…</h1>
       </div>
     </main>
   );

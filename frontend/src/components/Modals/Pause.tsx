@@ -25,8 +25,7 @@ export default function PauseModal({ onClose }: PauseModalProps) {
           Taking a Break
         </h2>
         <p className="text-sm sm:text-base font-normal w-full md:w-10/12 mx-auto text-center mt-2 mb-6">
-          Your Progress is automatically saved. You can resume anytime within 7
-          days.
+          Your progress is saved automatically. You can resume anytime within 7 days.
         </p>
 
         <p className="text-base sm:text-lg md:text-xl text-center font-semibold mt-6 mb-2 sm:mb-4">

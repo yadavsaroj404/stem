@@ -802,7 +802,7 @@ export default function TestPage() {
       logger.warn("Next question blocked: current question not answered.", {
         questionId: currentQuestion._id,
       });
-      alert("Please select an option before proceeding.");
+      alert("Please select at least one option to continue.");
       return;
     }
     if (!showPopUp()) {

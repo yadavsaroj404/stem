@@ -71,8 +71,7 @@ export default function PreviewPage() {
 
           {!isPlaying && (
             <div className="px-4 sm:px-8 text-center font-semibold absolute bottom-4 w-full pointer-events-none">
-              Start your journey—watch this 60-second intro for tips to get your
-              best result
+              Start your journey — watch this 60-second intro to get the best results.
             </div>
           )}
         </div>

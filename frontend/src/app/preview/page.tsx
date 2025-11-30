@@ -73,8 +73,7 @@ export default function PreviewPage() {
 
           {!isPlaying && (
             <div className="px-4 sm:px-8 text-center absolute bottom-4 w-full pointer-events-none">
-              Start your journey—watch this 60-second intro for tips to get your
-              best result
+              Start your journey — watch this 60-second intro to get the best results.
             </div>
           )}
         </div>
@@ -89,7 +88,7 @@ export default function PreviewPage() {
             alt="GIF 1"
             unoptimized
           />
-          <p>No right or wrong answers -- just your honest choices.</p>
+          <p>No right or wrong answers — just be honest.</p>
         </div>
         <div className="w-10/12 sm:w-8/12 md:w-6/12 lg:w-4/12 flex flex-col items-center gap-y-4">
           <Image
@@ -100,7 +99,7 @@ export default function PreviewPage() {
             alt="GIF 2"
             unoptimized
           />
-          <p>Takes about 15 minutes</p>
+          <p>Takes about 25 minutes</p>
         </div>
         <div className="w-10/12 sm:w-8/12 md:w-6/12 lg:w-4/12 flex flex-col items-center gap-y-4">
           <Image
@@ -112,8 +111,7 @@ export default function PreviewPage() {
             unoptimized
           />
           <p>
-            At the end, you'll see which Career field truly sparks your
-            potential.
+           At the end, you’ll discover 2–3 career pathways to explore and learn about.
           </p>
         </div>
       </section>
