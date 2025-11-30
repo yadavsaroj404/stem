@@ -35,13 +35,12 @@ export function RankQuestionComponent({
   onArrangement: (arrangement: string) => void;
 }) {
   const [orderedOptions, setOrderedOptions] = useState(
-    [...question.options].sort((a, b) => a.displayOrder - b.displayOrder)
+    question.options.sort((a, b) => a.displayOrder - b.displayOrder)
   );
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    // logger.debug("RankQuestionComponent mounted or options changed.");
     itemRefs.current = itemRefs.current.slice(0, orderedOptions.length);
   }, [orderedOptions]);
 
@@ -53,14 +52,7 @@ export function RankQuestionComponent({
         .filter((opt): opt is TextOptionParams => !!opt);
       if (newOrderedOptions.length === question.options.length) {
         setOrderedOptions(newOrderedOptions);
-        logger.debug("RankQuestionComponent: Arrangement restored from props.");
       }
-    } else {
-      setOrderedOptions(
-        [...question.options].sort(
-          (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)
-        )
-      );
     }
   }, [arrangement, question.options]);
 
@@ -92,60 +84,53 @@ export function RankQuestionComponent({
 
   return (
     <div>
-      {orderedOptions
-        .sort((a, b) => a.displayOrder - b.displayOrder)
-        .map((option, index) => {
-          const isBeingDragged = draggedIndex === index;
-          return (
-            <div
-              key={option._id}
-              ref={(el: HTMLDivElement | null) => {
-                if (el) {
-                  itemRefs.current[index] = el;
-                }
-              }}
-              draggable
-              onDragStart={() => handleDragStart(index)}
-              onDragEnter={() => handleDragEnter(index)}
-              onDragEnd={handleDragEnd}
-              onDragOver={(e) => e.preventDefault()}
-              className={`flex items-center gap-x-4 flex-nowrap mb-4 cursor-grab active:cursor-grabbing transition-all duration-300 ease-in-out ${
-                isBeingDragged
-                  ? "opacity-50 scale-105"
-                  : "opacity-100 scale-100"
-              }`}
-              style={{
-                transition:
-                  "transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-              }}
-            >
-              <div className="w-6.5 h-6.5 relative">
-                <div className="absolute top-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
-                <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
-                <div className="absolute bottom-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
-                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
-              </div>
-              <div
-                className={`flex grow-1 items-center px-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color`}
-              >
-                <span className="text-base font-medium mr-2 ">
-                  (
-                  {question.type === "rank"
-                    ? question.options.findIndex((o) => o._id === option._id) +
-                      1
-                    : String.fromCharCode(
-                        65 +
-                          question.options.findIndex(
-                            (o) => o._id === option._id
-                          )
-                      )}
-                  )
-                </span>
-                <span className="text-base font-medium">{option.text}</span>
-              </div>
+      {orderedOptions.map((option, index) => {
+        const isBeingDragged = draggedIndex === index;
+        return (
+          <div
+            key={option._id}
+            ref={(el: HTMLDivElement | null) => {
+              if (el) {
+                itemRefs.current[index] = el;
+              }
+            }}
+            draggable
+            onDragStart={() => handleDragStart(index)}
+            onDragEnter={() => handleDragEnter(index)}
+            onDragEnd={handleDragEnd}
+            onDragOver={(e) => e.preventDefault()}
+            className={`flex items-center gap-x-4 flex-nowrap mb-4 cursor-grab active:cursor-grabbing transition-all duration-300 ease-in-out ${
+              isBeingDragged ? "opacity-50 scale-105" : "opacity-100 scale-100"
+            }`}
+            style={{
+              transition:
+                "transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+            }}
+          >
+            <div className="w-6.5 h-6.5 relative">
+              <div className="absolute top-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+              <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+              <div className="absolute bottom-0 left-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
+              <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[#8F4EF5] rounded-full" />
             </div>
-          );
-        })}
+            <div
+              className={`flex grow-1 items-center px-4 py-3 bg-[#1B0244] bg-opacity-50 rounded-xl border border-primary-brand-color`}
+            >
+              <span className="text-base font-medium mr-2 ">
+                (
+                {question.type === "rank"
+                  ? question.options.findIndex((o) => o._id === option._id) + 1
+                  : String.fromCharCode(
+                      65 +
+                        question.options.findIndex((o) => o._id === option._id)
+                    )}
+                )
+              </span>
+              <span className="text-base font-medium">{option.text}</span>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -1147,7 +1132,15 @@ export function TextOption({
       <span className="text-base font-medium mr-2 ">
         ({String.fromCharCode(65 + index)})
       </span>
-
+      {option.image && (
+        <Image
+          width={100}
+          height={100}
+          src={option.image}
+          alt={option.text || "option"}
+          className="mx-auto my-5"
+        />
+      )}
       <span className="text-base font-medium">{option.text}</span>
     </div>
   );
