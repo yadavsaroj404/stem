@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import bulb from "@/images/objects/bulb.gif";
 import { FaArrowRightLong } from "react-icons/fa6";
@@ -199,7 +199,7 @@ export default function ReportPage() {
   //   },
   // ];
 
-  if(loading || !reportData) {
+  if (loading || !reportData) {
     return <div>Loading report...</div>;
   }
   const CAREERS = reportData?.pathways || [];
@@ -224,7 +224,7 @@ export default function ReportPage() {
             top: "6px",
           }}
         />
-        {Object.values(CAREERS).map(({ pathname: tab }, index) => (
+        {["Primary", "Secondary", "Tertiary"].map((tab, index) => (
           <button
             key={index}
             className={`${

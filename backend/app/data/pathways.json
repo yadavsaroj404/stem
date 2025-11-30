@@ -96,10 +96,10 @@
     "description": "Storyteller and connector who loves expressing ideas, persuading others, and creating meaningful content that inspires action.",
     "skills": ["Communication", "Creativity", "Persuasion", "Writing", "Public Speaking"],
     "subjects": [
-      { "name": "English", "image": "/s3/english.png" },
-      { "name": "Media Studies", "image": "/s3/media.png" },
+      { "name": "English", "image": "/s3/study.png" },
+      { "name": "Media Studies", "image": "/s3/social.png" },
       { "name": "Psychology", "image": "/s3/psychology.png" },
-      { "name": "Languages", "image": "/s3/languages.png" }
+      { "name": "Languages", "image": "/s3/social.png" }
     ],
     "careers": [
       {
@@ -124,9 +124,9 @@
     "description": "Imaginative visionary who expresses ideas through art, design, and creative media. You see the world differently and bring beauty to everything.",
     "skills": ["Creativity", "Visual Thinking", "Design", "Innovation", "Artistic Expression"],
     "subjects": [
-      { "name": "Art & Design", "image": "/s3/art.png" },
-      { "name": "Music", "image": "/s3/music.png" },
-      { "name": "Media Studies", "image": "/s3/media.png" },
+      { "name": "Art & Design", "image": "/s3/web-design.png" },
+      { "name": "Music", "image": "/s3/social.png" },
+      { "name": "Media Studies", "image": "/s3/social.png" },
       { "name": "Technology", "image": "/s3/data-science.png" }
     ],
     "careers": [
@@ -153,9 +153,9 @@
     "skills": ["Research", "Critical Thinking", "Curiosity", "Investigation", "Scientific Method"],
     "subjects": [
       { "name": "Science", "image": "/s3/atom.png" },
-      { "name": "Geography", "image": "/s3/geography.png" },
-      { "name": "History", "image": "/s3/history.png" },
-      { "name": "Research Methods", "image": "/s3/research.png" }
+      { "name": "Geography", "image": "/s3/study.png" },
+      { "name": "History", "image": "/s3/study.png" },
+      { "name": "Research Methods", "image": "/s3/study.png" }
     ],
     "careers": [
       {
@@ -180,10 +180,10 @@
     "description": "Compassionate helper who wants to make people's lives better through health, wellness, and support. You care deeply about others' wellbeing.",
     "skills": ["Empathy", "Patience", "Communication", "Problem-solving", "Caregiving"],
     "subjects": [
-      { "name": "Biology", "image": "/s3/biology.png" },
-      { "name": "Chemistry", "image": "/s3/chemistry.png" },
+      { "name": "Biology", "image": "/s3/atom.png" },
+      { "name": "Chemistry", "image": "/s3/atom.png" },
       { "name": "Psychology", "image": "/s3/psychology.png" },
-      { "name": "Health Sciences", "image": "/s3/health.png" }
+      { "name": "Health Sciences", "image": "/s3/social.png" }
     ],
     "careers": [
       {
@@ -208,9 +208,9 @@
     "description": "Environmental advocate who wants to protect the planet and create sustainable solutions. You think about future generations.",
     "skills": ["Environmental Awareness", "Systems Thinking", "Advocacy", "Innovation", "Sustainability"],
     "subjects": [
-      { "name": "Environmental Science", "image": "/s3/environment.png" },
-      { "name": "Geography", "image": "/s3/geography.png" },
-      { "name": "Biology", "image": "/s3/biology.png" },
+      { "name": "Environmental Science", "image": "/s3/atom.png" },
+      { "name": "Geography", "image": "/s3/study.png" },
+      { "name": "Biology", "image": "/s3/atom.png" },
       { "name": "Economics", "image": "/s3/economics.png" }
     ],
     "careers": [
@@ -238,8 +238,8 @@
     "subjects": [
       { "name": "Business Studies", "image": "/s3/study.png" },
       { "name": "IT", "image": "/s3/data-science.png" },
-      { "name": "Office Administration", "image": "/s3/admin.png" },
-      { "name": "Communication", "image": "/s3/communication.png" }
+      { "name": "Office Administration", "image": "/s3/study.png" },
+      { "name": "Communication", "image": "/s3/social.png" }
     ],
     "careers": [
       {
