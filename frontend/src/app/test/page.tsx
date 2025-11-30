@@ -20,7 +20,6 @@ import counterFrame from "@/images/objects/timer-frame.gif";
 import Timer from "@/components/Timer";
 import PauseModal from "@/components/Modals/Pause";
 import StillThereModal from "@/components/Modals/StillThere";
-import PartialCompletionModal from "@/components/Modals/PartialCompletion";
 import UserProfile from "@/components/UserProfile";
 import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
 import logger from "@/helpers/logger";
@@ -36,7 +35,7 @@ export function RankQuestionComponent({
   onArrangement: (arrangement: string) => void;
 }) {
   const [orderedOptions, setOrderedOptions] = useState(
-    [...question.options].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+    [...question.options].sort((a, b) => a.displayOrder - b.displayOrder)
   );
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -58,7 +57,9 @@ export function RankQuestionComponent({
       }
     } else {
       setOrderedOptions(
-        [...question.options].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+        [...question.options].sort(
+          (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)
+        )
       );
     }
   }, [arrangement, question.options]);

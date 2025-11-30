@@ -6,15 +6,18 @@ Handles answer validation, scoring computation, and cluster-level analysis.
 import json
 import os
 from typing import Any, Dict, List, Optional, Tuple
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.core.logging import get_logger
 from app.models.database import (
+    SubmissionDB,
     StudentAnswer,
     CandidateScore,
     Question,
     Answer,
     Cluster,
     TestSession,
+    ListOption,
+    ItemPool,
 )
 
 logger = get_logger(__name__)
@@ -389,6 +392,7 @@ class ScoringService:
             return f"{clean[:8]}-{clean[8:12]}-{clean[12:16]}-{clean[16:20]}-{clean[20:]}"
         return uuid_str
 
+    
     def get_top_clusters(self, db: Session, submission_id: str) -> List[Dict[str, Any]]:
         """
         Get top 3 clusters based on correct answers count with full pathway details.
@@ -446,6 +450,7 @@ class ScoringService:
 
         return pathways
 
+    # Only method that is in used in this application rest are there but unused
     def calculate_scores_from_responses(self, db: Session, responses: List[Dict]) -> Dict[str, int]:
         """
         Calculate cluster scores directly from a list of responses without a session.
@@ -488,6 +493,127 @@ class ScoringService:
 
         return cluster_scores
 
+    def get_selected_answers(self, db: Session, submission_id: str) -> Dict[str, Any]:
+        """
+        Retrieves and formats the selected answers for a given submission,
+        comparing them against correct answers and structuring the output by cluster.
+        """
+        submission = db.query(SubmissionDB).filter(SubmissionDB._id == submission_id).first()
 
+        if not submission:
+            return {"error": "Submission not found"}
+
+        responses = json.loads(submission.responses)
+        
+        clusters_data = {}
+
+        for response in responses:
+            question_id = response.get("questionId")
+            user_answer_str = response.get("selectedOption")
+
+            question = db.query(Question).options(
+                joinedload(Question.cluster),
+                joinedload(Question.options),
+                joinedload(Question.item_pools).joinedload(ItemPool.group)
+            ).filter(Question.question_id == question_id).first()
+            
+            if not question:
+                continue
+
+            # Get correct answer from the Answer table
+            correct_answer_record = db.query(Answer).filter(Answer.question_id == question_id).first()
+            correct_answer_str = correct_answer_record.correct_answer if correct_answer_record else ""
+
+            # Initialize cluster if not present
+            cluster_id = str(question.cluster.cluster_id)
+            if cluster_id not in clusters_data:
+                clusters_data[cluster_id] = {
+                    "clusterId": cluster_id,
+                    "score": 0,
+                    "clusterName": question.cluster.cluster_name,
+                    "questionCount": 0,
+                    "questions": []
+                }
+            
+            clusters_data[cluster_id]["questionCount"] += 1
+
+            # Determine correctness
+            is_correct = self._compare_answers(question.question_type, user_answer_str, correct_answer_str)
+            if is_correct:
+                clusters_data[cluster_id]["score"] += 1
+
+            # Format answers into human-readable text
+            formatted_user_answer = self._format_answer_text(db, question, user_answer_str)
+            formatted_correct_answer = self._format_answer_text(db, question, correct_answer_str)
+
+            clusters_data[cluster_id]["questions"].append({
+                "questionId": question_id,
+                "questionType": question.question_type,
+                "questionText": question.question_text,
+                "selectedOption": formatted_user_answer,
+                "correct_option": formatted_correct_answer,
+                "isCorrect": is_correct,
+                "pointsAwarded": 1 if is_correct else 0,
+            })
+
+        return {
+            "submission_id": submission_id,
+            "submittedAt": submission.submitted_at.isoformat(),
+            "clusters": list(clusters_data.values())
+        }
+
+    def _compare_answers(self, q_type: str, user_answer: str, correct_answer: str) -> bool:
+        """Compares user's answer with the correct answer based on question type."""
+        if user_answer is None or correct_answer is None:
+            return False
+
+        if q_type in ['text', 'text-image']:
+            return user_answer == correct_answer
+        
+        if q_type == 'multi-select':
+            user_options = set(user_answer.split(';'))
+            correct_options = set(correct_answer.split(';'))
+            return user_options == correct_options
+
+        if q_type in ['mapping', 'group']:
+            user_pairs = set(user_answer.split(';'))
+            correct_pairs = set(correct_answer.split(';'))
+            return user_pairs == correct_pairs
+            
+        return False
+
+    def _format_answer_text(self, db: Session, question: Question, answer_str: str) -> str:
+        """Converts an answer string of IDs into a human-readable text representation."""
+        if not answer_str:
+            return ""
+
+        q_type = question.question_type
+
+        if q_type in ['text', 'text-image']:
+            option = db.query(ListOption).filter(ListOption.option_id == answer_str).first()
+            return option.option_text if option else "N/A"
+
+        if q_type == 'multi-select':
+            option_ids = answer_str.split(';')
+            options = db.query(ListOption).filter(ListOption.option_id.in_(option_ids)).all()
+            return '; '.join(sorted([opt.option_text for opt in options]))
+
+        if q_type in ['mapping', 'group']:
+            text_pairs = []
+            pairs = answer_str.split(';')
+            all_item_ids = [p.split('->')[0] for p in pairs if '->' in p] + [p.split('->')[1] for p in pairs if '->' in p]
+            
+            items = db.query(ItemPool).filter(ItemPool.pool_id.in_(all_item_ids)).all()
+            item_map = {str(item.pool_id): item.item_text for item in items}
+
+            for pair in pairs:
+                if '->' in pair:
+                    left_id, right_id = pair.split('->')
+                    left_text = item_map.get(left_id, "N/A")
+                    right_text = item_map.get(right_id, "N/A")
+                    text_pairs.append(f"{left_text} -> {right_text}")
+            return '; '.join(sorted(text_pairs))
+
+        return answer_str
 # Singleton instance
 scoring_service = ScoringService()

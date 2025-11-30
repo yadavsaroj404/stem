@@ -5,14 +5,26 @@ This consolidated endpoint optimizes database operations and provides a consiste
 
 from typing import Optional, List
 from datetime import datetime
-from fastapi import APIRouter, HTTPException, status, Query
+from fastapi import APIRouter, HTTPException, status, Query, Depends
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
+from app.models.database import SessionLocal
 from app.services.assessment_service import assessment_service
+from app.services.scoring_service import scoring_service
 from app.core.logging import get_logger
 
 router = APIRouter()
 logger = get_logger(__name__)
+
+
+# Dependency to get the database session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 # --- Request/Response Models ---
@@ -28,7 +40,6 @@ class BulkResponseSubmit(BaseModel):
     userId: str
     submittedAt: datetime
     responses: List[ResponseInput]
-
 
 class SessionCreate(BaseModel):
     """Input model for creating a test session"""
@@ -226,6 +237,27 @@ def submit_bulk_responses(response_data: BulkResponseSubmit):
         raise HTTPException(
             status_code=500,
             detail="An error occurred while submitting responses. Please try again later."
+        )
+    
+@router.get("/assessments/answers/{submission_id}", status_code=status.HTTP_200_OK)
+def submit_get_score(submission_id: str, db: Session = Depends(get_db)):
+    try:
+        result = scoring_service.get_selected_answers(db, submission_id)
+        return result
+
+    except Exception as e:
+        logger.error(
+            "Failed to get answers for submission",
+            extra={
+                'error': str(e),
+                'error_type': type(e).__name__,
+                'submission_id': submission_id
+            },
+            exc_info=True
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="An error occurred while getting answers. Please try again later."
         )
 
 
