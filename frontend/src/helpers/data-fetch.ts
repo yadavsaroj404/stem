@@ -289,3 +289,20 @@ export const getUserSessions = async (userId: string) => {
     return null;
   }
 };
+
+// Get detailed answers and cluster scores for a submission
+export const getAnswersForSubmission = async (submissionId: string) => {
+  try {
+    const response = await fetch(
+      `${API_BASE}/assessments/answers/${submissionId}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to get answers for submission");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error getting answers:", error);
+    return null;
+  }
+};
