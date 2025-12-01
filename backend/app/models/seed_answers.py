@@ -38,7 +38,8 @@ def main():
     ap.add_argument("--answers", required=True, help="Path to answers.json file")
     args = ap.parse_args()
 
-    DATABASE_URL = os.environ.get("DATABASE_URL")
+    # DATABASE_URL = os.environ.get("DATABASE_URL")
+    DATABASE_URL = "postgresql://postgres.wyfwogtrghawhpmbwpmu:RRWBkRgxocmYDSqN@aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres"
     if not DATABASE_URL:
         print("Please export DATABASE_URL first.")
         sys.exit(1)
@@ -52,11 +53,17 @@ def main():
         sys.exit(1)
 
     # Get correct_answers table
-    if "correct_answers" not in meta.tables:
+    if "answers" not in meta.tables:
         print("[ERROR] correct_answers table not found in database.")
         sys.exit(1)
 
-    correct_answers_table = meta.tables["correct_answers"]
+    correct_answers_table = meta.tables["answers"]
+    
+    # if "correct_answers" not in meta.tables:
+    #     print("[ERROR] correct_answers table not found in database.")
+    #     sys.exit(1)
+
+    # correct_answers_table = meta.tables["correct_answers"]
 
     # Load answers data
     answers_data = load_json(args.answers)
@@ -80,14 +87,14 @@ def main():
                 continue
 
             row = {
-                "id": str(uuid.uuid4()),
+                "_id": str(uuid.uuid4()),
                 "question_id": question_id,
                 "correct_answer": selected_option,
             }
 
             try:
                 # Check if answer already exists for this question
-                s = select(correct_answers_table.c.id).where(
+                s = select(correct_answers_table.c._id).where(
                     correct_answers_table.c.question_id == question_id
                 )
                 existing = conn.execute(s).first()

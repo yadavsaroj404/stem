@@ -200,14 +200,6 @@ class StudentAnswer(Base):
     session = relationship("TestSession", back_populates="student_answers")
     question = relationship("Question")
 
-class Answer(Base):
-    """Student answers for each question in a test session"""
-    __tablename__ = "answers"
-
-    _id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
-    question_id = Column(UUID(as_uuid=False), ForeignKey("questions.question_id"), nullable=False)
-    correct_answer = Column(Text, nullable=False)
-
 # Submission model for storing all responses in one row
 class SubmissionDB(Base):
     """User test submissions - stores all responses as JSON in single row"""
@@ -244,6 +236,13 @@ class CandidateScore(Base):
     submission = relationship("SubmissionDB", backref="scores")
     cluster = relationship("Cluster")
 
+class Answer(Base):
+    """Student answers for each question in a test session"""
+    __tablename__ = "answers"
+
+    _id = Column(UUID(as_uuid=False), primary_key=True, default=gen_uuid)
+    question_id = Column(UUID(as_uuid=False), ForeignKey("questions.question_id"), nullable=False)
+    correct_answer = Column(Text, nullable=False)
 
 class CorrectAnswer(Base):
     """Correct answers for questions - replaces answers.json"""

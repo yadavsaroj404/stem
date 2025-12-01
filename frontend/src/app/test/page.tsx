@@ -1174,7 +1174,7 @@ export function TextImageOption({
       <span className="text-base font-medium mr-2 ">
         ({String.fromCharCode(65 + index)})
       </span>
-      <span className="text-base font-medium">{option.text}</span>
+      {/* <span className="text-base font-medium">{option.text}</span> */}
       <Image
         width={100}
         height={100}
