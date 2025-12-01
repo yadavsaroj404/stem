@@ -8,6 +8,7 @@ import UserProfile from "@/components/UserProfile";
 import ReportDownloadBtn from "@/components/ReportDownloadBtn";
 import { useRouter } from "next/navigation";
 import { ReportData } from "@/interfaces/report";
+import TestAnalyzePage from "../test/analyze/page";
 
 export default function ReportPage() {
   const router = useRouter();
@@ -200,7 +201,7 @@ export default function ReportPage() {
   // ];
 
   if (loading || !reportData) {
-    return <div>Loading report...</div>;
+    return <TestAnalyzePage />;
   }
   const CAREERS = reportData?.pathways || [];
 
@@ -224,7 +225,7 @@ export default function ReportPage() {
             top: "6px",
           }}
         />
-        {["Primary", "Secondary", "Tertiary"].map((tab, index) => (
+        {["First", "Second", "Third"].map((tab, index) => (
           <button
             key={index}
             className={`${

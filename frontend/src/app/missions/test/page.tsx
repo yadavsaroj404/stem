@@ -28,6 +28,7 @@ import DialogModal from "@/components/Modals/completed";
 import { fetchQuestions, submitAnswer } from "@/helpers/data-fetch";
 import { UUID } from "crypto";
 import { useRouter } from "next/navigation";
+import TestCompletePage from "@/app/test/complete/page";
 
 // const submitAnswer = async () => {
 //   setLoading(true);
@@ -66,7 +67,9 @@ export default function MissionsTestPage() {
   const [responses, setResponses] = useState<
     Record<string, { primary?: string; secondary?: string }>
   >({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<{
+    context: "FETCHING" | "SUBMITTING";
+  } | null>({ context: "FETCHING" });
   const [isTimerPaused, setIsTimerPaused] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -80,7 +83,7 @@ export default function MissionsTestPage() {
         return;
       }
       setMissions(d.missions.missions);
-      setLoading(false);
+      setLoading(null);
     });
   }, []);
 
@@ -214,8 +217,12 @@ export default function MissionsTestPage() {
     }
   };
 
-  if (loading) {
+  if (loading && loading.context === "FETCHING") {
     return <div className="text-center mt-10">Loading missions...</div>;
+  }
+
+  if (loading && loading.context === "SUBMITTING") {
+    return <TestCompletePage />;
   }
 
   if (!currentMission) {
@@ -238,7 +245,7 @@ export default function MissionsTestPage() {
   `;
 
   const handleQuestionSubmissions = async () => {
-    setLoading(true);
+    setLoading({ context: "SUBMITTING" });
     const missionsResponses: Array<{
       questionId: string;
       selectedOption: string;
@@ -277,8 +284,8 @@ export default function MissionsTestPage() {
     } catch (error) {
       console.log("Error submitting answers:");
     } finally {
-      router.push("/test/complete");
-      setLoading(false);
+      router.push("/report");
+      setLoading(null);
     }
   };
   return (

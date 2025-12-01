@@ -1,20 +1,7 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import analyzing from "@/images/objects/search.gif";
 import Image from "next/image";
 
 export default function TestAnalyzePage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push("/report");
-    }, 5000);
-
-    // Cleanup function to clear timeout if component unmounts
-    return () => clearTimeout(timer);
-  }, [router]);
   return (
     <main className="w-full h-full">
       <div className="-z-10 fixed w-[1200px] lg:w-[2381px] h-[1200px] lg:h-[2298px] rounded-full left-[-320px] lg:left-[-400px] top-[400px] lg:top-[500px] shadow-[0_4px_100px_0_#6300FF]"></div>

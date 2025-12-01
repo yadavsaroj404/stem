@@ -67,7 +67,7 @@ const HeroHeader = () => {
             {/* Feature list */}
             <div className="order-4">
               {[
-                "25 Fun & Easy Questions",
+                "45 Fun & Easy Questions",
                 "Careers Matched to You",
                 "Instant Results + PDF Report",
               ].map((feature, index) => (
