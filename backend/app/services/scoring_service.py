@@ -36,7 +36,7 @@ class ScoringService:
         "245f84af65204dfe9a5415c0b1b4cf05",  # Question 32
         "945c7ad402f544399c6ae68b62185274",  # Question 42
     }
-    FUTURE_STRATEGIST_SCORE_VALUE = 0.5
+    FUTURE_STRATEGIST_SCORE_VALUE = 1
 
     def __init__(self):
         self.correct_answers: Dict[str, str] = {}
@@ -477,8 +477,10 @@ class ScoringService:
         cluster_stats = {}  # {cluster_id: {"correct": 0, "total": 0}}
 
         # Initialize Future Strategist cluster stats
+        # Max score is 5 questions × 0.5 = 2.5
         future_strategist_id = self.FUTURE_STRATEGIST_CLUSTER_ID
-        cluster_stats[future_strategist_id] = {"correct": 0.0, "total": 0}
+        future_strategist_max_score = len(self.FUTURE_STRATEGIST_QUESTION_IDS) * self.FUTURE_STRATEGIST_SCORE_VALUE
+        cluster_stats[future_strategist_id] = {"correct": 0.0, "total": future_strategist_max_score}
 
         for response in responses:
             question_id = response.questionId
@@ -505,10 +507,10 @@ class ScoringService:
                 cluster_stats[cluster_id]["correct"] += 1
 
                 # Also add 0.5 points to Future Strategist cluster if this is a designated question
-                if question_id in self.FUTURE_STRATEGIST_QUESTION_IDS:
+                # Normalize question_id (remove hyphens) for comparison
+                normalized_question_id = question_id.replace('-', '')
+                if normalized_question_id in self.FUTURE_STRATEGIST_QUESTION_IDS:
                     cluster_stats[future_strategist_id]["correct"] += self.FUTURE_STRATEGIST_SCORE_VALUE
-                    # Count this question towards Future Strategist total for percentage calculation
-                    cluster_stats[future_strategist_id]["total"] += 1
 
         # Calculate final scores (using correct count directly, not percentage)
         cluster_scores = {}
@@ -525,6 +527,7 @@ class ScoringService:
         """
         Retrieves and formats the selected answers for a given submission,
         comparing them against correct answers and structuring the output by cluster.
+        Also includes Future Strategist cluster scoring for designated questions.
         """
         submission = db.query(SubmissionDB).filter(SubmissionDB._id == submission_id).first()
 
@@ -532,8 +535,20 @@ class ScoringService:
             return {"error": "Submission not found"}
 
         responses = json.loads(submission.responses)
-        
+
         clusters_data = {}
+
+        # Initialize Future Strategist cluster
+        # Max score is 5 questions × 0.5 = 2.5
+        future_strategist_id = self.FUTURE_STRATEGIST_CLUSTER_ID
+        future_strategist_max_score = len(self.FUTURE_STRATEGIST_QUESTION_IDS) * self.FUTURE_STRATEGIST_SCORE_VALUE
+        clusters_data[future_strategist_id] = {
+            "clusterId": future_strategist_id,
+            "score": 0.0,
+            "clusterName": "Future Strategist",
+            "questionCount": future_strategist_max_score,  # Always show max possible score (2.5)
+            "questions": []
+        }
 
         for response in responses:
             question_id = response.get("questionId")
@@ -544,7 +559,7 @@ class ScoringService:
                 joinedload(Question.options),
                 joinedload(Question.item_pools).joinedload(ItemPool.group)
             ).filter(Question.question_id == question_id).first()
-            
+
             if not question:
                 continue
 
@@ -562,13 +577,19 @@ class ScoringService:
                     "questionCount": 0,
                     "questions": []
                 }
-            
+
             clusters_data[cluster_id]["questionCount"] += 1
 
             # Determine correctness
             is_correct = self._compare_answers(question.question_type, user_answer_str, correct_answer_str)
             if is_correct:
                 clusters_data[cluster_id]["score"] += 1
+
+                # Also add 0.5 to Future Strategist if this is a designated question
+                # Normalize question_id (remove hyphens) for comparison
+                normalized_question_id = question_id.replace('-', '')
+                if normalized_question_id in self.FUTURE_STRATEGIST_QUESTION_IDS:
+                    clusters_data[future_strategist_id]["score"] += self.FUTURE_STRATEGIST_SCORE_VALUE
 
             # Format answers into human-readable text
             formatted_user_answer = self._format_answer_text(db, question, user_answer_str)
@@ -584,6 +605,10 @@ class ScoringService:
                 "pointsAwarded": 1 if is_correct else 0,
             })
 
+        # Remove Future Strategist if no score (no questions answered correctly)
+        if clusters_data[future_strategist_id]["score"] == 0:
+            del clusters_data[future_strategist_id]
+
         return {
             "submission_id": submission_id,
             "submittedAt": submission.submitted_at.isoformat(),
@@ -595,25 +620,35 @@ class ScoringService:
         if user_answer is None or correct_answer is None:
             return False
 
+        # Normalize UUIDs by removing hyphens for consistent comparison
+        user_normalized = user_answer.replace('-', '')
+        correct_normalized = correct_answer.replace('-', '')
+
         if q_type in ['text', 'text-image']:
-            return user_answer == correct_answer
-        
+            return user_normalized == correct_normalized
+
+        if q_type == 'rank':
+            # Rank questions: order matters, compare as ordered list
+            user_options = [opt.replace('-', '') for opt in user_answer.split(';')]
+            correct_options = [opt.replace('-', '') for opt in correct_answer.split(';')]
+            return user_options == correct_options
+
         if q_type == 'multi-select':
-            user_options = set(user_answer.split(';'))
-            correct_options = set(correct_answer.split(';'))
+            user_options = set(opt.replace('-', '') for opt in user_answer.split(';'))
+            correct_options = set(opt.replace('-', '') for opt in correct_answer.split(';'))
             return user_options == correct_options
 
         if q_type in ['mapping', 'group']:
-            user_pairs = set(user_answer.split(';'))
-            correct_pairs = set(correct_answer.split(';'))
+            user_pairs = set(p.replace('-', '') for p in user_answer.split(';'))
+            correct_pairs = set(p.replace('-', '') for p in correct_answer.split(';'))
             return user_pairs == correct_pairs
 
         if q_type == 'matching':
-            # Matching uses different separator format
-            user_pairs = set(user_answer.replace('->', '-').split(';'))
-            correct_pairs = set(correct_answer.replace('->', '-').split(';'))
+            # Matching uses -> separator, normalize UUIDs
+            user_pairs = set(p.replace('-', '') for p in user_answer.split(';'))
+            correct_pairs = set(p.replace('-', '') for p in correct_answer.split(';'))
             return user_pairs == correct_pairs
-            
+
         return False
 
     def _format_answer_text(self, db: Session, question: Question, answer_str: str) -> str:
@@ -649,12 +684,46 @@ class ScoringService:
             return '; '.join(sorted(text_pairs))
 
         if q_type == 'matching':
-            # Matching questions are image-based, return formatted pair indicators
+            # Matching questions: show actual text pairs (left -> right)
+            text_pairs = []
             pairs = answer_str.split(';')
-            formatted_pairs = []
-            for i, pair in enumerate(pairs, 1):
-                formatted_pairs.append(f"Match {i}")
-            return '; '.join(formatted_pairs)
+            all_item_ids = []
+
+            for p in pairs:
+                # Skip undefined or empty values
+                if not p or p == 'undefined':
+                    continue
+                if '->' in p:
+                    parts = p.split('->')
+                    if len(parts) == 2:
+                        left_id, right_id = parts
+                        # Skip undefined values
+                        if left_id and left_id != 'undefined':
+                            all_item_ids.append(left_id)
+                        if right_id and right_id != 'undefined':
+                            all_item_ids.append(right_id)
+
+            # Filter out any invalid UUIDs before querying
+            valid_ids = [id for id in all_item_ids if id and id != 'undefined' and len(id) == 36]
+
+            if valid_ids:
+                items = db.query(ItemPool).filter(ItemPool.pool_id.in_(valid_ids)).all()
+                item_map = {str(item.pool_id): item.item_text for item in items}
+            else:
+                item_map = {}
+
+            for pair in pairs:
+                if not pair or pair == 'undefined':
+                    continue
+                if '->' in pair:
+                    parts = pair.split('->')
+                    if len(parts) == 2:
+                        left_id, right_id = parts
+                        left_text = item_map.get(left_id, left_id if left_id != 'undefined' else "N/A")
+                        right_text = item_map.get(right_id, right_id if right_id != 'undefined' else "N/A")
+                        text_pairs.append(f"{left_text} -> {right_text}")
+
+            return '; '.join(text_pairs) if text_pairs else "No valid matches"
 
         if q_type == 'rank':
             option_ids = answer_str.split(';')
