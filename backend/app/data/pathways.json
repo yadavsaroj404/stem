@@ -256,5 +256,33 @@
       }
     ],
     "tryThis": "Organize a school event or help coordinate a community project from start to finish."
+  },
+  "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6": {
+    "careerImage": "/s3/strategist.png",
+    "title": "Future Strategist",
+    "subtitle": "The Visionary Planner",
+    "description": "You enjoy connecting ideas, planning for the future, and guiding others to make informed, long-term decisions.",
+    "skills": ["Seeing the bigger picture and planning ahead", "Making fair, thoughtful decisions", "Leading teams to solve global or community challenges"],
+    "subjects": [
+      { "name": "Business Studies", "image": "/s3/study.png" },
+      { "name": "Economics", "image": "/s3/economics.png" },
+      { "name": "Psychology", "image": "/s3/psychology.png" },
+      { "name": "Political Science", "image": "/s3/social.png" }
+    ],
+    "careers": [
+      {
+        "title": "Strategic Planning",
+        "careers": ["Strategic Planner", "Business Strategist", "Corporate Strategy Director", "Innovation Strategist"]
+      },
+      {
+        "title": "Policy & Governance",
+        "careers": ["Policy Analyst", "Government Advisor", "Ethics Officer", "Regulatory Affairs Specialist"]
+      },
+      {
+        "title": "Leadership & Consulting",
+        "careers": ["Management Consultant", "Executive Coach", "Change Management Specialist", "Futurist"]
+      }
+    ],
+    "tryThis": "Develop a strategic plan for a school project or community initiative, considering long-term impacts and ethical implications."
   }
 }

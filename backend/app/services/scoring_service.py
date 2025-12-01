@@ -26,6 +26,18 @@ logger = get_logger(__name__)
 class ScoringService:
     """Service for scoring candidate responses"""
 
+    # Future Strategist cluster configuration
+    # Questions that contribute 0.5 points to Future Strategist cluster (by question_id)
+    FUTURE_STRATEGIST_CLUSTER_ID = "a1b2c3d4e5f647a8b9c0d1e2f3a4b5c6"
+    FUTURE_STRATEGIST_QUESTION_IDS = {
+        "dc3eda5ea6b04eaaa20255a3e6c6f59a",  # Question 26
+        "d9783ddaf27746359d286fc5bcc9a863",  # Question 28
+        "1b9ba1992c034d0ea93cc9f5a36b5038",  # Question 31
+        "245f84af65204dfe9a5415c0b1b4cf05",  # Question 32
+        "945c7ad402f544399c6ae68b62185274",  # Question 42
+    }
+    FUTURE_STRATEGIST_SCORE_VALUE = 0.5
+
     def __init__(self):
         self.correct_answers: Dict[str, str] = {}
         self.pathways: Dict[str, Dict] = {}
@@ -451,7 +463,7 @@ class ScoringService:
         return pathways
 
     # Only method that is in used in this application rest are there but unused
-    def calculate_scores_from_responses(self, db: Session, responses: List[Dict]) -> Dict[str, int]:
+    def calculate_scores_from_responses(self, db: Session, responses: List[Dict]) -> Dict[str, float]:
         """
         Calculate cluster scores directly from a list of responses without a session.
 
@@ -463,6 +475,10 @@ class ScoringService:
             Dictionary with cluster IDs as keys and scores as values
         """
         cluster_stats = {}  # {cluster_id: {"correct": 0, "total": 0}}
+
+        # Initialize Future Strategist cluster stats
+        future_strategist_id = self.FUTURE_STRATEGIST_CLUSTER_ID
+        cluster_stats[future_strategist_id] = {"correct": 0.0, "total": 0}
 
         for response in responses:
             question_id = response.questionId
@@ -482,14 +498,26 @@ class ScoringService:
             # Simple correctness check (assumes single correct answer)
             # This might need to be more complex based on question type
             correct_answer_record = db.query(Answer).filter(Answer.question_id == question_id).first()
-            if correct_answer_record and answer_value == correct_answer_record.correct_answer:
+            is_correct = correct_answer_record and answer_value == correct_answer_record.correct_answer
+
+            if is_correct:
+                # Add 1 point to the original cluster
                 cluster_stats[cluster_id]["correct"] += 1
 
-        # Calculate final scores
+                # Also add 0.5 points to Future Strategist cluster if this is a designated question
+                if question_id in self.FUTURE_STRATEGIST_QUESTION_IDS:
+                    cluster_stats[future_strategist_id]["correct"] += self.FUTURE_STRATEGIST_SCORE_VALUE
+                    # Count this question towards Future Strategist total for percentage calculation
+                    cluster_stats[future_strategist_id]["total"] += 1
+
+        # Calculate final scores (using correct count directly, not percentage)
         cluster_scores = {}
         for cluster_id, stats in cluster_stats.items():
-            score = (stats["correct"] / stats["total"] * 100) if stats["total"] > 0 else 0
-            cluster_scores[cluster_id] = int(score)
+            # Only include Future Strategist if it has any score
+            if cluster_id == future_strategist_id and stats["correct"] == 0:
+                continue
+            # Use the correct count as the score (matching the existing behavior)
+            cluster_scores[cluster_id] = stats["correct"]
 
         return cluster_scores
 
