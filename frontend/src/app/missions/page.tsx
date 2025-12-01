@@ -16,7 +16,7 @@ export default function MissionsPage() {
       image: rocket,
     },
     {
-      title: "~6 Minutes",
+      title: "~6 minutes",
       description: "Quick & engaging",
       image: clock,
     },
