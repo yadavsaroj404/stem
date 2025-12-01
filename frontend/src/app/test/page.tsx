@@ -1054,6 +1054,7 @@ export default function TestPage() {
             </p>
           )}
           <Image
+            key={currIndex}
             src={currentQuestion.image}
             alt={currentQuestion.question}
             width={400}
