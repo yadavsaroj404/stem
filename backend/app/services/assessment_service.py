@@ -422,39 +422,40 @@ class AssessmentService:
             # 2. Calculate scores
             cluster_scores = scoring_service.calculate_scores_from_responses(db, submission_data.responses)
 
-            # 3. Get top 3 clusters, ensuring there are always 3
-            top_3_clusters_scores = sorted(cluster_scores.items(), key=lambda item: item[1], reverse=True)
-            top_cluster_ids = [cluster_id for cluster_id, score in top_3_clusters_scores]
-
-            # If we have fewer than 3 clusters, get more to fill the list
-            if len(top_cluster_ids) < 3:
-                # Get all cluster IDs from the database
-                all_db_clusters = db.query(Cluster.cluster_id).all()
-                all_db_cluster_ids = {str(c[0]) for c in all_db_clusters}
-
-                # Find which cluster IDs we are missing
-                missing_cluster_ids = list(all_db_cluster_ids - set(top_cluster_ids))
-                
-                # Add the missing ones until we have 3
-                needed = 3 - len(top_cluster_ids)
-                top_cluster_ids.extend(missing_cluster_ids[:needed])
-            
-            # Ensure we only have the top 3, even if scores were tied
-            top_cluster_ids = top_cluster_ids[:3]
-
-            # 4. Load pathways data
+            # 3. Load pathways data first (needed to filter valid clusters)
             pathways_file_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'pathways.json')
             with open(pathways_file_path, 'r') as f:
                 all_pathways = json.load(f)
 
-            # 5. Select and format top pathways
-            top_pathways_data = []
-            for cluster_id in top_cluster_ids:
+            # Helper function to normalize UUID to hyphenated format
+            def normalize_uuid(uuid_str: str) -> str:
+                clean = uuid_str.replace("-", "")
+                if len(clean) == 32:
+                    return f"{clean[:8]}-{clean[8:12]}-{clean[12:16]}-{clean[16:20]}-{clean[20:]}"
+                return uuid_str
+
+            # Helper function to find pathway by cluster_id (tries both formats)
+            def find_pathway(cluster_id: str):
                 if cluster_id in all_pathways:
-                    pathway = all_pathways[cluster_id]
+                    return all_pathways[cluster_id]
+                normalized_id = normalize_uuid(cluster_id)
+                if normalized_id in all_pathways:
+                    return all_pathways[normalized_id]
+                return None
+
+            # 4. Sort clusters by score and select top 3 that exist in pathways.json
+            sorted_clusters = sorted(cluster_scores.items(), key=lambda item: item[1], reverse=True)
+
+            top_pathways_data = []
+            for cluster_id, score in sorted_clusters:
+                if len(top_pathways_data) >= 3:
+                    break
+
+                pathway = find_pathway(cluster_id)
+                if pathway:
                     pathway_data = {
                         "pathname": pathway.get("title", "").lower().replace(" ", "-"),
-                        "tag": "Top Match", # Placeholder, adjust as needed
+                        "tag": "Top Match",
                         "careerImage": pathway.get("careerImage"),
                         "title": pathway.get("title"),
                         "subtitle": pathway.get("subtitle"),
