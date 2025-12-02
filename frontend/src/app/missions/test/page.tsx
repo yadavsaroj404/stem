@@ -80,7 +80,6 @@ export default function MissionsTestPage() {
 
   const handleNavigation = (direction: "next" | "prev") => {
     if (isAnimating) return;
-    console.log(responses);
     if (direction === "next") {
       // Check for response before moving to next mission
       if (!responses[currentMission._id]?.secondary) {
@@ -248,6 +247,9 @@ export default function MissionsTestPage() {
     ];
     try {
       const reportData = await submitAnswer(mergedResponses);
+      if (!reportData) {
+        alert("Error submitting answers. Please try again.");
+      }
       localStorage.setItem("reportData", JSON.stringify(reportData));
     } catch (error) {
       console.log("Error submitting answers:");
@@ -261,7 +263,7 @@ export default function MissionsTestPage() {
       {isCompleted && (
         <DialogModal
           title="Mission Completed!"
-          subTitle="You cleared all 45 questions AND all 8 future-tech missions — that’s
+          subTitle="You cleared all 45 questions AND all 9 future-tech missions — that’s
           the full experience completed. Future Fact: Your personalized report
           is built for a world where careers, cities, and technology evolve
           every single year — and you’ll be ready for all of it."

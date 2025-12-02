@@ -11,7 +11,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 export default function MissionsPage() {
   const cards = [
     {
-      title: "8 quick missions",
+      title: "9 quick missions",
       description: "Interactive challenges",
       image: rocket,
     },
@@ -40,7 +40,7 @@ export default function MissionsPage() {
             Advanced Future Technologies
           </h1>
           <p className="text-lg mt-2">
-            where 8 labs tackle tomorrow’s toughest challenges.
+            where 9 labs tackle tomorrow’s toughest challenges.
           </p>
 
           <div className="relative w-fit mt-10 gap-x-8 gap-y-6 grid grid-cols-2 grid-rows-2">

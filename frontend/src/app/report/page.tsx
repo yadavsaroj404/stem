@@ -67,7 +67,7 @@ export default function ReportPage() {
     }, 250); // Duration should match the fade-out transition
   };
 
-  if (loading || !reportData) {
+  if (loading || !reportData || !scoreData) {
     return <TestAnalyzePage />;
   }
   const CAREERS = reportData?.pathways || [];
