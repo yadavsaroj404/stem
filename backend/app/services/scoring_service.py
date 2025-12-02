@@ -27,8 +27,8 @@ class ScoringService:
     """Service for scoring candidate responses"""
 
     # Future Strategist cluster configuration
-    # Questions that contribute 0.5 points to Future Strategist cluster (by question_id)
-    FUTURE_STRATEGIST_CLUSTER_ID = "a1b2c3d4e5f647a8b9c0d1e2f3a4b5c6"
+    # Questions that contribute 1 point to Future Strategist cluster (by question_id)
+    FUTURE_STRATEGIST_CLUSTER_ID = "a1b2c3d4-e5f6-47a8-b9c0-d1e2f3a4b5c6"
     FUTURE_STRATEGIST_QUESTION_IDS = {
         "dc3eda5ea6b04eaaa20255a3e6c6f59a",  # Question 26
         "d9783ddaf27746359d286fc5bcc9a863",  # Question 28
@@ -477,7 +477,7 @@ class ScoringService:
         cluster_stats = {}  # {cluster_id: {"correct": 0, "total": 0}}
 
         # Initialize Future Strategist cluster stats
-        # Max score is 5 questions × 0.5 = 2.5
+        # Max score is 5 questions × 1 = 5
         future_strategist_id = self.FUTURE_STRATEGIST_CLUSTER_ID
         future_strategist_max_score = len(self.FUTURE_STRATEGIST_QUESTION_IDS) * self.FUTURE_STRATEGIST_SCORE_VALUE
         cluster_stats[future_strategist_id] = {"correct": 0.0, "total": future_strategist_max_score}
@@ -506,7 +506,7 @@ class ScoringService:
                 # Add 1 point to the original cluster
                 cluster_stats[cluster_id]["correct"] += 1
 
-                # Also add 0.5 points to Future Strategist cluster if this is a designated question
+                # Also add 1 point to Future Strategist cluster if this is a designated question
                 # Normalize question_id (remove hyphens) for comparison
                 normalized_question_id = question_id.replace('-', '')
                 if normalized_question_id in self.FUTURE_STRATEGIST_QUESTION_IDS:
@@ -515,9 +515,6 @@ class ScoringService:
         # Calculate final scores (using correct count directly, not percentage)
         cluster_scores = {}
         for cluster_id, stats in cluster_stats.items():
-            # Only include Future Strategist if it has any score
-            if cluster_id == future_strategist_id and stats["correct"] == 0:
-                continue
             # Use the correct count as the score (matching the existing behavior)
             cluster_scores[cluster_id] = stats["correct"]
 
@@ -539,14 +536,14 @@ class ScoringService:
         clusters_data = {}
 
         # Initialize Future Strategist cluster
-        # Max score is 5 questions × 0.5 = 2.5
+        # Max score is 5 questions × 1 = 5
         future_strategist_id = self.FUTURE_STRATEGIST_CLUSTER_ID
         future_strategist_max_score = len(self.FUTURE_STRATEGIST_QUESTION_IDS) * self.FUTURE_STRATEGIST_SCORE_VALUE
         clusters_data[future_strategist_id] = {
             "clusterId": future_strategist_id,
             "score": 0.0,
             "clusterName": "Future Strategist",
-            "questionCount": future_strategist_max_score,  # Always show max possible score (2.5)
+            "questionCount": future_strategist_max_score,  # Always show max possible score (5)
             "questions": []
         }
 
@@ -585,7 +582,7 @@ class ScoringService:
             if is_correct:
                 clusters_data[cluster_id]["score"] += 1
 
-                # Also add 0.5 to Future Strategist if this is a designated question
+                # Also add 1 point to Future Strategist if this is a designated question
                 # Normalize question_id (remove hyphens) for comparison
                 normalized_question_id = question_id.replace('-', '')
                 if normalized_question_id in self.FUTURE_STRATEGIST_QUESTION_IDS:
@@ -604,10 +601,6 @@ class ScoringService:
                 "isCorrect": is_correct,
                 "pointsAwarded": 1 if is_correct else 0,
             })
-
-        # Remove Future Strategist if no score (no questions answered correctly)
-        if clusters_data[future_strategist_id]["score"] == 0:
-            del clusters_data[future_strategist_id]
 
         return {
             "submission_id": submission_id,
