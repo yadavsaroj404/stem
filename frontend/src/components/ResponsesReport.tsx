@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ResponsesReport = ({ data }: { data: Score }) => {
+export const ResponsesReport = ({ data }: { data: Score | null }) => {
   if (!data || !data.clusters || data.clusters.length === 0) {
     return (
       <Document>

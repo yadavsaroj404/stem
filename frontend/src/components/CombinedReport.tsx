@@ -261,11 +261,23 @@ const styles = StyleSheet.create({
 });
 
 interface CombinedReportProps {
-  reportData: ReportData;
+  reportData: ReportData | null;
   responsesData: Score | null;
 }
 
-export const CombinedReport = ({ reportData, responsesData }: CombinedReportProps) => {
+export const CombinedReport = ({
+  reportData,
+  responsesData,
+}: CombinedReportProps) => {
+  if (!reportData || !responsesData) {
+    return (
+      <Document>
+        <Page>
+          <Text style={styles.header}>No Data Available</Text>
+        </Page>
+      </Document>
+    );
+  }
   const { submission_id, pathways } = reportData;
 
   // Sort clusters by score descending if responses data exists
@@ -274,7 +286,10 @@ export const CombinedReport = ({ reportData, responsesData }: CombinedReportProp
     : [];
 
   const totalScore = sortedClusters.reduce((sum, c) => sum + c.score, 0);
-  const totalQuestions = sortedClusters.reduce((sum, c) => sum + c.questionCount, 0);
+  const totalQuestions = sortedClusters.reduce(
+    (sum, c) => sum + c.questionCount,
+    0
+  );
 
   return (
     <Document>

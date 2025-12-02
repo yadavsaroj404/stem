@@ -3,7 +3,7 @@ import rocket from "@/images/objects/rocket.png";
 import clock from "@/images/objects/clock.png";
 import brain from "@/images/objects/brain.png";
 import lightening from "@/images/objects/lightening.png";
-import design from "@/images/design.svg";
+import design from "@/images/misison-page.jpg";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";

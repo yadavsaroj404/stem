@@ -7,8 +7,9 @@ import clzGirl from "@/images/people/clzGirl.png";
 import UserProfile from "@/components/UserProfile";
 import ReportDownloadBtn from "@/components/ReportDownloadBtn";
 import { useRouter } from "next/navigation";
-import { ReportData } from "@/interfaces/report";
+import { ReportData, Score } from "@/interfaces/report";
 import TestAnalyzePage from "../test/analyze/page";
+import { getAnswersForSubmission } from "@/helpers/data-fetch";
 
 export default function ReportPage() {
   const router = useRouter();
@@ -16,16 +17,34 @@ export default function ReportPage() {
   const [loading, setLoading] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
   const [reportData, setReportData] = useState<ReportData | null>(null);
+  const [scoreData, setScoreData] = useState<Score | null>(null);
   const [animationDirection, setAnimationDirection] = useState<
     "left" | "right"
   >("right");
 
   useEffect(() => {
     const reportData = localStorage.getItem("reportData");
+    const scoreData = localStorage.getItem("scoreData");
     if (reportData) {
       const parsedData: ReportData = JSON.parse(reportData);
       setReportData(parsedData);
-      setLoading(false);
+
+      if (scoreData) {
+        const parsedScore: Score = JSON.parse(scoreData);
+        setScoreData(parsedScore);
+        setLoading(false);
+      } else {
+        getAnswersForSubmission(parsedData.submission_id)
+          .then((score) => {
+            localStorage.setItem("scoreData", JSON.stringify(score));
+            setScoreData(score);
+            setLoading(false);
+          })
+          .catch((error) => {
+            alert("No report data found. Please complete the test first.");
+            router.push("/");
+          });
+      }
     } else {
       alert("No report data found. Please complete the test first.");
       router.push("/");
@@ -47,158 +66,6 @@ export default function ReportPage() {
       }, 50); // Animation in duration
     }, 250); // Duration should match the fade-out transition
   };
-
-  // const CAREERS: {
-  //   pathname: string;
-  //   tag: string;
-  //   careerImage: string;
-  //   title: string;
-  //   subtitle: string;
-  //   description: string;
-  //   skills: string[];
-  //   subjects: Array<{ name: string; image: string }>;
-  //   careers: Array<{ title: string; careers: string[] }>;
-  //   tryThis: string;
-  // }[] = [
-  //   {
-  //     pathname: "Primary",
-  //     tag: "Your Primary Pathway",
-  //     careerImage: "/s3/worker.png",
-  //     title: "Future Builder",
-  //     subtitle: "The Maker (MBTI: ISTP)",
-  //     description:
-  //       "Hands-on creator who loves solving problems and turning ideas into real things. You mix science, math, and creativity to design smarter systems for the world.",
-  //     skills: [
-  //       "Numerical Aptitude",
-  //       "Spatial reasoning",
-  //       "Problem-solving",
-  //       "Attention to detail",
-  //       "Digital literacy",
-  //     ],
-  //     subjects: [
-  //       { name: "Maths", image: "/s3/calculator.png" },
-  //       { name: "Physics", image: "/s3/atom.png" },
-  //       { name: "Computer Science", image: "/s3/data-science.png" },
-  //       { name: "Design Tech", image: "/s3/web-design.png" },
-  //     ],
-  //     careers: [
-  //       {
-  //         title: "Build Structures",
-  //         careers: ["Mechanical", "Civil, Aerospace", "Architecture"],
-  //       },
-  //       {
-  //         title: "Create Tech",
-  //         careers: [
-  //           "Robotics",
-  //           "Electrical",
-  //           "Mechatronics",
-  //           "Nanotech",
-  //           "Software",
-  //         ],
-  //       },
-  //       {
-  //         title: "Shape Health & Planet",
-  //         careers: [
-  //           "Biomedical",
-  //           "Environmental",
-  //           "Chemical",
-  //           "Materials",
-  //           "Industrial",
-  //         ],
-  //       },
-  //     ],
-  //     tryThis:
-  //       "Design a mini prototype (robot, bridge, or housing system) using CAD tools or LEGO and showcase it at a fair.",
-  //   },
-  //   {
-  //     pathname: "Secondary",
-  //     tag: "Your Secondary Pathways",
-  //     careerImage: "/s3/analyst.png",
-  //     title: "Future Analyst",
-  //     subtitle: "The Decoder",
-  //     description:
-  //       "Pattern-spotter and puzzle-solver who enjoys working with data, logic, and strategy. You ask, “What’s the smartest way to solve this?”",
-  //     skills: ["Analytical Reasoning", "Data Fluency", "Decision Making"],
-  //     subjects: [
-  //       { name: "Maths", image: "/s3/calculator.png" },
-  //       { name: "Statistics", image: "/s3/statistics.png" },
-  //       { name: "Computer Science", image: "/s3/data-science.png" },
-  //       { name: "Economics", image: "/s3/economics.png" },
-  //     ],
-  //     careers: [
-  //       {
-  //         title: "Analysts",
-  //         careers: [
-  //           "Data Scientist",
-  //           "AI Data Analyst",
-  //           "Genomics Data Scientist",
-  //           "Climate Risk Modeler",
-  //         ],
-  //       },
-  //       {
-  //         title: "Business Analysts",
-  //         careers: [
-  //           "Chartered Accountant",
-  //           "Financial Analyst",
-  //           "Investment Banker",
-  //           "Risk Manager",
-  //         ],
-  //       },
-  //       {
-  //         title: "Policy Analysts",
-  //         careers: [
-  //           "Corporate Strategist",
-  //           "ESG Consultant",
-  //           "Market Insights Researcher",
-  //           "Policy Advisor",
-  //         ],
-  //       },
-  //     ],
-  //     tryThis:
-  //       "Build a sports or finance prediction model in Excel or Tableau.",
-  //   },
-  //   {
-  //     pathname: "Tertiary",
-  //     tag: "Your Tertiary Pathways",
-  //     careerImage: "/s3/leader.png",
-  //     title: "Future Leader",
-  //     subtitle: "The Guide",
-  //     description:
-  //       "Organizer and motivator who enjoys leading teams, planning projects, and inspiring people to achieve shared goals.",
-  //     skills: ["Leadership", "Collaboration", "Communication"],
-  //     subjects: [
-  //       { name: "Business Studies", image: "/s3/study.png" },
-  //       { name: "Economics", image: "/s3/economics.png" },
-  //       { name: "Psychology", image: "/s3/psychology.png" },
-  //       { name: "Social", image: "/s3/social.png" },
-  //     ],
-  //     careers: [
-  //       {
-  //         title: "Business Leaders",
-  //         careers: ["Startup Founder", "CEO", "Business Development Manager"],
-  //       },
-  //       {
-  //         title: "Corporate Leaders",
-  //         careers: [
-  //           "Management Consultant",
-  //           "Strategy Director",
-  //           "Investment Banker",
-  //           "Innovation Officer",
-  //         ],
-  //       },
-  //       {
-  //         title: "Policy & Governance",
-  //         careers: [
-  //           "Civil Service Leader",
-  //           "Policy Director",
-  //           "Youth Council Director",
-  //         ],
-  //       },
-  //     ],
-  //     tryThis:
-  //       "Run a school initiative or community project — assign roles, track outcomes, and present results.",
-  //   },
-  // ];
 
   if (loading || !reportData) {
     return <TestAnalyzePage />;
@@ -368,7 +235,7 @@ export default function ReportPage() {
         </div>
 
         {/* get report btn */}
-        <ReportDownloadBtn report={reportData} />
+        <ReportDownloadBtn score={scoreData} report={reportData} />
         {/* <button className="mx-auto mt-12 mb-7 px-8 py-2 group active:shadow-none hover:shadow-md border-b border-primary-brand-color shadow-primary-brand-color rounded-full bg-gradient-to-r from-primary-dark to-primary-brand-color font-semibold text-sm lg:text-lg transition cursor-pointer duration-200 flex items-center justify-center space-x-2">
           <span>See full Future Builder report</span>
           <FaArrowRightLong className="ml-1 group-hover:scale-110 group-hover:ml-2 group-hover:translate-x-1 transition-transform duration-200" />

@@ -1,10 +1,8 @@
 import {
   GeneralTest,
-  Mission,
   MissionsTest,
   TestQuestions,
 } from "@/interfaces/tests";
-import { UUID } from "crypto";
 
 // Unified API base path
 const API_BASE = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
@@ -42,13 +40,13 @@ export const fetchQuestions = async (
     let storedQuestions = localStorage.getItem(storageKey);
 
     // ------------temp code start-------
-    if (
-      storedQuestions &&
-      JSON.parse(storedQuestions).lastFetched < 1764256773415
-    ) {
-      localStorage.removeItem(storageKey);
-      storedQuestions = null;
-    }
+    // if (
+    //   storedQuestions &&
+    //   JSON.parse(storedQuestions).lastFetched < 1764256773415
+    // ) {
+    //   localStorage.removeItem(storageKey);
+    //   storedQuestions = null;
+    // }
     // ------------temp code end-----------
 
     if (storedQuestions) {
@@ -131,51 +129,6 @@ export const fetchQuestions = async (
   }
 };
 
-// Fetch missions specifically
-export const fetchMissions = async (
-  testId?: string
-): Promise<TestQuestions | null> => {
-  try {
-    const url = testId
-      ? `${API_BASE}/assessments/questions?test_id=${testId}&type=missions`
-      : `${API_BASE}/assessments/questions?type=missions`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Failed to fetch missions");
-    }
-    const data: { status: string; data: TestQuestions } = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error("Error fetching missions:", error);
-    return null;
-  }
-};
-
-// Create a new assessment session
-export const createSession = async (
-  userId: string,
-  testId: string,
-  name: string
-) => {
-  try {
-    const response = await fetch(`${API_BASE}/assessments/session`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId, testId, name }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to create session");
-    }
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error("Error creating session:", error);
-    return null;
-  }
-};
-
 // Submit an individual answer
 export const submitAnswer = async (
   responses: Array<{ questionId: string; selectedOption: string }>
@@ -199,93 +152,6 @@ export const submitAnswer = async (
     return await response.json();
   } catch (error) {
     console.error("Error submitting answer:", error);
-    return null;
-  }
-};
-
-// Submit all responses at once (bulk submission)
-export const submitResponses = async (
-  userId: string,
-  name: string,
-  responses: {
-    questionId: string;
-    selectedOptionId?: string;
-    selectedItems?: string[];
-  }[],
-  testId?: string
-) => {
-  try {
-    const response = await fetch(`${API_BASE}/assessments/responses`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId,
-        testId,
-        name,
-        responses,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to submit responses");
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error submitting responses:", error);
-    return null;
-  }
-};
-
-// Complete a session
-export const completeSession = async (sessionId: string) => {
-  try {
-    const response = await fetch(
-      `${API_BASE}/assessments/session/${sessionId}/complete`,
-      {
-        method: "POST",
-      }
-    );
-    if (!response.ok) {
-      throw new Error("Failed to complete session");
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error completing session:", error);
-    return null;
-  }
-};
-
-// Get session with answers and scores
-export const getSession = async (sessionId: string) => {
-  try {
-    const response = await fetch(
-      `${API_BASE}/assessments/session/${sessionId}`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to get session");
-    }
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error("Error getting session:", error);
-    return null;
-  }
-};
-
-// Get all sessions for a user
-export const getUserSessions = async (userId: string) => {
-  try {
-    const response = await fetch(
-      `${API_BASE}/assessments/user/${userId}/sessions`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to get user sessions");
-    }
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error("Error getting user sessions:", error);
     return null;
   }
 };

@@ -26,40 +26,8 @@ import {
 } from "@/app/test/page"; // Reusing components from test page
 import DialogModal from "@/components/Modals/completed";
 import { fetchQuestions, submitAnswer } from "@/helpers/data-fetch";
-import { UUID } from "crypto";
 import { useRouter } from "next/navigation";
 import TestCompletePage from "@/app/test/complete/page";
-
-// const submitAnswer = async () => {
-//   setLoading(true);
-//   try {
-//     // Use unified assessment endpoint
-//     const result = await submitResponses(
-//       "64a7b1f4e4b0c5b6f8d9e8c1", // userId
-//       "Default Test Name", // name
-//       responses.map((r) => ({
-//         questionId: r.questionId,
-//         selectedOptionId: r.selectedOptionId,
-//       }))
-//     );
-
-//     if (result && result.status === "success") {
-//       // Store session ID and score for results page if needed
-//       if (result.sessionId) {
-//         localStorage.setItem("lastSessionId", result.sessionId);
-//       }
-//       if (result.score) {
-//         localStorage.setItem("lastScore", JSON.stringify(result.score));
-//       }
-//     }
-//     router.push("/test/complete");
-//     logger.info("Redirecting to test complete page.");
-//   } catch (error) {
-//     logger.error("Failed to submit test.", error as Error);
-//     alert("Failed to submit test. Please try again.");
-//     setLoading(false);
-//   }
-// };
 
 export default function MissionsTestPage() {
   const [missions, setMissions] = useState<Mission[]>([]);
