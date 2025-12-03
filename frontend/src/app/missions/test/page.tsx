@@ -253,9 +253,10 @@ export default function MissionsTestPage() {
       localStorage.setItem("reportData", JSON.stringify(reportData));
     } catch (error) {
       console.log("Error submitting answers:");
+      setLoading(null);
     } finally {
       router.push("/report");
-      setLoading(null);
+      // setLoading(null);
     }
   };
   return (

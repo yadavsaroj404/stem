@@ -983,7 +983,7 @@ export default function TestPage() {
           headerText={`Question ${currIndex + 1} of ${questions.length}`}
           title="All Milestones Completed!"
           subTitle="Huge win — you powered through every checkpoint like a legend. Future Fact: The world’s coolest future careers will blend technology in ways we haven’t even imagined yet — from AI explorers to quantum problem-solvers."
-          desc="Ready to try 8 mini-missions that show how these future technologies actually work?"
+          desc="Ready to try 9 mini-missions that show how these future technologies actually work?"
           cancelBtnText="Take a Break"
           okBtnText="Start Missions"
           onClose={() => setIsTimerPaused(false)}
