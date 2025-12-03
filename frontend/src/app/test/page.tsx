@@ -582,7 +582,7 @@ export function MultiSelectQuestionComponent({
   }, [selectedOptions]);
 
   // const SELECTION_LIMIT = question.limit;
-  const SELECTION_LIMIT = question.options.length;
+  const SELECTION_LIMIT = 3;
 
   const handleSelect = (optionId: string) => {
     let newSelected: string[];
@@ -598,7 +598,9 @@ export function MultiSelectQuestionComponent({
       }
     }
     setSelected(newSelected);
-    onSelect(newSelected.join(";"));
+    if (newSelected.length === SELECTION_LIMIT) {
+      onSelect(newSelected.join(";"));
+    }
   };
 
   return (

@@ -17,34 +17,34 @@ export default function ReportPage() {
   const [loading, setLoading] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
   const [reportData, setReportData] = useState<ReportData | null>(null);
-  const [scoreData, setScoreData] = useState<Score | null>(null);
+  // const [scoreData, setScoreData] = useState<Score | null>(null);
   const [animationDirection, setAnimationDirection] = useState<
     "left" | "right"
   >("right");
 
   useEffect(() => {
     const reportData = localStorage.getItem("reportData");
-    const scoreData = localStorage.getItem("scoreData");
+    // const scoreData = localStorage.getItem("scoreData");
     if (reportData) {
       const parsedData: ReportData = JSON.parse(reportData);
       setReportData(parsedData);
-
-      if (scoreData) {
-        const parsedScore: Score = JSON.parse(scoreData);
-        setScoreData(parsedScore);
-        setLoading(false);
-      } else {
-        getAnswersForSubmission(parsedData.submission_id)
-          .then((score) => {
-            localStorage.setItem("scoreData", JSON.stringify(score));
-            setScoreData(score);
-            setLoading(false);
-          })
-          .catch((error) => {
-            alert("No report data found. Please complete the test first.");
-            router.push("/");
-          });
-      }
+      setLoading(false);
+      // if (scoreData) {
+      //   const parsedScore: Score = JSON.parse(scoreData);
+      //   setScoreData(parsedScore);
+      //   setLoading(false);
+      // } else {
+      //   getAnswersForSubmission(parsedData.submission_id)
+      //     .then((score) => {
+      //       localStorage.setItem("scoreData", JSON.stringify(score));
+      //       setScoreData(score);
+      //       setLoading(false);
+      //     })
+      //     .catch((error) => {
+      //       alert("No report data found. Please complete the test first.");
+      //       router.push("/");
+      //     });
+      // }
     } else {
       alert("No report data found. Please complete the test first.");
       router.push("/");
@@ -67,7 +67,7 @@ export default function ReportPage() {
     }, 250); // Duration should match the fade-out transition
   };
 
-  if (loading || !reportData || !scoreData) {
+  if (loading || !reportData) {
     return <TestAnalyzePage />;
   }
   const CAREERS = reportData?.pathways || [];
@@ -235,7 +235,7 @@ export default function ReportPage() {
         </div>
 
         {/* get report btn */}
-        <ReportDownloadBtn score={scoreData} report={reportData} />
+        <ReportDownloadBtn report={reportData} />
         {/* <button className="mx-auto mt-12 mb-7 px-8 py-2 group active:shadow-none hover:shadow-md border-b border-primary-brand-color shadow-primary-brand-color rounded-full bg-gradient-to-r from-primary-dark to-primary-brand-color font-semibold text-sm lg:text-lg transition cursor-pointer duration-200 flex items-center justify-center space-x-2">
           <span>See full Future Builder report</span>
           <FaArrowRightLong className="ml-1 group-hover:scale-110 group-hover:ml-2 group-hover:translate-x-1 transition-transform duration-200" />

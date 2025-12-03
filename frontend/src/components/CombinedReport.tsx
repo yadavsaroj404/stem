@@ -262,14 +262,13 @@ const styles = StyleSheet.create({
 
 interface CombinedReportProps {
   reportData: ReportData | null;
-  responsesData: Score | null;
+  // responsesData: Score | null;
 }
 
 export const CombinedReport = ({
   reportData,
-  responsesData,
 }: CombinedReportProps) => {
-  if (!reportData || !responsesData) {
+  if (!reportData) {
     return (
       <Document>
         <Page>
@@ -281,15 +280,15 @@ export const CombinedReport = ({
   const { submission_id, pathways } = reportData;
 
   // Sort clusters by score descending if responses data exists
-  const sortedClusters = responsesData?.clusters
-    ? [...responsesData.clusters].sort((a, b) => b.score - a.score)
-    : [];
+  // const sortedClusters = responsesData?.clusters
+  //   ? [...responsesData.clusters].sort((a, b) => b.score - a.score)
+  //   : [];
 
-  const totalScore = sortedClusters.reduce((sum, c) => sum + c.score, 0);
-  const totalQuestions = sortedClusters.reduce(
-    (sum, c) => sum + c.questionCount,
-    0
-  );
+  // const totalScore = sortedClusters.reduce((sum, c) => sum + c.score, 0);
+  // const totalQuestions = sortedClusters.reduce(
+  //   (sum, c) => sum + c.questionCount,
+  //   0
+  // );
 
   return (
     <Document>
@@ -355,7 +354,7 @@ export const CombinedReport = ({
       </Page>
 
       {/* Page 2: Cluster Score Summary */}
-      {responsesData && (
+      {/* {responsesData && (
         <Page style={styles.page}>
           <Text style={styles.header}>Detailed Response Report</Text>
           <Text style={styles.reportId}>Report ID: {submission_id}</Text>
@@ -381,10 +380,10 @@ export const CombinedReport = ({
             </View>
           </View>
         </Page>
-      )}
+      )} */}
 
       {/* Subsequent pages: Detailed Questions per Cluster */}
-      {sortedClusters
+      {/* {sortedClusters
         .filter((cluster) => cluster.questions && cluster.questions.length > 0)
         .map((cluster, clusterIndex) => (
           <Page key={clusterIndex} style={styles.page}>
@@ -448,7 +447,7 @@ export const CombinedReport = ({
               STEM Career Assessment - Complete Report
             </Text>
           </Page>
-        ))}
+        ))} */}
     </Document>
   );
 };

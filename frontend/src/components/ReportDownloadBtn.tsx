@@ -14,15 +14,18 @@ const PDFDownloadLink = dynamic(
 );
 
 export default function ReportDownloadBtn({
-  report,
-  score,
+  report
 }: {
   report: ReportData | null;
-  score: Score | null;
+  // score: Score | null;
 }) {
   return (
     <PDFDownloadLink
-      document={<CombinedReport reportData={report} responsesData={score} />}
+    fileName="STEM_REPORT"
+      document={<CombinedReport reportData={report} 
+      
+      // responsesData={score} 
+      />}
     >
       <button className="mx-auto mt-12 mb-7 px-8 py-2 group active:shadow-none hover:shadow-md border-b border-primary-brand-color shadow-primary-brand-color rounded-full bg-gradient-to-r from-primary-dark to-primary-brand-color font-semibold text-sm lg:text-lg transition cursor-pointer duration-200 flex items-center justify-center space-x-2 disabled:opacity-50">
         See full report
